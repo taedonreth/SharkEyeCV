@@ -49,7 +49,7 @@ export default function Page5() {
           </View>
         </View>
       </View>
-      
+
       {/* Shark with Speech Bubble */}
       <View style={styles.sharkSection}>
         <View style={styles.sharkContainer}>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     bottom: -225, // Ensures it stays at the bottom
     width: '100%',
     zIndex: -1, // Pushes it to the background
-    left:-480,
+    left: -480,
     transform: [{ scale: 1.2 }],
   },
   sharkSection: {
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   bubbleWrapper: {
     position: 'absolute',
     left: -350,
+    bottom: -100,
     top: -800,
     width: 200,
     transform: [{ scale: 0.25 }],
