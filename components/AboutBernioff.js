@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const AboutBernioff = (props) => (
+const AboutBenioff = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="208"
@@ -24,4 +24,4 @@ const AboutBernioff = (props) => (
   </svg>
 );
 
-export default AboutBernioff;
+export default AboutBenioff;
