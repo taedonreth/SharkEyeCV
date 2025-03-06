@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     bottom: -225, // Ensures it stays at the bottom
     width: '100%',
     zIndex: -1, // Pushes it to the background
-    left: -500,
+    left: -800,
     transform: [{ scale: 1.4 }],
   },
   singleBox: {

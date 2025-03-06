@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   waveContainer: {
     position: 'absolute',
     bottom: -80,     // This will align to bottom
-    left: 0,
+    left: -250,
     right: 0,
     zIndex: 1,  // Waves will be above background
   },
