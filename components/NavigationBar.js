@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 
 const NavigationBar = ({ onAboutPress }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <ThemedView style={styles.container} lightColor="#FFFFFF">
       <View style={styles.content}>
@@ -17,9 +19,14 @@ const NavigationBar = ({ onAboutPress }) => {
 
         {/* About Benioff Button */}
         <TouchableOpacity
-          style={styles.aboutButton}
+          style={[
+            styles.aboutButton,
+            isHovered && styles.aboutButtonHovered
+          ]}
           activeOpacity={0.7}
           onPress={onAboutPress}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <ThemedText style={styles.aboutButtonText}>About Benioff</ThemedText>
         </TouchableOpacity>
@@ -74,6 +81,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#CCCCCC",
+  },
+  aboutButtonHovered: {
+    backgroundColor: "#F5F5F5",
+    borderColor: "#AAAAAA",
   },
   aboutButtonText: {
     fontSize: 14,
