@@ -23,22 +23,6 @@ export default function Page5() {
         <Wave />
       </View>
 
-      {/* Shark and CuteShark with Speech Bubble */}
-      <View style={styles.sharkSection}>
-        {/* Shark positioned on the left */}
-        <View style={styles.sharkContainer}>
-          <Shark />
-        </View>
-
-        {/* Speech Bubble */}
-        <View style={styles.bubbleWrapper}>
-          <SpeechBubble>
-            <ThemedText style={styles.questionText}>What is data?</ThemedText>
-            <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
-            <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
-          </SpeechBubble>
-        </View>
-      </View>
 
     {/* Shark with Speech Bubble */}
     <View style={styles.sharkSection}>
