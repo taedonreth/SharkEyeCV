@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     left: 85,
     zIndex: 1, 
     transform: [
-      { scale: 0.80}
+      { scale: 0.65}
     ]
   },
   reviewProcessAIContainer: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     left: 800,
     zIndex: 1, 
     transform: [
-      { scale: 0.80}
+      { scale: 0.65}
     ]
   },
   waveContainer: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   speechBubbleContainer: {
     position: 'absolute',
     bottom: -75,     // This will align to bottom
-    left: 225,
+    left: 180,
     right: 0,
     zIndex: 2,  // Waves will be above background
     transform: [

@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
   reviewProcessContainer: {
     position: 'absolute',
     bottom: -40,     // This will align to bottom
-    left: 85,
+    left: 55,
     zIndex: 1, 
     transform: [
-      { scale: 0.80}
+      { scale: 0.70}
     ]
   },
   waveContainer: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    bottom: 125,     // This will align to bottom
+    bottom: 90,     // This will align to bottom
     left: -275,
     right: 0,
     zIndex: 2,  // Waves will be above background

@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
   },
   introToBenioffContainer: {
     position: 'absolute',
-    bottom: -40,     // This will align to bottom
-    left: 85,
+    bottom: -60,     // This will align to bottom
+    left: 65,
     zIndex: 1, 
     transform: [
-      { scale: 0.80}
+      { scale: 0.70}
     ]
   },
   waveContainer: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    bottom: 100,     // This will align to bottom
+    bottom: 50,     // This will align to bottom
     left: -350,
     right: 0,
     zIndex: 2,  // Waves will be above background
