@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     marginRight: 10,
-    width: 50,
+    width: 60,
+    textAlign: 'right',
   },
   progressContainer: {
     flex: 1,

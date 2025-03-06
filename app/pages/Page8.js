@@ -1,71 +1,41 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import SharkIcon from '../../components/SharkIcon';
-import CorrectButton from '../../components/CorrectButton';
-import FalseButton from '../../components/FalseButton';
-import Wave from '../../components/Wave'; // Import the Wave component
-import CroppingRectangle from '../../components/CroppingRectangle'; // Import CroppingRectangle component
 import Shark from '../../components/Shark'; // Import Shark component
-import SpeechBubble from '../../components/SpeechBubble'; // Import SpeechBubble component
+import SpeechBubble from '../../components/SpeechBubble';
+import { ThemedText } from '../../components/ThemedText';
+import Wave from '../../components/Wave'; // Import the Wave component
 
-export default function Page5() {
+export default function Page8() {
   const title = " ";
   const description = (
     <View style={styles.customContent}>
+
       {/* Wave positioned absolutely at the bottom */}
       <View style={styles.waveWrapper}>
         <Wave />
       </View>
 
-      {/* Single White Box */}
-      <View style={styles.singleBox}>
-        {/* Good Box */}
-        <View style={styles.boxContent}>
-          <View style={styles.iconContainer}>
-            <SharkIcon />
-            <View style={styles.correctButtonContainer}>
-              <CorrectButton />
-            </View>
-          </View>
-          <View style={styles.goodLabel}>
-            <Text style={styles.labelText}>Good box!</Text>
-          </View>
+      {/* Shark and CuteShark with Speech Bubble */}
+      <View style={styles.sharkSection}>
+        {/* Shark positioned on the left */}
+        <View style={styles.sharkContainer}>
+          <Shark />
         </View>
 
-        {/* Bad Box */}
-        <View style={styles.boxContent}>
-          <View style={styles.iconContainer}>
-            <SharkIcon />
-            <View style={styles.falseButtonContainer}>
-              <FalseButton />
-            </View>
-          </View>
-          <View style={styles.badLabel}>
-            <Text style={styles.labelText}>Bad box.</Text>
-          </View>
-        </View>
-
-        {/* Cropping Rectangle for Good Box */}
-        <View style={styles.croppingRectangleGood}>
-          <CroppingRectangle />
-        </View>
-
-        {/* Cropping Rectangle for Bad Box */}
-        <View style={styles.croppingRectangleBad}>
-          <CroppingRectangle />
+        {/* Speech Bubble */}
+        <View style={styles.bubbleWrapper}>
+          <SpeechBubble>
+            <ThemedText style={styles.questionText}>What is data?</ThemedText>
+            <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
+            <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
+          </SpeechBubble>
         </View>
       </View>
-
-      {/* Shark Component */}
-      <View style={styles.sharkContainer}>
-        <Shark />
-      </View>
-
     </View>
   );
 
-  return <BasePage pageNumber={5} title={title} description={description} />;
+  return <BasePage pageNumber={8} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -75,98 +45,100 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5, // Reduced padding to move everything up
   },
+  backDropWrapper: {
+    position: 'absolute',
+    bottom: -200,
+    left: -300,
+    width: '100%',
+    zIndex: 2, // Ensure it's behind other elements
+    transform: [{ scale: 0.65 }],
+  },
   waveWrapper: {
     position: 'absolute',
-    bottom: -225, // Ensures it stays at the bottom
+    bottom: -300, // Ensures it stays at the bottom
     width: '100%',
     zIndex: -1, // Pushes it to the background
-    left: -500,
-    transform: [{ scale: 1.4 }],
+    left: -900,
+    transform: [{ scale: 1 }],
   },
-  singleBox: {
+  sharkSection: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: 80,
+    width: '90%',
+    justifyContent: 'space-between', // Adjust spacing between sharks
+    position: 'relative',
+    transform: [{ scale: 0.8 }],
+    left: -100,
+  },
+  sharkContainer: {
+    position: 'absolute',
+    bottom: -300,
+    left: -400,
+    transform: [{ scale: .85 }], // Combine scale and rotate
+    zIndex: 1,
+  },
+  bubbleWrapper: {
+    position: 'absolute',
+    left: 0,
+    top: -600,
+    width: 200,
+    transform: [{ scale: 0.4 }], // Combine scale and rotate
+  },
+  buttonsContainer: {
+    position: 'absolute',
+    bottom: 20, // Adjust position as needed
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '60%',
+    zIndex: 2, // Ensure buttons are above other elements
+  },
+  correctButtonContainer: {
+    left: -100,
+    top: 175,
+    transform: [{ scale: 0.55 }], // Adjust scale as needed
+  },
+  falseButtonContainer: {
+    left: -100,
+    top: 175,
+    transform: [{ scale: 0.55 }],
+  },
+  questionText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginVertical: 2,
+  },
+  cardsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '200%',
+    paddingHorizontal: 40,
+    marginTop: 0,
+    marginBottom: -100,
+  },
+  card: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    width: '200%', // Adjust width as needed
-    height: 360,
-    marginBottom: 20,
-    flexDirection: 'row', // Ensure content is side by side
-    justifyContent: 'space-between', // Space out the two boxes
-    position: 'relative', // Required for absolute positioning of children
+    width: '40%',
+    marginHorizontal: 10,
   },
-  boxContent: {
-    alignItems: 'center',
-    width: '45%', // Adjust width as needed
-  },
-  iconContainer: {
+  cardImageContainer: {
     position: 'relative',
-    marginBottom: 10,
-    height: 130,
+    marginBottom: 20,
+    height: 180,
     width: 120,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  correctButtonContainer: {
-    position: 'absolute',
-    top: 130,
-    right: 0,
-    transform: [{ scale: 0.5 }],
-  },
-  falseButtonContainer: {
-    position: 'absolute',
-    top: 130,
-    right: 0,
-    transform: [{ scale: 0.5 }],
-  },
-  goodLabel: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 10,
-    alignItems: 'center',
-    width: '100%',
-    minHeight: 50,
-    top: 80,
-  },
-  badLabel: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 10,
-    alignItems: 'center',
-    width: '100%',
-    minHeight: 50,
-    top: 80,
-  },
   labelText: {
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  croppingRectangleGood: {
-    position: 'absolute',
-    top: 35, // Adjust position as needed
-    left: -20, // Adjust position as needed
-    zIndex: 1, // Ensure it's above other elements
-    transform: [{ scale: 0.65 }],
-  },
-  croppingRectangleBad: {
-    position: 'absolute',
-    top: 80, // Adjust position as needed
-    right: -70, // Adjust position as needed
-    zIndex: 1, // Ensure it's above other elements
-    transform: [{ scale: 0.4 }],
-  },
-  sharkContainer: {
-    position: 'absolute',
-    bottom: -100, // Adjust position as needed
-    left: -700, // Adjust position as needed
-    transform: [{ scale: 0.7 }], // Adjust scale as needed
-    zIndex: 1, // Ensure it's above other elements
   },
 });
