@@ -44,7 +44,7 @@ export default function GameFlow() {
   const renderPageContent = () => {
     switch (currentPageIndex) {
       case 0:
-        return <LandingPage />;
+        return <LandingPage onContinue={goToNextPage} />;
       case 1:
         return <OverviewPage />;
       case 2:
