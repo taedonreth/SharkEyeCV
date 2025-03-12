@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../../components/Shark'; // Import Shark component
-import SpeechBubble from '../../components/SpeechBubble';
-import { ThemedText } from '../../components/ThemedText';
-import Wave from '../../components/Wave'; // Import the Wave component
+import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import { ThemedText } from '../components/ThemedText';
+import Wave from '../components/Wave';
+import { Link } from 'expo-router';
+import BackButton from '../components/BackButton';
+import ContinueButton from '../components/ContinueButton';
 
-export default function Page13() {
+export default function Page11() {
   const title = " ";
   const description = (
     <View style={styles.customContent}>
@@ -32,10 +35,27 @@ export default function Page13() {
           </SpeechBubble>
         </View>
       </View>
+      
+      {/* Navigation buttons */}
+      <View style={styles.navigationContainer}>
+        {/* Back button */}
+        <View style={styles.backButton}>
+          <Link href="/page10" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+
+        {/* Continue button */}
+        <View style={styles.continueButton}>
+          <Link href="/page12" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
+      </View>
     </View>
   );
 
-  return <BasePage pageNumber={13} title={title} description={description} />;
+  return <BasePage pageNumber={11} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -140,5 +160,28 @@ const styles = StyleSheet.create({
   labelText: {
     color: 'white',
     textAlign: 'center',
+  },
+  navigationContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    width: '100%',
+    zIndex: 3,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  continueButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
   },
 });

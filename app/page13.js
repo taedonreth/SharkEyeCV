@@ -1,24 +1,18 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../../components/Shark'; // Import Shark component
-import CuteShark from '../../components/CuteShark'; // Import CuteShark component
-import CorrectButton from '../../components/CorrectButton'; // Import CorrectButton component
-import FalseButton from '../../components/FalseButton'; // Import FalseButton component
-import CroppingRectangle from '../../components/CroppingRectangle'; // Import CroppingRectangle component
-import SpeechBubble from '../../components/SpeechBubble';
-import { ThemedText } from '../../components/ThemedText';
-import Wave from '../../components/Wave'; // Import the Wave component
-import BackDrop from '../../components/BackDrop'; // Import the BackDrop component
+import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import { ThemedText } from '../components/ThemedText';
+import Wave from '../components/Wave';
+import { Link } from 'expo-router';
+import BackButton from '../components/BackButton';
+import ContinueButton from '../components/ContinueButton';
 
-export default function Page7() {
+export default function Page13() {
   const title = " ";
   const description = (
     <View style={styles.customContent}>
-      {/* BackDrop positioned absolutely at the bottom */}
-      <View style={styles.backDropWrapper}>
-        <BackDrop />
-      </View>
 
       {/* Wave positioned absolutely at the bottom */}
       <View style={styles.waveWrapper}>
@@ -41,20 +35,27 @@ export default function Page7() {
           </SpeechBubble>
         </View>
       </View>
-
-      {/* CorrectButton and FalseButton */}
-      <View style={styles.buttonsContainer}>
-        <View style={styles.correctButtonContainer}>
-          <CorrectButton />
+      
+      {/* Navigation buttons */}
+      <View style={styles.navigationContainer}>
+        {/* Back button */}
+        <View style={styles.backButton}>
+          <Link href="/page12" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
         </View>
-        <View style={styles.falseButtonContainer}>
-          <FalseButton />
+
+        {/* Continue button */}
+        <View style={styles.continueButton}>
+          <Link href="/page14" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
         </View>
       </View>
     </View>
   );
 
-  return <BasePage pageNumber={7} title={title} description={description} />;
+  return <BasePage pageNumber={13} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: -1, // Pushes it to the background
     left: -900,
-    transform: [{ scale: 1.1 }],
+    transform: [{ scale: 1 }],
   },
   sharkSection: {
     flexDirection: 'row',
@@ -92,17 +93,17 @@ const styles = StyleSheet.create({
   },
   sharkContainer: {
     position: 'absolute',
-    bottom: -100,
-    left: -900,
-    transform: [{ scale: 1 }, { rotate: '45deg' }], // Combine scale and rotate
+    bottom: -300,
+    left: -400,
+    transform: [{ scale: .85 }], // Combine scale and rotate
     zIndex: 1,
   },
   bubbleWrapper: {
     position: 'absolute',
-    left: -500,
-    top: -400,
+    left: 0,
+    top: -600,
     width: 200,
-    transform: [{ scale: 0.25 }, { rotate: '180deg' }], // Combine scale and rotate
+    transform: [{ scale: 0.4 }], // Combine scale and rotate
   },
   buttonsContainer: {
     position: 'absolute',
@@ -159,5 +160,28 @@ const styles = StyleSheet.create({
   labelText: {
     color: 'white',
     textAlign: 'center',
+  },
+  navigationContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    width: '100%',
+    zIndex: 3,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  continueButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
   },
 });

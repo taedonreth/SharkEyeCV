@@ -1,14 +1,17 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../../components/Shark';
-import SharkIcon from '../../components/SharkIcon';
-import Surfer from '../../components/surfer';
-import CorrectButton from '../../components/CorrectButton';
-import FalseButton from '../../components/FalseButton';
-import SpeechBubble from '../../components/SpeechBubble';
-import { ThemedText } from '../../components/ThemedText';
-import Wave from '../../components/Wave'; // Import the Wave component
+import Shark from '../components/Shark';
+import SharkIcon from '../components/SharkIcon';
+import Surfer from '../components/surfer';
+import CorrectButton from '../components/CorrectButton';
+import FalseButton from '../components/FalseButton';
+import SpeechBubble from '../components/SpeechBubble';
+import { ThemedText } from '../components/ThemedText';
+import Wave from '../components/Wave';
+import { Link } from 'expo-router';
+import BackButton from '../components/BackButton';
+import ContinueButton from '../components/ContinueButton';
 
 export default function Page6() {
   const title = " ";
@@ -61,6 +64,23 @@ export default function Page6() {
             <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
             <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
           </SpeechBubble>
+        </View>
+      </View>
+      
+      {/* Navigation buttons */}
+      <View style={styles.navigationContainer}>
+        {/* Back button */}
+        <View style={styles.backButton}>
+          <Link href="/page5" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+
+        {/* Continue button */}
+        <View style={styles.continueButton}>
+          <Link href="/page7" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
         </View>
       </View>
     </View>
@@ -177,5 +197,27 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  navigationContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    width: '100%',
+    zIndex: 3,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  continueButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
+  },
 });
-
