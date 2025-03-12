@@ -1,18 +1,18 @@
-import * as React from "react";
-import { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import * as React from 'react';
+import { useState, forwardRef } from 'react';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const BackButton = (props) => {
+const BackButton = forwardRef((props, ref) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const normalColor = "#064160";
   const hoverColor = "#042E44"; // Darker shade for hover state
-  
-  // Determine if this is a navigation button (flat on left side) or regular button
+
   const isNavigation = props.isNavigation || false;
-  
+
   return (
     <TouchableOpacity
+      ref={ref} // forward the ref here
       style={[
         styles.button,
         isNavigation ? styles.navigationButton : null,
@@ -27,7 +27,7 @@ const BackButton = (props) => {
       <Text style={styles.buttonText}>BACK</Text>
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   button: {
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     borderLeftWidth: 0,
-    width: 180, // Wider for navigation
-    height: 60, // Shorter height
+    width: 180,
+    height: 60,
   },
   buttonText: {
     color: 'white',

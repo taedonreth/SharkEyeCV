@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import BasePage from './BasePage';
-import SharkIcon from '../../components/SharkIcon';
-import CorrectButton from '../../components/CorrectButton';
-import FalseButton from '../../components/FalseButton';
-import Wave from '../../components/Wave'; // Import the Wave component
-import CroppingRectangle from '../../components/CroppingRectangle'; // Import CroppingRectangle component
-import Shark from '../../components/Shark'; // Import Shark component
-import SpeechBubble from '../../components/SpeechBubble'; // Import SpeechBubble component
+import SharkIcon from '../components/SharkIcon';
+import CorrectButton from '../components/CorrectButton';
+import FalseButton from '../components/FalseButton';
+import Wave from '../components/Wave';
+import CroppingRectangle from '../components/CroppingRectangle';
+import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import { Link } from 'expo-router';
+import BackButton from '../components/BackButton';
+import ContinueButton from '../components/ContinueButton';
 
 export default function Page9() {
   const title = " ";
@@ -61,7 +64,23 @@ export default function Page9() {
       <View style={styles.sharkContainer}>
         <Shark />
       </View>
+      
+      {/* Navigation buttons */}
+      <View style={styles.navigationContainer}>
+        {/* Back button */}
+        <View style={styles.backButton}>
+          <Link href="/page8" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
 
+        {/* Continue button */}
+        <View style={styles.continueButton}>
+          <Link href="/page10" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
+      </View>
     </View>
   );
 
@@ -168,5 +187,28 @@ const styles = StyleSheet.create({
     left: -700, // Adjust position as needed
     transform: [{ scale: 0.7 }], // Adjust scale as needed
     zIndex: 1, // Ensure it's above other elements
+  },
+  navigationContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    width: '100%',
+    zIndex: 3,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  continueButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
   },
 });

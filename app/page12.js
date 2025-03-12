@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../../components/Shark'
-import Wave from '../../components/Wave';
-import BackDrop from '../../components/BackDropPage12';
-import AnswerBox from '../../components/AnswerBoxPage12';
+import Shark from '../components/Shark';
+import Wave from '../components/Wave';
+import BackDrop from '../components/BackDropPage12';
+import AnswerBox from '../components/AnswerBoxPage12';
+import { Link } from 'expo-router';
+import BackButton from '../components/BackButton';
+import ContinueButton from '../components/ContinueButton';
 
 export default function Page12() {
   return (
@@ -21,6 +24,23 @@ export default function Page12() {
       </View>
       <View style={styles.sharkContainer}>
         <Shark />
+      </View>
+      
+      {/* Navigation buttons */}
+      <View style={styles.navigationContainer}>
+        {/* Back button */}
+        <View style={styles.backButton}>
+          <Link href="/page11" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+
+        {/* Continue button */}
+        <View style={styles.continueButton}>
+          <Link href="/page13" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
       </View>
     </View>
   );
@@ -68,5 +88,28 @@ const styles = StyleSheet.create({
       { scale: 0.60 },
       { rotate: '20deg' }
     ]
-  }
+  },
+  navigationContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    width: '100%',
+    zIndex: 3,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  continueButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
+  },
 });
