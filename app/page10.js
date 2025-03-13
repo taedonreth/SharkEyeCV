@@ -11,8 +11,6 @@ export default function Page10() {
   const title = " "; // Or any title
   const description = (
     <View style={styles.container}>
-
-
       {/* Main content in a flex container */}
       <View style={styles.mainContent}>
         {/* RealShark + RealSharkLabel side by side (or stacked, your choice) */}
@@ -53,17 +51,17 @@ const styles = StyleSheet.create({
     // You can add padding if you want space around the content
   },
   sharkSection: {
-    flexDirection: 'row', 
+    flexDirection: 'column',
     alignItems: 'center',
-    // If you want them stacked vertically, use flexDirection: 'column'
+    // Apply scaling to the entire section containing both components
+    transform: [{ scale: 0.65 }], // Adjust this value to make them smaller (0.5-0.8 range)
   },
   realSharkContainer: {
     marginRight: 20,   // Space between shark and label
-    // If you want the shark smaller or partially off-screen:
-    // transform: [{ scale: 0.8 }, { translateX: -50 }],
   },
   realSharkLabelContainer: {
     // Additional styling if needed
+    marginTop: 10, // Add a bit of space between the shark and label when stacked
   },
   footerContainer: {
     flexDirection: 'row',

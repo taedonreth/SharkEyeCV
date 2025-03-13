@@ -4,60 +4,185 @@ import BasePage from './BasePage';
 import SharkIcon from '../components/SharkIcon';
 import CorrectButton from '../components/CorrectButton';
 import FalseButton from '../components/FalseButton';
-import Wave from '../components/Wave';
 import CroppingRectangle from '../components/CroppingRectangle';
 import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
+// Component layout configuration
+const layoutConfig = {
+  // Container spacing and layout configuration
+  container: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  },
+  
+  // Box section layout
+  boxSection: {
+    marginBottom: 600,    // space below the box section
+    padding: 10,         // reduced internal padding
+    gap: 15,             // gap between boxes
+    width: '50%',   
+    marginLeft: 50,     // control the overall width
+  },
+  
+  // Individual box properties
+  goodBox: {
+    flex: 1,             // flex ratio (relative sizing)
+    marginRight: 10,     // right margin
+    width: '35%',        // reduced width percentage
+    scale: 0.75,         // reduced scale factor
+  },
+  badBox: {
+    flex: 1,             // flex ratio (relative sizing)
+    marginLeft: 10,      // left margin
+    width: '35%',        // reduced width percentage
+    scale: 0.75,         // reduced scale factor
+  },
+  
+  // Cropping section layout
+  croppingRow: {
+    marginVertical: -150,  // Move the entire row higher (negative value moves up)
+    gap: 30,               // Reasonable gap between elements
+    justifyContent: 'center', // Center the row
+  },
+  croppingGood: {
+    flex: 0,               // Remove flex to prevent stretching
+    marginRight: 0,        // Small margin for spacing
+    marginLeft: 0,         // Reset any left margin
+    scale: 0.62,           // Reduced scale to make it narrower (changed from 0.64)
+    marginTop: -1000,       // Keep your vertical positioning
+  },
+  croppingBad: {
+    flex: 0,               // Remove flex to prevent stretching
+    marginLeft: 400,       // Small margin for spacing
+    marginRight: 50,       // Reset any right margin
+    scale: 0.30,           // Keep your scale
+    marginTop: -1200,      // Added vertical positioning
+  },
+  
+  // Shark section
+  sharkSection: {
+    marginTop: -700,       // top margin
+    marginBottom: 0,
+    marginLeft: -900,  // negative margin to adjust position
+  },
+  
+  // Text and label customization
+  labelText: {
+    fontSize: 30,        // font size
+    fontWeight: 'bold',  // font weight
+  },
+  
+  // Box label positioning
+  boxLabel: {
+    marginTop: 80,       // Add space above the label to push it down
+    paddingVertical: 8,  // Slightly more vertical padding
+    width: '90%',        // Keep the width
+  },
+};
+
 export default function Page9() {
   const title = " ";
+
   const description = (
-    <View style={styles.container}>
+    <View style={[styles.container, { 
+      paddingHorizontal: layoutConfig.container.paddingHorizontal,
+      paddingVertical: layoutConfig.container.paddingVertical,
+    }]}>
       <View style={styles.mainContent}>
         {/* Box Section with Good and Bad Boxes */}
-        <View style={styles.boxSection}>
+        <View style={[styles.boxSection, { 
+          marginBottom: layoutConfig.boxSection.marginBottom,
+          padding: layoutConfig.boxSection.padding,
+          gap: layoutConfig.boxSection.gap,
+          width: layoutConfig.boxSection.width,
+          marginLeft: layoutConfig.boxSection.marginLeft
+        }]}>
           {/* Good Box */}
-          <View style={styles.box}>
+          <View style={[styles.box, { 
+            flex: layoutConfig.goodBox.flex,
+            marginRight: layoutConfig.goodBox.marginRight,
+            width: layoutConfig.goodBox.width,
+            transform: [{ scale: layoutConfig.goodBox.scale }]
+          }]}>
             <View style={styles.iconContainer}>
               <SharkIcon />
               <View style={styles.correctButton}>
                 <CorrectButton />
               </View>
             </View>
-            <View style={styles.boxLabel}>
-              <Text style={styles.labelText}>Good box!</Text>
+            <View style={[styles.boxLabel, {
+              width: layoutConfig.boxLabel.width,
+              marginTop: layoutConfig.boxLabel.marginTop,
+              paddingVertical: layoutConfig.boxLabel.paddingVertical,
+            }]}>
+              <Text style={[styles.labelText, {
+                fontSize: layoutConfig.labelText.fontSize,
+                fontWeight: layoutConfig.labelText.fontWeight
+              }]}>Good box!</Text>
             </View>
           </View>
 
           {/* Bad Box */}
-          <View style={styles.box}>
+          <View style={[styles.box, { 
+            flex: layoutConfig.badBox.flex,
+            marginLeft: layoutConfig.badBox.marginLeft,
+            width: layoutConfig.badBox.width,
+            transform: [{ scale: layoutConfig.badBox.scale }]
+          }]}>
             <View style={styles.iconContainer}>
               <SharkIcon />
               <View style={styles.falseButton}>
                 <FalseButton />
               </View>
             </View>
-            <View style={styles.boxLabel}>
-              <Text style={styles.labelText}>Bad box.</Text>
+            <View style={[styles.boxLabel, {
+              width: layoutConfig.boxLabel.width,
+              marginTop: layoutConfig.boxLabel.marginTop,
+              paddingVertical: layoutConfig.boxLabel.paddingVertical,
+            }]}>
+              <Text style={[styles.labelText, {
+                fontSize: layoutConfig.labelText.fontSize,
+                fontWeight: layoutConfig.labelText.fontWeight
+              }]}>Bad box.</Text>
             </View>
           </View>
         </View>
 
         {/* Cropping Rectangles */}
-        <View style={styles.croppingRow}>
-          <View style={styles.croppingGood}>
+        <View style={[styles.croppingRow, { 
+          marginVertical: layoutConfig.croppingRow.marginVertical,
+          gap: layoutConfig.croppingRow.gap,
+          justifyContent: 'center'
+        }]}>
+          <View style={[styles.croppingGood, { 
+            flex: layoutConfig.croppingGood.flex,
+            marginRight: layoutConfig.croppingGood.marginRight,
+            marginLeft: layoutConfig.croppingGood.marginLeft,
+            marginTop: layoutConfig.croppingGood.marginTop,
+            transform: [{ scale: layoutConfig.croppingGood.scale }]
+          }]}>
             <CroppingRectangle />
           </View>
-          <View style={styles.croppingBad}>
+          <View style={[styles.croppingBad, { 
+            flex: layoutConfig.croppingBad.flex,
+            marginLeft: layoutConfig.croppingBad.marginLeft,
+            marginRight: layoutConfig.croppingBad.marginRight,
+            marginTop: layoutConfig.croppingBad.marginTop,
+            transform: [{ scale: layoutConfig.croppingBad.scale }]
+          }]}>
             <CroppingRectangle />
           </View>
         </View>
 
         {/* Shark Component */}
-        <View style={styles.sharkSection}>
+        <View style={[styles.sharkSection, { 
+          marginTop: layoutConfig.sharkSection.marginTop,
+          marginBottom: layoutConfig.sharkSection.marginBottom,
+          marginLeft: layoutConfig.sharkSection.marginLeft
+        }]}>
           <Shark />
         </View>
       </View>
@@ -84,71 +209,64 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
   },
   boxSection: {
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    width: '100%',
   },
   box: {
     alignItems: 'center',
-    width: '45%',
   },
   iconContainer: {
     position: 'relative',
-    marginBottom: 10,
-    height: 130,
-    width: 120,
+    marginBottom: -50,
+    height: 400,        // Reduced height
+    width: 100,         // Reduced width
     justifyContent: 'center',
     alignItems: 'center',
   },
   correctButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -30,
     right: 0,
     transform: [{ scale: 0.8 }],
   },
   falseButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -30,
     right: 0,
     transform: [{ scale: 0.8 }],
   },
   boxLabel: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 8,
+    borderRadius: 6,      // smaller border radius
+    padding: 6,           // reduced padding
     alignItems: 'center',
-    width: '100%',
+    width: '90%',         // slightly narrower
   },
   labelText: {
     color: 'black',
     textAlign: 'center',
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 12,         // smaller font size
   },
   croppingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    width: '100%',
   },
-  croppingGood: {
-    transform: [{ scale: 0.65 }],
-  },
-  croppingBad: {
-    transform: [{ scale: 0.65 }],
-  },
+  croppingGood: {},
+  croppingBad: {},
   sharkSection: {
     alignItems: 'center',
-    marginBottom: 20,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
+    width: '100%',
   },
 });
