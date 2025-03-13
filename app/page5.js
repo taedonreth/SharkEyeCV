@@ -8,6 +8,7 @@ import ReviewProcessAI from '../components/ReviewProcessAI';
 import Arrow from '../components/Arrow';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
+import { ThemedText } from '../components/ThemedText';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page5() {
@@ -16,29 +17,35 @@ export default function Page5() {
     <View style={styles.container}>
       {/* Main content area */}
       <View style={styles.mainContent}>
-        {/* Optionally show an arrow at the top */}
+        {/* Arrow at the top */}
         <View style={styles.arrowContainer}>
           <Arrow />
         </View>
-        {/* Shark and SpeechBubble in a vertical stack */}
-        <View style={styles.sharkBubbleContainer}>
-          <View style={styles.sharkContainer}>
-            <Shark />
-          </View>
-          <View style={styles.speechBubbleContainer}>
-            <SpeechBubble />
-          </View>
-        </View>
+
         {/* Review process components side by side */}
         <View style={styles.reviewContainer}>
           <View style={styles.reviewProcess}>
             <ReviewProcess />
           </View>
+
+          {/* Shark and Speech Bubble positioned in the middle */}
+          <View style={styles.sharkBubbleContainer}>
+            <Shark style={styles.shark} />
+            <View style={styles.speechBubble}>
+              <SpeechBubble>
+                <ThemedText style={styles.speechText}>
+                  We use AI to shorten it!
+                </ThemedText>
+              </SpeechBubble>
+            </View>
+          </View>
+
           <View style={styles.reviewProcessAI}>
             <ReviewProcessAI />
           </View>
         </View>
       </View>
+
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
         <Link href="/page4" asChild>
@@ -65,39 +72,54 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   arrowContainer: {
-    marginBottom: 20,
-  },
-  sharkBubbleContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  sharkContainer: {
-    marginBottom: 20,
-    // Uncomment and adjust if you need scaling or rotation:
-    // transform: [{ scale: 0.75 }, { rotate: '-5deg' }],
-  },
-  speechBubbleContainer: {
-    marginBottom: 20,
-    // Uncomment and adjust if you need scaling or rotation:
-    // transform: [{ scale: 0.3 }, { rotate: '5deg' }],
+    position: 'absolute', // Makes sure it does not affect other elements
+    paddingBottom: 200,
+
   },
   reviewContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
+    transform: [{ scale: 0.74 }],
+    gap: 700,
   },
   reviewProcess: {
     flex: 1,
     alignItems: 'center',
-    // Optionally add transforms here if needed:
-    // transform: [{ scale: 0.65 }],
   },
   reviewProcessAI: {
     flex: 1,
     alignItems: 'center',
-    // Optionally add transforms here if needed:
-    // transform: [{ scale: 0.65 }],
+  },
+  sharkBubbleContainer: {
+    position: 'absolute',
+    top: '50%', // Keep it centered vertically
+    left: '8%', // Move it to the left (adjust as needed)
+    transform: [{ translateX: -100 }, { translateY: -50 }], // Adjust positioning
+    alignItems: 'center',
+    zIndex: 1, // Keep it behind other elements if necessary
+    paddingTop: 80,
+  },
+  speechText: {
+    fontSize: 110,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 100,
+    color: 'black',
+  },
+  shark: {
+    width: 150,
+    height: 150,
+  },
+  speechBubble: {
+    position: 'absolute',
+    transform: [{ scale: 0.3 }], // Adjust fine positioning
+    zIndex: 2, // Ensure it's above the shark
+    bottom: 100,
+    left: 200,
   },
   footerContainer: {
     flexDirection: 'row',
@@ -105,3 +127,4 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
   },
 });
+

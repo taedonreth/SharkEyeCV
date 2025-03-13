@@ -33,7 +33,7 @@ export default function OverviewPage() {
               <Shark />
             </View>
           </View>
-          
+
           {/* Right side container for Overview */}
           <View style={styles.rightContainer}>
             <View style={styles.overviewContainer}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     right: 160,
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 0.9 }],
   },
   footerContainer: {
     flexDirection: 'row',
