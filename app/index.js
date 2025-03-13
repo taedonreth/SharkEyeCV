@@ -21,8 +21,15 @@ export default function Index() {
             <Shark />
           </View>
 
-          <View style={styles.bubbleOverlap}>
-            <SpeechBubble />
+          <View style={styles.speechBubbleContainer}>
+            <SpeechBubble>
+              <ThemedText style={styles.speechText}>
+                Welcome!
+                My name is BotShark.
+                Ready to learn about
+                computer vision?...
+              </ThemedText>
+            </SpeechBubble>
           </View>
         </View>
 
@@ -50,6 +57,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  speechText: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 80,
+    color: 'black',
+  },
   mainContent: {
     flex: 1,
     // Center everything in the main area
@@ -68,11 +83,11 @@ const styles = StyleSheet.create({
   // Optional: additional styling for Shark
   sharkPosition: {
     marginLeft: -340,
-    marginTop: 0,
-    transform: [{ scale: 0.9 }],
+    marginTop: 25,
+    transform: [{ scale: 0.8 }],
   },
   // Absolutely position the bubble so it overlaps the Shark
-  bubbleOverlap: {
+  speechBubbleContainer: {
     position: 'absolute',
     top: -300,          // Adjust to move bubble up/down
     right: 0,      // Adjust to move bubble left/right

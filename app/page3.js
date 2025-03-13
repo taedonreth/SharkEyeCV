@@ -5,6 +5,7 @@ import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
 import IntroToBenioff from '../components/IntroToBenioff';
 import { Link } from 'expo-router';
+import { ThemedText } from '../components/ThemedText';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
@@ -19,7 +20,14 @@ export default function Page3() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble />
+              <SpeechBubble>
+                <ThemedText style={styles.speechText}>
+                  This is how computer
+                  vision is used to
+                  detect me in real
+                  life!
+                </ThemedText>
+              </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
@@ -54,6 +62,14 @@ export default function Page3() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  speechText: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 70,
+    color: 'black',
   },
   mainContent: {
     flex: 1, // Pushes footer to the bottom

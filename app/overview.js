@@ -7,6 +7,7 @@ import ContinueButton from '../components/ContinueButton';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
 import Overview from '../components/Overview';
+import { ThemedText } from '../components/ThemedText';
 
 export default function OverviewPage() {
   const title = " ";
@@ -19,8 +20,14 @@ export default function OverviewPage() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble />
+              <SpeechBubble>
+                <ThemedText style={styles.speechText}>
+                  So...
+                  What is computer vision?
+                </ThemedText>
+              </SpeechBubble>
             </View>
+            {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <Shark />
@@ -64,6 +71,14 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1, // Pushes footer to the bottom
     justifyContent: 'center',
+  },
+  speechText: {
+    fontSize: 90,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 100,
+    color: 'black',
   },
   contentRow: {
     flexDirection: 'row', // Arrange children horizontally

@@ -16,22 +16,19 @@ export default function Page13() {
       <View style={styles.mainContent}>
         <View style={styles.sharkSection}>
           {/* Wrapper View with margins for positioning the shark */}
-          <View style={{ marginLeft: 500, marginTop: 200 }}>
+          <View style={styles.sharkContainer}>
             <Shark />
           </View>
         </View>
-        <View style={styles.speechSection}>
-          {/* Wrapper View with margins for positioning */}
-          <View style={{ marginLeft: 50, marginTop: -200 }}>
-            <SpeechBubble width={400} height={400} scale={0.85}>
-              <View style={styles.questionsContainer}>
-                <ThemedText style={styles.questionText}>Good Job!</ThemedText>
-              </View>
-            </SpeechBubble>
-          </View>
+        <View style={styles.speechBubbleContainer}>
+          <SpeechBubble>
+            <ThemedText style={styles.speechText}>
+              Nice!
+            </ThemedText>
+          </SpeechBubble>
         </View>
       </View>
-      
+
       {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page12" asChild>
@@ -43,7 +40,7 @@ export default function Page13() {
       </View>
     </View>
   );
-  
+
   return <BasePage pageNumber={13} title=" " description={description} />;
 }
 
@@ -51,12 +48,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  questionsContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // Add responsive padding based on platform
-    paddingHorizontal: Platform.OS === 'web' ? 20 : 10,
+  speechText: {
+    fontSize: 110,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 110,
+    color: 'black',
+  },
+  sharkContainer: {
+    marginLeft: 500,
+    marginTop: 200,
   },
   mainContent: {
     flex: 1,
@@ -70,17 +72,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  speechSection: {
-    flex: 0.5,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  questionText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginVertical: 4,
-    textAlign: 'center',
-    lineHeight: 18,
+  speechBubbleContainer: {
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    transform: [{ scale: 0.4 }], // Adjust scale if needed
+    top: -100,
   },
   footer: {
     flexDirection: 'row',

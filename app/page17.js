@@ -6,6 +6,8 @@ import SpeechBubble from '../components/SpeechBubble';
 import Resources from '../components/Resources';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
+import { ThemedText } from '../components/ThemedText';
+
 
 export default function Page17() {
   const title = ' '; // Or any title you'd like
@@ -13,20 +15,32 @@ export default function Page17() {
     <View style={styles.container}>
       {/* Main content: shark + speech bubble + resources */}
       <View style={styles.mainContent}>
-        {/* Shark + bubble side by side (or stacked, your choice) */}
-        <View style={styles.sharkBubbleContainer}>
-          <View style={styles.sharkContainer}>
-            <Shark />
+        <View style={styles.contentRow}>
+          {/* Left side container for Shark and Speech Bubble */}
+          <View style={styles.leftContainer}>
+            {/* Speech bubble positioned above the shark */}
+            <View style={styles.speechBubbleContainer}>
+              <SpeechBubble>
+                <ThemedText style={styles.speechText}>
+                  Congrats!
+                  Here are some
+                  more resources!
+                </ThemedText>
+              </SpeechBubble>
+            </View>
+            {/* Shark 
+            {/* Shark below the speech bubble */}
+            <View style={styles.sharkContainer}>
+              <Shark />
+            </View>
           </View>
 
-          <View style={styles.bubbleContainer}>
-            <SpeechBubble />
+          {/* Right side container for Overview */}
+          <View style={styles.rightContainer}>
+            <View style={styles.resourcesContainer}>
+              <Resources />
+            </View>
           </View>
-        </View>
-
-        {/* Resources component to the right (or below, if you change flexDirection) */}
-        <View style={styles.resourcesContainer}>
-          <Resources />
         </View>
       </View>
 
@@ -55,13 +69,43 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // If you want them stacked vertically, do flexDirection: 'column'
   },
-  sharkBubbleContainer: {
-    flexDirection: 'row',
+  contentRow: {
+    flexDirection: 'row', // Arrange children horizontally
     alignItems: 'center',
-    marginRight: -300,
+  },
+  speechText: {
+    fontSize: 90,
+    fontWeight: 'bold',
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 100,
+    color: 'black',
+  },
+  leftContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align items at the bottom of container
+    paddingRight: 10,
+    position: 'relative',
+  },
+  rightContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10,
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    top: -200,
+    left: -50,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    transform: [{ scale: 0.4 }], // Adjust scale if needed
   },
   sharkContainer: {
-    transform: [{ scale: 0.7 }, { rotate: '-5deg' }],
+    marginTop: 200, // Add space above the shark to make room for speech bubble
+    zIndex: 1,
+    marginLeft: -340,
+    transform: [{ scale: 0.7 }], // Adjust scale if needed
   },
   bubbleContainer: {
     transform: [{ scale: 0.3 }, { rotate: '5deg' }],
@@ -69,7 +113,9 @@ const styles = StyleSheet.create({
   },
   resourcesContainer: {
     // Additional styling if needed
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.8 }],
+    top: 20,
+    left: 70,
   },
   footerContainer: {
     flexDirection: 'row',
