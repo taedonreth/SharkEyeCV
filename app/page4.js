@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
   },
   reviewProcessContainer: {
     transform: [{ scale: 0.75 }],
-    right: 300,
-    top: 20,
+    right: 260,
+    top: 5,
   },
   footerContainer: {
     flexDirection: 'row',
