@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
@@ -9,24 +9,29 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page3() {
-  useEffect(() => {
-    console.log("Page 3 Loaded");
-  }, []);
-
-  const title = "Page 3";
+  const title = " ";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}
       <View style={styles.mainContent}>
-        <View style={styles.sceneContainer}>
-          <View style={styles.sharkContainer}>
-            <Shark />
+        <View style={styles.contentRow}>
+          {/* Left side container for Shark and Speech Bubble */}
+          <View style={styles.leftContainer}>
+            {/* Speech bubble positioned above the shark */}
+            <View style={styles.speechBubbleContainer}>
+              <SpeechBubble />
+            </View>
+            {/* Shark below the speech bubble */}
+            <View style={styles.sharkContainer}>
+              <Shark />
+            </View>
           </View>
-          <View style={styles.speechBubbleContainer}>
-            <SpeechBubble />
-          </View>
-          <View style={styles.introContainer}>
-            <IntroToBenioff />
+
+          {/* Right side container for Intro to Benioff */}
+          <View style={styles.rightContainer}>
+            <View style={styles.introContainer}>
+              <IntroToBenioff />
+            </View>
           </View>
         </View>
       </View>
@@ -51,29 +56,44 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  sceneContainer: {
-    alignItems: 'center',
+    flex: 1, // Pushes footer to the bottom
     justifyContent: 'center',
   },
-  sharkContainer: {
-    marginBottom: 20,
-    // Optional: adjust scale or rotation as needed:
-    // transform: [{ scale: 0.75 }, { rotate: '-5deg' }],
+  contentRow: {
+    flexDirection: 'row', // Arrange children horizontally
+    alignItems: 'center',
+  },
+  leftContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align items at the bottom of container
+    paddingRight: 10,
+    position: 'relative',
+  },
+  rightContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10,
   },
   speechBubbleContainer: {
-    marginBottom: 20,
-    // Optional: adjust scale or rotation as needed:
-    // transform: [{ scale: 0.3 }, { rotate: '5deg' }],
+    position: 'absolute',
+    top: -200,
+    left: 1,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    transform: [{ scale: 0.4 }], // Adjust scale if needed
+  },
+  sharkContainer: {
+    marginTop: 200, // Add space above the shark to make room for speech bubble
+    zIndex: 1,
+    marginLeft: -340,
+    transform: [{ scale: 0.7 }], // Adjust scale if needed
   },
   introContainer: {
-    marginBottom: 20,
-    // Optional: adjust scale if desired:
-    // transform: [{ scale: 0.70 }],
+    width: '100%',
+    position: 'absolute',
+    right: 500,
+    transform: [{ scale: 0.7 }],
   },
   footerContainer: {
     flexDirection: 'row',

@@ -9,20 +9,29 @@ import SpeechBubble from '../components/SpeechBubble';
 import Overview from '../components/Overview';
 
 export default function OverviewPage() {
-  const title = "overview";
+  const title = " ";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}
       <View style={styles.mainContent}>
-        <View style={styles.sceneContainer}>
-          <View style={styles.sharkContainer}>
-            <Shark />
+        <View style={styles.contentRow}>
+          {/* Left side container for Shark and Speech Bubble */}
+          <View style={styles.leftContainer}>
+            {/* Speech bubble positioned above the shark */}
+            <View style={styles.speechBubbleContainer}>
+              <SpeechBubble />
+            </View>
+            {/* Shark below the speech bubble */}
+            <View style={styles.sharkContainer}>
+              <Shark />
+            </View>
           </View>
-          <View style={styles.speechBubbleContainer}>
-            <SpeechBubble />
-          </View>
-          <View style={styles.overviewContainer}>
-            <Overview />
+          
+          {/* Right side container for Overview */}
+          <View style={styles.rightContainer}>
+            <View style={styles.overviewContainer}>
+              <Overview />
+            </View>
           </View>
         </View>
       </View>
@@ -55,26 +64,42 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1, // Pushes footer to the bottom
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
   },
-  sceneContainer: {
+  contentRow: {
+    flexDirection: 'row', // Arrange children horizontally
+    alignItems: 'center',
+  },
+  leftContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align items at the bottom of container
+    paddingRight: 10,
+    position: 'relative',
+  },
+  rightContainer: {
+    flex: 1, // Takes up half the available width
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  sharkContainer: {
-    marginBottom: 20,
-    // Optionally, apply transforms if needed:
-    // transform: [{ scale: 0.75 }, { rotate: '-5deg' }],
+    paddingLeft: 10,
   },
   speechBubbleContainer: {
-    marginBottom: 20,
-    // Optionally, apply transforms if needed:
-    // transform: [{ scale: 0.3 }, { rotate: '5deg' }],
+    position: 'absolute',
+    top: -200,
+    left: 1,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    transform: [{ scale: 0.4 }], // Adjust scale if needed
+  },
+  sharkContainer: {
+    marginTop: 200, // Add space above the shark to make room for speech bubble
+    zIndex: 1,
+    marginLeft: -340,
+    transform: [{ scale: 0.7 }], // Adjust scale if needed
   },
   overviewContainer: {
-    // Optionally, apply scaling if desired:
-    // transform: [{ scale: 0.90 }],
+    width: '100%',
+    position: 'absolute',
+    right: 160,
+    transform: [{ scale: 0.8 }],
   },
   footerContainer: {
     flexDirection: 'row',
