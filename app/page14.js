@@ -10,105 +10,64 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page14() {
-  return (
+  const description = (
     <View style={styles.container}>
-      <BasePage pageNumber={14} />
-      <View style={styles.sharkContainer}>
-        <Shark />
-      </View>
-      <View style={styles.waveContainer}>
-        <Wave />
-      </View>
-      <View style={styles.speechBubbleContainer}>
-        <SpeechBubble />
-      </View>
-      <View style={styles.textBoxContainer}>
-        <TextBox />
-      </View>
-      
-      {/* Navigation buttons */}
-      <View style={styles.navigationContainer}>
-        {/* Back button */}
-        <View style={styles.backButton}>
-          <Link href="/page13" asChild>
-            <BackButton isNavigation={true} />
-          </Link>
-        </View>
 
-        {/* Continue button */}
-        <View style={styles.continueButton}>
-          <Link href="/page15" asChild>
-            <ContinueButton isNavigation={true} />
-          </Link>
+      {/* Main content with Shark, SpeechBubble and TextBox */}
+      <View style={styles.mainContent}>
+        <View style={styles.sharkSection}>
+          <Shark />
         </View>
+        <View style={styles.contentSection}>
+          <SpeechBubble style={styles.speechBubble} />
+          <TextBox style={styles.textBox} />
+        </View>
+      </View>
+
+      {/* Footer Navigation */}
+      <View style={styles.footer}>
+        <Link href="/page13" asChild>
+          <BackButton isNavigation={true} />
+        </Link>
+        <Link href="/page15" asChild>
+          <ContinueButton isNavigation={true} />
+        </Link>
       </View>
     </View>
   );
+  
+  return <BasePage pageNumber={14} description={description} />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
   },
-  textBoxContainer: {
-    position: 'absolute',
-    bottom: -30,     // This will align to bottom
-    left: 200,
-    zIndex: 1,  // Waves will be above background
-    transform: [
-      { scale: 0.80}
-    ]
+  waveSection: {
+    flex: 0.2,
+    justifyContent: 'flex-end',
   },
-  waveContainer: {
-    position: 'absolute',
-    bottom: -80,     // This will align to bottom
-    left: -100,
-    right: 0,
-    zIndex: 1,  // Waves will be above background
+  mainContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sharkContainer: {
-    position: 'absolute',
-    top: 300,    // pixels from top
-    left: -150,   // pixels from left
-    zIndex: 2,
-    transform: [
-      { scale: 0.75 },
-      { rotate: '-5deg' }
-    ]
+  sharkSection: {
+    marginBottom: 20,
   },
-  speechBubbleContainer: {
-    position: 'absolute',
-    bottom: 100,     // This will align to bottom
-    left: -350,
-    right: 0,
-    zIndex: 2,  // Waves will be above background
-    transform: [
-      { scale: 0.3 },
-      { rotate: '5deg'}
-    ],
+  contentSection: {
+    alignItems: 'center',
+    transform: [{ scale: 0.5 }],
   },
-  navigationContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
+  speechBubble: {
+    marginBottom: 20,
+  },
+  textBox: {
+    // Additional styling if needed
+  },
+  footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 0,
-    width: '100%',
-    zIndex: 3,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-    position: 'absolute',
-    left: 0,
-    bottom: 10,
-  },
-  continueButton: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    right: 0,
-    bottom: 10,
+    paddingVertical: 25,
   },
 });

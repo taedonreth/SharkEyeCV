@@ -1,8 +1,7 @@
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import { View, StyleSheet } from 'react-native';
-import Wave from '../components/Wave';
 import SpeechBubble from '../components/SpeechBubble';
 import ReviewProcess from '../components/ReviewProcessPage5';
 import ReviewProcessAI from '../components/ReviewProcessAI';
@@ -12,128 +11,97 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page5() {
-  return (
+  const title = " ";
+  const description = (
     <View style={styles.container}>
-      <BasePage pageNumber={5} />
-      <View style={styles.waveContainer}>
-        <Wave />
-      </View>
-      <View style={styles.sharkContainer}>
-        <Shark />
-      </View>
-      <View style={styles.speechBubbleContainer}>
-        <SpeechBubble />
-      </View>
-      <View style={styles.reviewProcessContainer}>
-        <ReviewProcess />
-      </View>
-      <View style={styles.reviewProcessAIContainer}>
-        <ReviewProcessAI />
-      </View>
-      <View style={styles.arrowContainer}>
-        <Arrow />
-      </View>
-      
-      <View style={styles.navigationContainer}>
-        {/* Back button */}
-        <View style={styles.backButton}>
-          <Link href="/page4" asChild>
-            <BackButton isNavigation={true} />
-          </Link>
+      {/* Main content area */}
+      <View style={styles.mainContent}>
+        {/* Optionally show an arrow at the top */}
+        <View style={styles.arrowContainer}>
+          <Arrow />
         </View>
-
-        {/* Continue button */}
-        <View style={styles.continueButton}>
-          <Link href="/page6" asChild>
-            <ContinueButton isNavigation={true} />
-          </Link>
+        {/* Shark and SpeechBubble in a vertical stack */}
+        <View style={styles.sharkBubbleContainer}>
+          <View style={styles.sharkContainer}>
+            <Shark />
+          </View>
+          <View style={styles.speechBubbleContainer}>
+            <SpeechBubble />
+          </View>
         </View>
+        {/* Review process components side by side */}
+        <View style={styles.reviewContainer}>
+          <View style={styles.reviewProcess}>
+            <ReviewProcess />
+          </View>
+          <View style={styles.reviewProcessAI}>
+            <ReviewProcessAI />
+          </View>
+        </View>
+      </View>
+      {/* Footer with navigation buttons */}
+      <View style={styles.footerContainer}>
+        <Link href="/page4" asChild>
+          <BackButton isNavigation={true} />
+        </Link>
+        <Link href="/page6" asChild>
+          <ContinueButton isNavigation={true} />
+        </Link>
       </View>
     </View>
   );
+
+  return <BasePage pageNumber={5} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+  },
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   arrowContainer: {
-    position: 'absolute',
-    bottom: 450,     // This will align to bottom
-    left: 650,
-    zIndex: 1, 
-    transform: [
-      { scale: 0.80}
-    ]
+    marginBottom: 20,
   },
-  reviewProcessContainer: {
-    position: 'absolute',
-    bottom: -40,     // This will align to bottom
-    left: 85,
-    zIndex: 1, 
-    transform: [
-      { scale: 0.65}
-    ]
-  },
-  reviewProcessAIContainer: {
-    position: 'absolute',
-    bottom: -40,     // This will align to bottom
-    left: 800,
-    zIndex: 1, 
-    transform: [
-      { scale: 0.65}
-    ]
-  },
-  waveContainer: {
-    position: 'absolute',
-    bottom: -80,     // This will align to bottom
-    left: -180,
-    right: 0,
-    zIndex: 1,  // Waves will be above background
+  sharkBubbleContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
   sharkContainer: {
-    position: 'absolute',
-    top: 450,    // pixels from top
-    left: 250,   // pixels from left
-    zIndex: 2,
-    transform: [
-      { scale: 0.75 },
-      { rotate: '-5deg' }
-    ]
+    marginBottom: 20,
+    // Uncomment and adjust if you need scaling or rotation:
+    // transform: [{ scale: 0.75 }, { rotate: '-5deg' }],
   },
   speechBubbleContainer: {
-    position: 'absolute',
-    bottom: -75,     // This will align to bottom
-    left: 180,
-    right: 0,
-    zIndex: 2,  // Waves will be above background
-    transform: [
-      { scale: 0.3 },
-      { rotate: '5deg'}
-    ],
+    marginBottom: 20,
+    // Uncomment and adjust if you need scaling or rotation:
+    // transform: [{ scale: 0.3 }, { rotate: '5deg' }],
   },
-  navigationContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
+  reviewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  reviewProcess: {
+    flex: 1,
+    alignItems: 'center',
+    // Optionally add transforms here if needed:
+    // transform: [{ scale: 0.65 }],
+  },
+  reviewProcessAI: {
+    flex: 1,
+    alignItems: 'center',
+    // Optionally add transforms here if needed:
+    // transform: [{ scale: 0.65 }],
+  },
+  footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 0,
-    width: '100%',
-    zIndex: 3,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-    position: 'absolute',
-    left: 0,
-    bottom: 10,
-  },
-  continueButton: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    right: 0,
-    bottom: 10,
+    paddingVertical: 25,
   },
 });
