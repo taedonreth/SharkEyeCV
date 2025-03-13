@@ -4,9 +4,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { Stack } from 'expo-router';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import GameFlow from './GameFlow';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,8 +31,28 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <GameFlow />
-      <StatusBar style="auto" />
+      <SafeAreaProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="overview" />
+          <Stack.Screen name="page3" />
+          <Stack.Screen name="page4" />
+          <Stack.Screen name="page5" />
+          <Stack.Screen name="page6" />
+          <Stack.Screen name="page7" />
+          <Stack.Screen name="page8" />
+          <Stack.Screen name="page9" />
+          <Stack.Screen name="page10" />
+          <Stack.Screen name="page11" />
+          <Stack.Screen name="page12" />
+          <Stack.Screen name="page13" />
+          <Stack.Screen name="page14" />
+          <Stack.Screen name="page15" />
+          <Stack.Screen name="page16" />
+          <Stack.Screen name="page17" />
+        </Stack>
+        <StatusBar style="auto" />
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

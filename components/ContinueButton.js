@@ -1,18 +1,19 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 
-const ContinueButton = (props) => {
+const ContinueButton = forwardRef((props, ref) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const normalColor = "#4CC0B9";
-  const hoverColor = "#3A9A94"; // Darker shade for hover effect
+  const hoverColor = "#3A9A94";
   
   // Determine if this is a navigation button (flat on right side) or regular button
   const isNavigation = props.isNavigation || false;
 
   return (
     <TouchableOpacity
+      ref={ref}
       style={[
         styles.button,
         isNavigation ? styles.navigationButton : null,
@@ -27,7 +28,7 @@ const ContinueButton = (props) => {
       <Text style={styles.buttonText}>CONTINUE</Text>
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   button: {
