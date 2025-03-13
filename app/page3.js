@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     right: 500,
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.75 }],
   },
   footerContainer: {
     flexDirection: 'row',
