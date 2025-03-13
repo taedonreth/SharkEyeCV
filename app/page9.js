@@ -15,113 +15,88 @@ import ContinueButton from '../components/ContinueButton';
 export default function Page9() {
   const title = " ";
   const description = (
-    <View style={styles.customContent}>
-      {/* Wave positioned absolutely at the bottom */}
-      <View style={styles.waveWrapper}>
-        <Wave />
-      </View>
-
-      {/* Single White Box */}
-      <View style={styles.singleBox}>
-        {/* Good Box */}
-        <View style={styles.boxContent}>
-          <View style={styles.iconContainer}>
-            <SharkIcon />
-            <View style={styles.correctButtonContainer}>
-              <CorrectButton />
+    <View style={styles.container}>
+      <View style={styles.mainContent}>
+        {/* Box Section with Good and Bad Boxes */}
+        <View style={styles.boxSection}>
+          {/* Good Box */}
+          <View style={styles.box}>
+            <View style={styles.iconContainer}>
+              <SharkIcon />
+              <View style={styles.correctButton}>
+                <CorrectButton />
+              </View>
+            </View>
+            <View style={styles.boxLabel}>
+              <Text style={styles.labelText}>Good box!</Text>
             </View>
           </View>
-          <View style={styles.goodLabel}>
-            <Text style={styles.labelText}>Good box!</Text>
-          </View>
-        </View>
 
-        {/* Bad Box */}
-        <View style={styles.boxContent}>
-          <View style={styles.iconContainer}>
-            <SharkIcon />
-            <View style={styles.falseButtonContainer}>
-              <FalseButton />
+          {/* Bad Box */}
+          <View style={styles.box}>
+            <View style={styles.iconContainer}>
+              <SharkIcon />
+              <View style={styles.falseButton}>
+                <FalseButton />
+              </View>
+            </View>
+            <View style={styles.boxLabel}>
+              <Text style={styles.labelText}>Bad box.</Text>
             </View>
           </View>
-          <View style={styles.badLabel}>
-            <Text style={styles.labelText}>Bad box.</Text>
+        </View>
+
+        {/* Cropping Rectangles */}
+        <View style={styles.croppingRow}>
+          <View style={styles.croppingGood}>
+            <CroppingRectangle />
+          </View>
+          <View style={styles.croppingBad}>
+            <CroppingRectangle />
           </View>
         </View>
 
-        {/* Cropping Rectangle for Good Box */}
-        <View style={styles.croppingRectangleGood}>
-          <CroppingRectangle />
-        </View>
-
-        {/* Cropping Rectangle for Bad Box */}
-        <View style={styles.croppingRectangleBad}>
-          <CroppingRectangle />
+        {/* Shark Component */}
+        <View style={styles.sharkSection}>
+          <Shark />
         </View>
       </View>
 
-      {/* Shark Component */}
-      <View style={styles.sharkContainer}>
-        <Shark />
-      </View>
-      
-      {/* Navigation buttons */}
-      <View style={styles.navigationContainer}>
-        {/* Back button */}
-        <View style={styles.backButton}>
-          <Link href="/page8" asChild>
-            <BackButton isNavigation={true} />
-          </Link>
-        </View>
-
-        {/* Continue button */}
-        <View style={styles.continueButton}>
-          <Link href="/page10" asChild>
-            <ContinueButton isNavigation={true} />
-          </Link>
-        </View>
+      {/* Footer Navigation */}
+      <View style={styles.footer}>
+        <Link href="/page8" asChild>
+          <BackButton isNavigation={true} />
+        </Link>
+        <Link href="/page10" asChild>
+          <ContinueButton isNavigation={true} />
+        </Link>
       </View>
     </View>
   );
 
-  return <BasePage pageNumber={9} title={title} description={description} />;
+  return <BasePage pageNumber={9} title=" " description={description} />;
 }
 
 const styles = StyleSheet.create({
-  customContent: {
+  container: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    paddingTop: 5, // Reduced padding to move everything up
   },
-  waveWrapper: {
-    position: 'absolute',
-    bottom: -225, // Ensures it stays at the bottom
-    width: '100%',
-    zIndex: -1, // Pushes it to the background
-    left: -800,
-    transform: [{ scale: 1.4 }],
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems:'center',
   },
-  singleBox: {
+  boxSection: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 3,
-    width: '200%', // Adjust width as needed
-    height: 360,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
-    flexDirection: 'row', // Ensure content is side by side
-    justifyContent: 'space-between', // Space out the two boxes
-    position: 'relative', // Required for absolute positioning of children
   },
-  boxContent: {
+  box: {
     alignItems: 'center',
-    width: '45%', // Adjust width as needed
+    width: '45%',
   },
   iconContainer: {
     position: 'relative',
@@ -131,35 +106,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  correctButtonContainer: {
+  correctButton: {
     position: 'absolute',
-    top: 130,
+    bottom: 0,
     right: 0,
-    transform: [{ scale: 0.5 }],
+    transform: [{ scale: 0.8 }],
   },
-  falseButtonContainer: {
+  falseButton: {
     position: 'absolute',
-    top: 130,
+    bottom: 0,
     right: 0,
-    transform: [{ scale: 0.5 }],
+    transform: [{ scale: 0.8 }],
   },
-  goodLabel: {
+  boxLabel: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
-    padding: 10,
+    padding: 8,
     alignItems: 'center',
     width: '100%',
-    minHeight: 50,
-    top: 80,
-  },
-  badLabel: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 10,
-    alignItems: 'center',
-    width: '100%',
-    minHeight: 50,
-    top: 80,
   },
   labelText: {
     color: 'black',
@@ -167,48 +131,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  croppingRectangleGood: {
-    position: 'absolute',
-    top: 35, // Adjust position as needed
-    left: -20, // Adjust position as needed
-    zIndex: 1, // Ensure it's above other elements
-    transform: [{ scale: 0.65 }],
-  },
-  croppingRectangleBad: {
-    position: 'absolute',
-    top: 80, // Adjust position as needed
-    right: -70, // Adjust position as needed
-    zIndex: 1, // Ensure it's above other elements
-    transform: [{ scale: 0.4 }],
-  },
-  sharkContainer: {
-    position: 'absolute',
-    bottom: -100, // Adjust position as needed
-    left: -700, // Adjust position as needed
-    transform: [{ scale: 0.7 }], // Adjust scale as needed
-    zIndex: 1, // Ensure it's above other elements
-  },
-  navigationContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
+  croppingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 0,
-    width: '100%',
-    zIndex: 3,
+    marginBottom: 20,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    position: 'absolute',
-    left: 0,
-    bottom: 10,
+  croppingGood: {
+    transform: [{ scale: 0.65 }],
   },
-  continueButton: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    right: 0,
-    bottom: 10,
+  croppingBad: {
+    transform: [{ scale: 0.65 }],
+  },
+  sharkSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 25,
   },
 });

@@ -62,10 +62,11 @@ const styles = StyleSheet.create({
   },
   waveWrapper: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
+    bottom: -100,
+    left: -100,
     right: 0,
     zIndex: -1,            // Behind all other content
+    transform: [{ scale: 0.9 }],
   },
   pageContent: {
     flex: 1,
