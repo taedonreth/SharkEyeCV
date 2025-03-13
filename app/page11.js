@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
@@ -9,23 +9,29 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page11() {
+  const title = " ";
   const description = (
     <View style={styles.container}>
-
-      {/* Main content with Shark and SpeechBubble */}
+      {/* Main Content: Shark and Speech Bubble */}
       <View style={styles.mainContent}>
         <View style={styles.sharkSection}>
-          <Shark />
+          {/* Wrapper View with margins for positioning the shark */}
+          <View style={{ marginLeft: 500, marginTop: 200 }}>
+            <Shark />
+          </View>
         </View>
-        <View style={styles.bubbleSection}>
-          <SpeechBubble>
-            <ThemedText style={styles.questionText}>What is data?</ThemedText>
-            <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
-            <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
-          </SpeechBubble>
+        <View style={styles.speechSection}>
+          {/* Wrapper View with margins for positioning */}
+          <View style={{ marginLeft: 50, marginTop: -200 }}>
+            <SpeechBubble width={400} height={400} scale={0.85}>
+              <View style={styles.questionsContainer}>
+                <ThemedText style={styles.questionText}>You got it right!</ThemedText>
+              </View>
+            </SpeechBubble>
+          </View>
         </View>
       </View>
-
+      
       {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page10" asChild>
@@ -37,7 +43,7 @@ export default function Page11() {
       </View>
     </View>
   );
-
+  
   return <BasePage pageNumber={11} title=" " description={description} />;
 }
 
@@ -45,9 +51,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  waveSection: {
-    flex: 0.2,
-    justifyContent: 'flex-end',
+  questionsContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Add responsive padding based on platform
+    paddingHorizontal: Platform.OS === 'web' ? 20 : 10,
   },
   mainContent: {
     flex: 1,
@@ -56,15 +65,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sharkSection: {
-    marginRight: 20,
+    // Changed from marginRight to flex to give it proper space allocation
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  bubbleSection: {
-    flex: 1,
+  speechSection: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   questionText: {
-    fontSize: 14,
+    fontSize: 25,
     fontWeight: 'bold',
-    marginVertical: 2,
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 18,
   },
   footer: {
     flexDirection: 'row',

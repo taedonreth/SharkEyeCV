@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
@@ -9,69 +9,83 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page16() {
-  const title = " "; // or any title you want
+  const title = " ";
   const description = (
     <View style={styles.container}>
-      {/* Main content (shark + bubble) */}
+      {/* Main Content: Shark and Speech Bubble */}
       <View style={styles.mainContent}>
-        <View style={styles.sharkContainer}>
-          <Shark />
+        <View style={styles.sharkSection}>
+          {/* Wrapper View with margins for positioning the shark */}
+          <View style={{ marginLeft: 500, marginTop: 200 }}>
+            <Shark />
+          </View>
         </View>
-
-        <View style={styles.bubbleContainer}>
-          <SpeechBubble>
-            <ThemedText style={styles.questionText}>What is data?</ThemedText>
-            <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
-            <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
-          </SpeechBubble>
+        <View style={styles.speechSection}>
+          {/* Wrapper View with margins for positioning */}
+          <View style={{ marginLeft: 50, marginTop: -200 }}>
+            <SpeechBubble width={400} height={400} scale={0.85}>
+              <View style={styles.questionsContainer}>
+                <ThemedText style={styles.questionText}>That was Wrong!</ThemedText>
+                <ThemedText style={styles.questionText}>The model is now incorrect!</ThemedText>
+              </View>
+            </SpeechBubble>
+          </View>
         </View>
       </View>
-
-      {/* Footer container pinned to the bottom by flex layout */}
-      <View style={styles.footerContainer}>
+      
+      {/* Footer Navigation */}
+      <View style={styles.footer}>
         <Link href="/page15" asChild>
           <BackButton isNavigation={true} />
         </Link>
-
         <Link href="/page17" asChild>
           <ContinueButton isNavigation={true} />
         </Link>
       </View>
     </View>
   );
-
-  return <BasePage pageNumber={16} title={title} description={description} />;
+  
+  return <BasePage pageNumber={16} title=" " description={description} />;
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,            // Fill all available space in BasePage's descriptionContainer
+    flex: 1,
+  },
+  questionsContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Add responsive padding based on platform
+    paddingHorizontal: Platform.OS === 'web' ? 20 : 10,
   },
   mainContent: {
-    flex: 1,            // Push footer to the bottom
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // If you want to shift the shark or bubble, you can use margin or transforms
   },
-  sharkContainer: {
-    marginRight: 30,
-
-    // If you want the shark partly off-screen, you could do negative margin
-    // e.g. marginLeft: -50
+  sharkSection: {
+    // Changed from marginRight to flex to give it proper space allocation
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  bubbleContainer: {
-    transform: [{ scale: 0.4 }],
+  speechSection: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   questionText: {
-    fontSize: 14,
+    fontSize: 23,
     fontWeight: 'bold',
-    marginVertical: 2,
+    marginVertical: 4,
+    textAlign: 'center',
+    lineHeight: 18,
   },
-  footerContainer: {
+  footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
-    backgroundColor: 'transparent', // or any color
   },
 });
