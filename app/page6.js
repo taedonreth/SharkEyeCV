@@ -93,26 +93,28 @@ const styles = StyleSheet.create({
     marginTop: 150,
     width: '100%',
     padding: 10,
-    gap: 30, // Added gap to control space between cards
+    gap: 100, // Added gap to control space between cards
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 20, // Increased from 10 to 20 for more rounded corners
+    borderWidth: 1,
+    borderColor: '#a19f9f', // Very light gray border
     padding: 20,
-    width: '40%',
+    width: '30%',
     height: 'auto',
     minHeight: 300,
     // Use flexbox for layout within the card
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between', // This pushes content to top and bottom
+    justifyContent: 'space-between',
     alignItems: 'center',
-    // Other styles remain the same
+    // Shadow adjustments for a softer look
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
   },
   goodCard: {
     // You may change the background if needed
@@ -126,28 +128,29 @@ const styles = StyleSheet.create({
     width: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 50,
   },
   correctButton: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
+    bottom: -35,
+    right: 50,
     transform: [{ scale: 0.8 }],
   },
   falseButton: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
+    bottom: 100,
+    left: 130,
     transform: [{ scale: 0.8 }],
   },
   label: {
     backgroundColor: '#4FD1C5',
+    position: 'absolute',
     borderRadius: 8,
     padding: 8,
     alignItems: 'center',
-    width: '100%', // This ensures the label spans the full width of the card
+    width: '50%', // This ensures the label spans the full width of the card
     // Optional - to ensure it sits at the bottom
-    marginTop: 'auto', // This pushes the label to the bottom if you use flexbox
+    top: 270, // This pushes the label to the bottom if you use flexbox
   },
   labelText: {
     color: 'white',
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
   sharkPosition: {
     marginLeft: -340,
     marginTop: 190,
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 0.7 }],
     //borderWidth: 1,
     //borderColor: 'blue'
   },
@@ -184,7 +187,7 @@ const styles = StyleSheet.create({
   },
   // Keep the original styles for the text inside the bubble
   questionText: {
-    fontSize: 50,
+    fontSize: 60,
     fontWeight: 'bold',
     marginVertical: 4,
     lineHeight: 100,
