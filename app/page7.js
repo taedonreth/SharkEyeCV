@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import CuteShark from '../components/CuteShark';
@@ -16,25 +16,36 @@ export default function Page7() {
   const title = " ";
   const description = (
     <View style={styles.container}>
-
-      {/* Main Content: Shark and Speech Bubble */}
       <View style={styles.mainContent}>
-        <View style={styles.sharkSection}>
-          <Shark />
+        {/* Left section with shark and speech bubble */}
+        <View style={styles.leftSection}>
+          <View style={styles.sharkContainer}>
+            <Shark />
+          </View>
         </View>
-        <View style={styles.speechSection}>
+        
+        <View style={styles.speechBubbleContainer}>
           <SpeechBubble>
-            <ThemedText style={styles.questionText}>What is data?</ThemedText>
-            <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
-            <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
+            <ThemedText style={styles.questionText}>
+              Is this photo{'\n'}good or bad?
+            </ThemedText>
           </SpeechBubble>
         </View>
 
-
-        {/* Buttons Row */}
-        <View style={styles.buttonsRow}>
-          <CorrectButton />
-          <FalseButton />
+        {/* Center content with image and buttons */}
+        <View style={styles.centerContent}>
+          <View style={styles.imageContainer}>
+            <View style={styles.cuteSharkContainer}>
+              <CuteShark />
+            </View>
+            <View style={styles.redBorderFrame} />
+          </View>
+          
+          {/* Buttons Row - moved inside centerContent */}
+          <View style={styles.buttonsRow}>
+            <CorrectButton />
+            <FalseButton />
+          </View>
         </View>
       </View>
 
@@ -60,25 +71,75 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
+    justifyContent: 'center'
   },
-  sharkSection: {
-    marginRight: 20,
+  leftSection: {
+    width: '30%',
+    position: 'relative',
+    paddingTop: 100,
   },
-  speechSection: {
-    flex: 1,
+  sharkContainer: {
+    left: -120,
+    top: 0,
+    transform: [{ scale: 0.9 }],
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    left: 110,
+    top: -310,
+    transform: [{ scale: 0.38 }],
+    zIndex: 20,
   },
   questionText: {
-    fontSize: 14,
+    fontSize: 70,
     fontWeight: 'bold',
-    marginVertical: 2,
+    lineHeight: 36,
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 100,
+  },
+  centerContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 50, // Reduced to move content up
+    marginLeft: 100, // Move content to the right
+    maxWidth: 800, // Add a maximum width to prevent excessive stretching
+  },
+  
+  imageContainer: {
+    width: 700, // Use fixed width instead of percentage
+    height: 420, // Use fixed height instead of percentage
+    borderRadius: 20,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    overflow: 'visible',
+    borderWidth: 1,          // Add this
+    borderColor: '#E5E5E5',  // Add this - a light gray border
+    shadowColor: '#000',
+  },
+  
+  cuteSharkContainer: {
+    position: 'absolute',
+    transform: [{ scale: 0.8 }], // Make shark larger relative to container
+  },
+  
+  redBorderFrame: {
+    position: 'absolute',
+    width: 400, // Fixed width
+    height: 220, // Fixed height
+    borderWidth: 2,
+    borderColor: '#F87171',
+    borderRadius: 8,
   },
   buttonsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+    justifyContent: 'center',
+    marginTop: -10,
+    width: '100%',
+    gap: 80, // Space between buttons
   },
   footer: {
     flexDirection: 'row',
