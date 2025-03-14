@@ -79,15 +79,15 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   sharkContainer: {
-    left: -120,
-    top: 0,
-    transform: [{ scale: 0.9 }],
+    right: 190,
+    bottom: 150,
+    transform: [{ scale: 0.65 }, { rotate: '20deg'}],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 110,
-    top: -310,
-    transform: [{ scale: 0.38 }],
+    left: -90,
+    top: -350,
+    transform: [{ scale: 0.25 }],
     zIndex: 20,
   },
   questionText: {
@@ -102,9 +102,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 50, // Reduced to move content up
-    marginLeft: 100, // Move content to the right
-    maxWidth: 800, // Add a maximum width to prevent excessive stretching
+    paddingTop: 50,
+    marginRight: 450,
+    // marginLeft: 100, // Remove or comment this out
+    maxWidth: 800,
+    transform: [{ scale: 1.1 }],
   },
   
   imageContainer: {
@@ -137,9 +139,10 @@ const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: -10,
+    marginTop: -50,
     width: '100%',
-    gap: 80, // Space between buttons
+    gap: 90, // Space between buttons
+    transform: [{ scale: 0.7 }],
   },
   footer: {
     flexDirection: 'row',
