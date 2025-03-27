@@ -57,7 +57,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sharkSection: {
+    top: 920,
+    right: 400,
     marginBottom: 20,
+    transform: [ {scale: 0.8} ]
   },
   contentSection: {
     alignItems: 'center',
