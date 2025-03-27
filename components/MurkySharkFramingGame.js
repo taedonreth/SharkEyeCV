@@ -8,99 +8,99 @@ const UnderwaterClassificationGame = () => {
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [maxAttempts, setMaxAttempts] = useState(10);
-  
+
   // Feedback state
   const [feedbackState, setFeedbackState] = useState({
     message: '',
     visible: false
   });
-  
+
   // Underwater items data with their positions in the image
   const underwaterItems = [
-    { 
-      id: 1, 
-      name: 'fish', 
-      position: { x: 80, y: 110 }, 
-      size: { width: 70, height: 60 } 
+    {
+      id: 1,
+      name: 'fish',
+      position: { x: 80, y: 110 },
+      size: { width: 70, height: 60 }
     },
-    { 
-      id: 2, 
-      name: 'fish', 
-      position: { x: 400, y: 130 }, 
-      size: { width: 120, height: 70 } 
+    {
+      id: 2,
+      name: 'fish',
+      position: { x: 400, y: 130 },
+      size: { width: 120, height: 70 }
     },
-    { 
-      id: 3, 
-      name: 'fish', 
-      position: { x: 210, y: 50 }, 
-      size: { width: 240, height: 80 } 
+    {
+      id: 3,
+      name: 'fish',
+      position: { x: 210, y: 50 },
+      size: { width: 240, height: 80 }
     },
-    { 
-      id: 4, 
-      name: 'plant', 
-      position: { x: 0, y: 100 }, 
-      size: { width: 80, height: 190 } 
+    {
+      id: 4,
+      name: 'plant',
+      position: { x: 0, y: 100 },
+      size: { width: 80, height: 190 }
     },
-    { 
-      id: 5, 
-      name: 'plant', 
-      position: { x: 520, y: 170 }, 
-      size: { width: 60, height: 140 } 
+    {
+      id: 5,
+      name: 'plant',
+      position: { x: 520, y: 170 },
+      size: { width: 60, height: 140 }
     },
-    { 
-      id: 6, 
-      name: 'plant', 
-      position: { x: 190, y: 160 }, 
-      size: { width: 50, height: 180 } 
+    {
+      id: 6,
+      name: 'plant',
+      position: { x: 190, y: 160 },
+      size: { width: 50, height: 180 }
     },
-    { 
-      id: 7, 
-      name: 'plant', 
-      position: { x: 350, y: 190 }, 
-      size: { width: 200, height: 150 } 
+    {
+      id: 7,
+      name: 'plant',
+      position: { x: 350, y: 190 },
+      size: { width: 200, height: 150 }
     },
-    { 
-      id: 8, 
-      name: 'plant', 
-      position: { x: 60, y: 180 }, 
-      size: { width: 80, height: 90 } 
+    {
+      id: 8,
+      name: 'plant',
+      position: { x: 60, y: 180 },
+      size: { width: 80, height: 90 }
     },
-    { 
-      id: 9, 
-      name: 'plant', 
-      position: { x: 100, y: 210 }, 
-      size: { width: 80, height: 120 } 
+    {
+      id: 9,
+      name: 'plant',
+      position: { x: 100, y: 210 },
+      size: { width: 80, height: 120 }
     }
   ];
-  
+
   // User input
   const [userLabel, setUserLabel] = useState('');
   const [showLabelInput, setShowLabelInput] = useState(false);
-  
+
   // Game area dimensions - adjust as needed to match your image aspect ratio
   const gameWidth = 640;
   const gameHeight = 360;
-  
+
   // Selection frame
   const [framePosition, setFramePosition] = useState({ x: 0, y: 0 });
   const [frameSize, setFrameSize] = useState({ width: 0, height: 0 });
-  
+
   // Reference to the game box for position calculations
   const gameBoxRef = useRef(null);
-  
+
   // Track which items have been found
   const [foundItems, setFoundItems] = useState([]);
-  
+
   // Hide feedback after a set duration
   useEffect(() => {
     let feedbackTimer = null;
-    
+
     if (feedbackState.visible) {
       feedbackTimer = setTimeout(() => {
         setFeedbackState(prev => ({ ...prev, visible: false }));
       }, 3000);
     }
-    
+
     return () => {
       if (feedbackTimer) clearTimeout(feedbackTimer);
     };
@@ -112,24 +112,24 @@ const UnderwaterClassificationGame = () => {
       setGameComplete(true);
     }
   }, [attempts, maxAttempts, foundItems, underwaterItems.length]);
-  
+
   // Initialize game
   useEffect(() => {
     if (gameStarted && !gameComplete) {
       setFeedbackState({ message: '', visible: false });
     }
   }, [gameStarted, gameComplete]);
-  
+
   // Add marquee selection using DOM for web
   useEffect(() => {
     // Only run in browser environment
     if (typeof window === 'undefined' || !gameBoxRef.current || !gameStarted || gameComplete) return;
-    
+
     let isSelecting = false;
     let startX = 0;
     let startY = 0;
     let marqueeElement = null;
-    
+
     // Create a marquee element
     const createMarquee = () => {
       const element = document.createElement('div');
@@ -141,169 +141,169 @@ const UnderwaterClassificationGame = () => {
       element.style.zIndex = '1000';
       return element;
     };
-    
+
     // Update marquee size
     const updateMarquee = (currentX, currentY) => {
       if (!marqueeElement) return;
-      
+
       const left = Math.min(startX, currentX);
       const top = Math.min(startY, currentY);
       const width = Math.abs(currentX - startX);
       const height = Math.abs(currentY - startY);
-      
+
       marqueeElement.style.left = `${left}px`;
       marqueeElement.style.top = `${top}px`;
       marqueeElement.style.width = `${width}px`;
       marqueeElement.style.height = `${height}px`;
     };
-    
+
     // Handle mouse down - uses direct offsets
     const handleMouseDown = (e) => {
       // Only handle left mouse button
       if (e.button !== 0) return;
-      
+
       // Use direct offset which is relative to the target element
       startX = e.offsetX;
       startY = e.offsetY;
-      
+
       // Create and add marquee
       marqueeElement = createMarquee();
       gameBoxRef.current.appendChild(marqueeElement);
-      
+
       // Set initial position
       marqueeElement.style.left = `${startX}px`;
       marqueeElement.style.top = `${startY}px`;
-      
+
       isSelecting = true;
     };
-    
+
     // Handle mouse move - uses direct offsets and client coordinates
     const handleMouseMove = (e) => {
       if (!isSelecting) return;
-      
+
       // Calculate offset within the game box
       const rect = gameBoxRef.current.getBoundingClientRect();
       const offsetX = e.clientX - rect.left;
       const offsetY = e.clientY - rect.top;
-      
+
       // Clamp to game boundaries
       const x = Math.max(0, Math.min(gameWidth, offsetX));
       const y = Math.max(0, Math.min(gameHeight, offsetY));
-      
+
       updateMarquee(x, y);
     };
-    
+
     // Handle mouse up
     const handleMouseUp = (e) => {
       if (!isSelecting) return;
-      
+
       isSelecting = false;
-      
+
       // Calculate offset within the game box
       const rect = gameBoxRef.current.getBoundingClientRect();
       const offsetX = e.clientX - rect.left;
       const offsetY = e.clientY - rect.top;
-      
+
       // Clamp to game boundaries
       const x = Math.max(0, Math.min(gameWidth, offsetX));
       const y = Math.max(0, Math.min(gameHeight, offsetY));
-      
+
       // Calculate final rectangle
       const left = Math.min(startX, x);
       const top = Math.min(startY, y);
       const width = Math.abs(x - startX);
       const height = Math.abs(y - startY);
-      
+
       // Remove marquee
       if (marqueeElement && marqueeElement.parentNode) {
         marqueeElement.parentNode.removeChild(marqueeElement);
       }
       marqueeElement = null;
-      
+
       // Update frame position and size
       setFramePosition({ x: left, y: top });
       setFrameSize({ width, height });
-      
+
       // Show label input after selection
       setShowLabelInput(true);
     };
-    
+
     // Add event listeners to the game box
     const gameBox = gameBoxRef.current;
     gameBox.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
-    
+
     // Cleanup
     return () => {
       gameBox.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-      
+
       if (marqueeElement && marqueeElement.parentNode) {
         marqueeElement.parentNode.removeChild(marqueeElement);
       }
     };
   }, [gameStarted, gameComplete, gameWidth, gameHeight]);
-  
+
   // Check if the selection is correct
   const checkSelection = () => {
     setAttempts(prev => prev + 1);
-    
+
     // First, check if the selection is too small (prevents accidental clicks)
     const MIN_SELECTION_SIZE = 30; // Increased minimum size requirement
     if (frameSize.width < MIN_SELECTION_SIZE || frameSize.height < MIN_SELECTION_SIZE) {
       // Selection too small, consider it a miss
-      setFeedbackState({ 
-        message: 'Selection too small. Try to frame the item better!', 
-        visible: true 
+      setFeedbackState({
+        message: 'Selection too small. Try to frame the item better!',
+        visible: true
       });
       setShowLabelInput(false);
       return; // Don't count this as an attempt
     }
-    
+
     // Get frame dimensions
     const frameLeft = framePosition.x;
     const frameTop = framePosition.y;
     const frameRight = frameLeft + frameSize.width;
     const frameBottom = frameTop + frameSize.height;
-    
+
     // Track the best match (item with highest overlap percentage)
     let bestMatch = null;
     let highestOverlapPercentage = 0;
     let bestSelectionPrecision = 0;
-    
+
     // Check against all underwater items that haven't been found yet
     underwaterItems.forEach(item => {
       // Skip if this item has already been found
       if (foundItems.includes(item.id)) return;
-      
+
       const itemLeft = item.position.x;
       const itemTop = item.position.y;
       const itemRight = itemLeft + item.size.width;
       const itemBottom = itemTop + item.size.height;
-      
+
       // Calculate the actual overlap area
       const overlapLeft = Math.max(itemLeft, frameLeft);
       const overlapTop = Math.max(itemTop, frameTop);
       const overlapRight = Math.min(itemRight, frameRight);
       const overlapBottom = Math.min(itemBottom, frameBottom);
-      
+
       // Check if there is an actual overlap
       const hasOverlap = overlapLeft < overlapRight && overlapTop < overlapBottom;
-      
+
       if (hasOverlap) {
         const overlapWidth = overlapRight - overlapLeft;
         const overlapHeight = overlapBottom - overlapTop;
         const overlapArea = overlapWidth * overlapHeight;
-        
+
         const itemArea = item.size.width * item.size.height;
         const overlapPercentage = (overlapArea / itemArea) * 100;
-        
+
         // Also calculate how much of the selection contains the item
         const selectionArea = frameSize.width * frameSize.height;
         const selectionPrecision = (overlapArea / selectionArea) * 100;
-        
+
         // If this item has better overlap than our current best match, update the best match
         if (overlapPercentage > highestOverlapPercentage) {
           highestOverlapPercentage = overlapPercentage;
@@ -312,29 +312,29 @@ const UnderwaterClassificationGame = () => {
         }
       }
     });
-    
+
     // Check if we found a match
     if (bestMatch) {
       console.log(`Best match: ${bestMatch.name} with ${highestOverlapPercentage.toFixed(2)}% overlap`);
       console.log(`Selection precision: ${bestSelectionPrecision.toFixed(2)}%`);
-      
+
       // Check if the label is correct
       const labelCorrect = userLabel.trim().toLowerCase() === bestMatch.name.toLowerCase();
-      
+
       // Calculate score
       let pointsEarned = 0;
       let message = '';
-      
+
       // Apply much stricter precision requirements
       let effectiveOverlapPercentage = highestOverlapPercentage;
-      
+
       // Heavily penalize imprecise selections (large boxes around small items)
       if (bestSelectionPrecision < 30) {
         // If the selection is very large and the item is small within it,
         // drastically reduce the effective overlap percentage
         effectiveOverlapPercentage = highestOverlapPercentage * (bestSelectionPrecision / 100);
       }
-      
+
       if (effectiveOverlapPercentage > 60) { // Much higher threshold for a good match
         if (labelCorrect) {
           if (effectiveOverlapPercentage > 80) {
@@ -367,7 +367,7 @@ const UnderwaterClassificationGame = () => {
         message = `Bad selection! You need to be more precise. Try again. +0`;
         pointsEarned = 0;
       }
-      
+
       setScore(prev => prev + pointsEarned);
       setFeedbackState({ message, visible: true });
     } else {
@@ -375,13 +375,13 @@ const UnderwaterClassificationGame = () => {
       const message = 'Missed! Try selecting a different area. +0';
       setFeedbackState({ message, visible: true });
     }
-    
+
     // Reset selection and prepare for next round
     setUserLabel('');
     setFrameSize({ width: 0, height: 0 });
     setShowLabelInput(false);
   };
-  
+
   // Start new game
   const startGame = () => {
     setGameStarted(true);
@@ -390,7 +390,7 @@ const UnderwaterClassificationGame = () => {
     setAttempts(0);
     setFoundItems([]);
   };
-  
+
   // Get current item prompt
   const getItemPrompt = () => {
     const remainingCount = underwaterItems.length - foundItems.length;
@@ -577,26 +577,26 @@ const UnderwaterClassificationGame = () => {
       minWidth: 180,
     },
     completeScreen: {
-        position: 'absolute',
-        top: -100,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(173, 216, 230, 1)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 70,
-        width: '100%',
-        height: '700%',
-        padding: 20,
-      },
-      completeText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#fff',
-        marginBottom: 20,
-        textAlign: 'center',
-      },
+      position: 'absolute',
+      top: -100,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(173, 216, 230, 1)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 70,
+      width: '100%',
+      height: '700%',
+      padding: 20,
+    },
+    completeText: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      color: '#fff',
+      marginBottom: 20,
+      textAlign: 'center',
+    },
     finalScore: {
       fontSize: 24,
       color: '#fff',
@@ -624,7 +624,7 @@ const UnderwaterClassificationGame = () => {
       backgroundColor: 'rgba(0, 255, 0, 0.2)',
     },
   });
-  
+
   return (
     <View style={styles.container}>
       {!gameStarted ? (
@@ -648,19 +648,20 @@ const UnderwaterClassificationGame = () => {
             <Text style={styles.attemptsText}>Attempts: {attempts}/{maxAttempts}</Text>
             <Text style={styles.foundText}>Found: {foundItems.length}/{underwaterItems.length}</Text>
           </View>
-          
+
           {gameComplete ? (
             <View style={styles.completeScreen}>
               <Text style={styles.completeText}>Game Over!</Text>
               <Text style={styles.finalScore}>Final Score: {score}</Text>
               <Text style={styles.finalFound}>Items Found: {foundItems.length}/{underwaterItems.length}</Text>
+              <Text style={styles.finalFound}>Continue to next page!</Text>
               <TouchableOpacity style={styles.restartButton} onPress={startGame}>
                 <Text style={styles.restartButtonText}>Play Again</Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.gameArea}>
-              <View 
+              <View
                 ref={gameBoxRef}
                 style={[styles.gameBox, { width: gameWidth, height: gameHeight }]}
               >
@@ -670,7 +671,7 @@ const UnderwaterClassificationGame = () => {
                   style={styles.backgroundImage}
                   resizeMode="cover"
                 />
-                
+
                 {/* Optional debug mode: visualize items with borders */}
                 {/* Change this to false to hide debug visualization */}
                 {false && underwaterItems.map(item => (
@@ -684,18 +685,18 @@ const UnderwaterClassificationGame = () => {
                       height: item.size.height,
                       borderWidth: 2,
                       borderColor: foundItems.includes(item.id) ? 'green' : 'red',
-                      backgroundColor: foundItems.includes(item.id) 
-                        ? 'rgba(0, 255, 0, 0.2)' 
+                      backgroundColor: foundItems.includes(item.id)
+                        ? 'rgba(0, 255, 0, 0.2)'
                         : 'rgba(255, 0, 0, 0.2)',
                       zIndex: 10
                     }}
                   >
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
                       {item.name}
                     </Text>
                   </View>
                 ))}
-                
+
                 {/* Highlight found items with subtle indication */}
                 {foundItems.map(id => {
                   const item = underwaterItems.find(item => item.id === id);
@@ -716,7 +717,7 @@ const UnderwaterClassificationGame = () => {
                     />
                   );
                 })}
-                
+
                 {/* Selection Frame */}
                 <View
                   style={[
@@ -729,7 +730,7 @@ const UnderwaterClassificationGame = () => {
                     }
                   ]}
                 />
-                
+
                 {/* Feedback */}
                 {feedbackState.visible && (
                   <View style={styles.feedbackPopup}>
@@ -737,11 +738,11 @@ const UnderwaterClassificationGame = () => {
                   </View>
                 )}
               </View>
-              
+
               <View style={styles.targetPrompt}>
                 <Text style={styles.targetText}>{getItemPrompt()}</Text>
               </View>
-              
+
               {/* Controls */}
               <View style={styles.controls}>
                 {showLabelInput ? (
@@ -753,7 +754,7 @@ const UnderwaterClassificationGame = () => {
                       onChangeText={setUserLabel}
                       autoFocus
                     />
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       style={styles.submitButton}
                       onPress={checkSelection}
                       disabled={!userLabel.trim()}
