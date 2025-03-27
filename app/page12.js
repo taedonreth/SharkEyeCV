@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import SharkFramingGame from '../components/SharkFramingGame';
+import MurkySharkFramingGame from '../components/MurkySharkFramingGame';
 
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
@@ -19,7 +19,7 @@ export default function Page12() {
         
         {/* Added SharkFramingGame */}
         <View style={styles.gameSection}>
-          <SharkFramingGame />
+          <MurkySharkFramingGame />
         </View>
       </View>
 
