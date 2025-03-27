@@ -28,9 +28,9 @@ export default function Page7() {
   // State for the game
   const [currentImage, setCurrentImage] = useState(null);
   const [score, setScore] = useState(0);
-  const [totalAnswered, setTotalAnswered] = useState(0);
   const [feedback, setFeedback] = useState({ visible: false, correct: false, message: '' });
   const [fadeAnim] = useState(new Animated.Value(1));
+  const [gameCompleted, setGameCompleted] = useState(false);
 
   // Function to get a random image
   const getRandomImage = () => {
@@ -54,16 +54,27 @@ export default function Page7() {
 
   // Handle user selection
   const handleSelection = (selection) => {
-    // Don't allow selection while feedback is showing
-    if (feedback.visible) return;
+    // Don't allow selection while feedback is showing or if game is completed
+    if (feedback.visible || gameCompleted) return;
 
     const isCorrect = (selection === 'good' && currentImage.category === 'good') ||
       (selection === 'bad' && currentImage.category === 'bad');
 
-    // Update score and total
-    setTotalAnswered(prev => prev + 1);
+    // Update score only for correct answers
     if (isCorrect) {
-      setScore(prev => prev + 1);
+      const newScore = score + 1;
+      setScore(newScore);
+      
+      // Check if game is completed
+      if (newScore >= 5) {
+        setGameCompleted(true);
+        setFeedback({
+          visible: true,
+          correct: true,
+          message: 'Game completed! Press Continue to move to the next page!'
+        });
+        return;
+      }
     }
 
     // Show feedback
@@ -79,16 +90,18 @@ export default function Page7() {
       duration: 300,
       useNativeDriver: true
     }).start(() => {
-      // After fade out, set new image and fade in
-      setTimeout(() => {
-        setCurrentImage(getRandomImage());
-        setFeedback({ visible: false, correct: false, message: '' });
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true
-        }).start();
-      }, 1000);
+      // After fade out, set new image and fade in (only if game is not completed)
+      if (!gameCompleted) {
+        setTimeout(() => {
+          setCurrentImage(getRandomImage());
+          setFeedback({ visible: false, correct: false, message: '' });
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true
+          }).start();
+        }, 1000);
+      }
     });
   };
 
@@ -116,7 +129,7 @@ export default function Page7() {
           {/* Score display */}
           <View style={styles.scoreContainer}>
             <ThemedText style={styles.scoreText}>
-              Score: {score}/{totalAnswered}
+              Score: {score}
             </ThemedText>
           </View>
 
@@ -136,9 +149,10 @@ export default function Page7() {
             {feedback.visible && (
               <View style={[
                 styles.feedbackOverlay,
-                feedback.correct ? styles.correctOverlay : styles.incorrectOverlay
+                feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
+                gameCompleted ? styles.completionOverlay : null
               ]}>
-                <ThemedText style={styles.feedbackText}>
+                <ThemedText style={[styles.feedbackText, gameCompleted ? styles.completionText : null]}>
                   {feedback.message}
                 </ThemedText>
               </View>
@@ -151,27 +165,20 @@ export default function Page7() {
               style={styles.buttonWrapper}
               onPress={() => handleSelection('good')}
               activeOpacity={0.8}
+              disabled={gameCompleted}
             >
               <CorrectButton />
-              <ThemedText style={styles.buttonLabel}>Good Data</ThemedText>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonWrapper}
               onPress={() => handleSelection('bad')}
               activeOpacity={0.8}
+              disabled={gameCompleted}
             >
               <FalseButton />
-              <ThemedText style={styles.buttonLabel}>Bad Data</ThemedText>
             </TouchableOpacity>
           </View>
 
-          {/* Instructions */}
-          <View style={styles.instructionsContainer}>
-            <ThemedText style={styles.instructionsText}>
-              Good training data includes sharks or relevant ocean items.{'\n'}
-              Bad training data includes unrelated objects or scenes.
-            </ThemedText>
-          </View>
         </View>
       </View>
 
@@ -197,7 +204,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'space-evenly', // or 'center'
   },
   leftSection: {
     width: '30%',
@@ -227,7 +234,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 100,
     marginRight: 450,
     maxWidth: 800,
   },
@@ -240,7 +246,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     position: 'absolute',
     left: 225,
-    top: 430,
+    top: 359,
     zIndex: 3,
   },
   scoreText: {
@@ -286,6 +292,9 @@ const styles = StyleSheet.create({
   incorrectOverlay: {
     backgroundColor: 'rgba(180, 0, 0, 0.5)',
   },
+  completionOverlay: {
+    backgroundColor: 'rgba(0, 100, 180, 0.7)',
+  },
   feedbackText: {
     fontSize: 36,
     fontWeight: 'bold',
@@ -294,10 +303,14 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
+  completionText: {
+    fontSize: 32,
+    textAlign: 'center',
+    padding: 10,
+  },
   buttonsRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
     width: '100%',
     gap: 90,
   },
@@ -310,20 +323,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-  },
-  instructionsContainer: {
-    marginTop: 5,
-    padding: 10,
-    backgroundColor: '#F9F9F9',
-    borderRadius: 8,
-    maxWidth: 600,
-    position: 'absolute',
-    bottom: 80,
-  },
-  instructionsText: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: '#555',
   },
   footer: {
     flexDirection: 'row',
