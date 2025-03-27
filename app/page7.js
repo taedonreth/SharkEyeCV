@@ -13,13 +13,19 @@ import ContinueButton from '../components/ContinueButton';
 // Define the training images data structure
 const trainingImages = {
   good: [
-    { id: 'good1', path: require('../assets/images/training-data/good/good1.jpg'), name: 'Shark Image 1' },
-    { id: 'good2', path: require('../assets/images/training-data/good/good2.jpg'), name: 'Seaweed Image' },
+    { id: 'good1', path: require('../assets/images/training-data/good/good1.jpg'), name: 'Shark' },
+    { id: 'good2', path: require('../assets/images/training-data/good/good2.jpg'), name: 'Turtle' },
+    { id: 'good3', path: require('../assets/images/training-data/good/good3.jpg'), name: 'StingRay' },
+    { id: 'good4', path: require('../assets/images/training-data/good/good4.jpg'), name: 'CoralReef' },
+    { id: 'good5', path: require('../assets/images/training-data/good/good5.jpg'), name: 'Surfer' },
     // Add more good images as needed
   ],
   bad: [
-    { id: 'bad1', path: require('../assets/images/training-data/bad/bad1.jpg'), name: 'Monkey Image' },
-    { id: 'bad2', path: require('../assets/images/training-data/bad/bad2.jpg'), name: 'Random Object' },
+    { id: 'bad1', path: require('../assets/images/training-data/bad/bad1.jpg'), name: 'Couch' },
+    { id: 'bad2', path: require('../assets/images/training-data/bad/bad2.jpg'), name: 'Monkey' },
+    { id: 'bad3', path: require('../assets/images/training-data/bad/bad3.jpg'), name: 'Dog' },
+    { id: 'bad4', path: require('../assets/images/training-data/bad/bad4.jpg'), name: 'Cat' },
+    { id: 'bad5', path: require('../assets/images/training-data/bad/bad5.jpg'), name: 'Sushi' },
     // Add more bad images as needed
   ]
 };
@@ -64,7 +70,7 @@ export default function Page7() {
     if (isCorrect) {
       const newScore = score + 1;
       setScore(newScore);
-      
+
       // Check if game is completed
       if (newScore >= 5) {
         setGameCompleted(true);
