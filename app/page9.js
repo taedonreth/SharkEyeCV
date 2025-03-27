@@ -6,9 +6,12 @@ import CorrectButton from '../components/CorrectButton';
 import FalseButton from '../components/FalseButton';
 import CroppingRectangle from '../components/CroppingRectangle';
 import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import { transform } from 'typescript';
 
 // Component layout configuration
 const layoutConfig = {
@@ -17,16 +20,16 @@ const layoutConfig = {
     paddingHorizontal: 0,
     paddingVertical: 0,
   },
-  
+
   // Box section layout
   boxSection: {
     marginBottom: 600,    // space below the box section
     padding: 10,         // reduced internal padding
     gap: 15,             // gap between boxes
-    width: '50%',   
+    width: '50%',
     marginLeft: 50,     // control the overall width
   },
-  
+
   // Individual box properties
   goodBox: {
     flex: 1,             // flex ratio (relative sizing)
@@ -40,7 +43,7 @@ const layoutConfig = {
     width: '35%',        // reduced width percentage
     scale: 0.75,         // reduced scale factor
   },
-  
+
   // Cropping section layout
   croppingRow: {
     marginVertical: -150,  // Move the entire row higher (negative value moves up)
@@ -61,20 +64,21 @@ const layoutConfig = {
     scale: 0.30,           // Keep your scale
     marginTop: -1200,      // Added vertical positioning
   },
-  
+
   // Shark section
   sharkSection: {
     marginTop: -700,       // top margin
     marginBottom: 0,
     marginLeft: -900,  // negative margin to adjust position
+    transform: [{ scale: 0.8 }],
   },
-  
+
   // Text and label customization
   labelText: {
     fontSize: 30,        // font size
     fontWeight: 'bold',  // font weight
   },
-  
+
   // Box label positioning
   boxLabel: {
     marginTop: 80,       // Add space above the label to push it down
@@ -87,13 +91,22 @@ export default function Page9() {
   const title = " ";
 
   const description = (
-    <View style={[styles.container, { 
+    <View style={[styles.container, {
       paddingHorizontal: layoutConfig.container.paddingHorizontal,
       paddingVertical: layoutConfig.container.paddingVertical,
     }]}>
       <View style={styles.mainContent}>
+        {/* Speech Bubble */}
+        <View style={styles.speechBubbleContainer}>
+          <SpeechBubble>
+            <ThemedText style={styles.questionText}>
+              Is this image{'\n'}good or bad{'\n'}training data?
+            </ThemedText>
+          </SpeechBubble>
+        </View>
+
         {/* Box Section with Good and Bad Boxes */}
-        <View style={[styles.boxSection, { 
+        <View style={[styles.boxSection, {
           marginBottom: layoutConfig.boxSection.marginBottom,
           padding: layoutConfig.boxSection.padding,
           gap: layoutConfig.boxSection.gap,
@@ -101,7 +114,7 @@ export default function Page9() {
           marginLeft: layoutConfig.boxSection.marginLeft
         }]}>
           {/* Good Box */}
-          <View style={[styles.box, { 
+          <View style={[styles.box, {
             flex: layoutConfig.goodBox.flex,
             marginRight: layoutConfig.goodBox.marginRight,
             width: layoutConfig.goodBox.width,
@@ -126,7 +139,7 @@ export default function Page9() {
           </View>
 
           {/* Bad Box */}
-          <View style={[styles.box, { 
+          <View style={[styles.box, {
             flex: layoutConfig.badBox.flex,
             marginLeft: layoutConfig.badBox.marginLeft,
             width: layoutConfig.badBox.width,
@@ -152,12 +165,12 @@ export default function Page9() {
         </View>
 
         {/* Cropping Rectangles */}
-        <View style={[styles.croppingRow, { 
+        <View style={[styles.croppingRow, {
           marginVertical: layoutConfig.croppingRow.marginVertical,
           gap: layoutConfig.croppingRow.gap,
           justifyContent: 'center'
         }]}>
-          <View style={[styles.croppingGood, { 
+          <View style={[styles.croppingGood, {
             flex: layoutConfig.croppingGood.flex,
             marginRight: layoutConfig.croppingGood.marginRight,
             marginLeft: layoutConfig.croppingGood.marginLeft,
@@ -166,7 +179,7 @@ export default function Page9() {
           }]}>
             <CroppingRectangle />
           </View>
-          <View style={[styles.croppingBad, { 
+          <View style={[styles.croppingBad, {
             flex: layoutConfig.croppingBad.flex,
             marginLeft: layoutConfig.croppingBad.marginLeft,
             marginRight: layoutConfig.croppingBad.marginRight,
@@ -178,10 +191,11 @@ export default function Page9() {
         </View>
 
         {/* Shark Component */}
-        <View style={[styles.sharkSection, { 
+        <View style={[styles.sharkSection, {
           marginTop: layoutConfig.sharkSection.marginTop,
           marginBottom: layoutConfig.sharkSection.marginBottom,
-          marginLeft: layoutConfig.sharkSection.marginLeft
+          marginLeft: layoutConfig.sharkSection.marginLeft,
+          transform: layoutConfig.sharkSection.transform
         }]}>
           <Shark />
         </View>
@@ -268,5 +282,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 25,
     width: '100%',
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    left: 10,
+    top: -370,
+    transform: [{ scale: 0.25 }],
+    zIndex: 20,
+  },
+  questionText: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 100,
   },
 });
