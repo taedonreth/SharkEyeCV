@@ -9,7 +9,6 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page16() {
-  const title = " ";
   const description = (
     <View style={styles.container}>
       {/* Main Content: Shark and Speech Bubble */}

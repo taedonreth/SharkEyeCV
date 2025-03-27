@@ -244,7 +244,7 @@ export default function Page15() {
     </View>
   );
 
-  return <BasePage pageNumber={15} description={description} />;
+  return <BasePage pageNumber={15} title=" " description={description} />;
 }
 
 // Update styles to include completion styling
