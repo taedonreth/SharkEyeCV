@@ -10,23 +10,41 @@ import Question from '../components/QuestionPage15';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import { ThemedText } from '../components/ThemedText';
 
 export default function Page15() {
   const description = (
     <View style={styles.container}>
+      {/* Main scene content */}
       <View style={styles.mainContent}>
-        {/* Top section: Shark */}
-        <View style={styles.sharkContainer}>
-          <Shark />
-        </View>
+        <View style={styles.contentRow}>
+          {/* Left side container for Shark and Speech Bubble */}
+          <View style={styles.leftContainer}>
+            {/* Speech bubble positioned above the shark */}
+            <View style={styles.speechBubbleContainer}>
+              <SpeechBubble style={styles.speechBubble}>
+                <ThemedText style={styles.bubbleText}>
+                  Hmmm..{'\n'}I see a dog!
+                </ThemedText>
+              </SpeechBubble>
+            </View>
+            
+            {/* Shark below the speech bubble */}
+            <View style={styles.sharkContainer}>
+              <Shark />
+            </View>
+          </View>
 
-        {/* Middle section: BackDrop, SpeechBubble and Question */}
-        <View style={styles.middleContent}>
-          <BackDrop style={styles.backdrop} />
-          <SpeechBubble style={styles.speechBubble}>
-            {/* You can insert any children if needed */}
-          </SpeechBubble>
-          <Question style={styles.question} />
+          {/* Right side container for BackDrop and Question */}
+          <View style={styles.rightContainer}>
+            <View style={styles.backdropContainer}>
+              <BackDrop style={styles.backdrop} />
+            </View>
+            
+            <View style={styles.questionContainer}>
+              <Question style={styles.question} />
+            </View>
+          </View>
         </View>
 
         {/* Bottom section: Yes and No buttons */}
@@ -36,7 +54,7 @@ export default function Page15() {
         </View>
       </View>
 
-      {/* Footer navigation similar to Page16 */}
+      {/* Footer navigation */}
       <View style={styles.footerContainer}>
         <Link href="/page14" asChild>
           <BackButton isNavigation={true} />
@@ -56,38 +74,72 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContent: {
-    flex: 1,
-    paddingHorizontal: 20,
-    justifyContent: 'space-around',
-  },
-  sharkContainer: {
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  middleContent: {
-    flex: 1,
-    alignItems: 'center',
+    flex: 1, // Pushes footer to the bottom
     justifyContent: 'center',
   },
-  backdrop: {
-    marginBottom: 20,
-    // additional styling if needed
+  contentRow: {
+    flexDirection: 'row', // Arrange children horizontally
+    alignItems: 'center',
   },
-  speechBubble: {
-    marginBottom: 20,
-    // additional styling if needed
+  leftContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align items at the bottom of container
+    paddingRight: 10,
+    position: 'relative',
   },
-  question: {
-    // additional styling if needed
+  rightContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    position: 'relative',
+  },
+  sharkContainer: {
+    zIndex: 1,
+    marginLeft: -340,
+    transform: [{ scale: 0.7 }], // Adjust scale if needed
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    top: -200,
+    left: 150,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    transform: [{ scale: 0.3 }], // Adjust scale if needed
+  },
+  backdropContainer: {
+    transform: [{ scale: 0.75 }],
+    top: 25,
+    right: 100,
+    marginBottom: 20,
+  },
+  questionContainer: {
+    position: 'absolute',
+    top: 550,
+    right: 420,
+    zIndex: 3,
+    transform: [{ scale: 0.75 }],
   },
   buttonsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     marginVertical: 20,
+    top: -85,
+    right: -465,
+    gap: 60, // Very small gap between buttons
+    transform: [{ scale: 0.75 }]
   },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
+  },
+  bubbleText: {
+    fontSize: 90,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 100,
+    transform: [{ scale: 1.25 }]
   },
 });
