@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Animated, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Animated, Pressable, Text } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import CorrectButton from '../components/CorrectButton';
-import FalseButton from '../components/FalseButton';
 import SpeechBubble from '../components/SpeechBubble';
 import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
@@ -37,6 +35,8 @@ export default function Page7() {
   const [feedback, setFeedback] = useState({ visible: false, correct: false, message: '' });
   const [fadeAnim] = useState(new Animated.Value(1));
   const [gameCompleted, setGameCompleted] = useState(false);
+  const [yesButtonHovered, setYesButtonHovered] = useState(false);
+  const [noButtonHovered, setNoButtonHovered] = useState(false);
 
   // Function to get a random image
   const getRandomImage = () => {
@@ -167,22 +167,34 @@ export default function Page7() {
 
           {/* Buttons Row */}
           <View style={styles.buttonsRow}>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
+            <Pressable
+              style={({ pressed }) => [
+                styles.simpleButton,
+                styles.yesButton,
+                pressed && styles.buttonPressed,
+                yesButtonHovered && styles.buttonHovered
+              ]}
               onPress={() => handleSelection('good')}
-              activeOpacity={0.8}
               disabled={gameCompleted}
+              onMouseEnter={() => setYesButtonHovered(true)}
+              onMouseLeave={() => setYesButtonHovered(false)}
             >
-              <CorrectButton />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
+              <Text style={styles.buttonText}>YES</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.simpleButton,
+                styles.noButton,
+                pressed && styles.buttonPressed,
+                noButtonHovered && styles.buttonHovered
+              ]}
               onPress={() => handleSelection('bad')}
-              activeOpacity={0.8}
               disabled={gameCompleted}
+              onMouseEnter={() => setNoButtonHovered(true)}
+              onMouseLeave={() => setNoButtonHovered(false)}
             >
-              <FalseButton />
-            </TouchableOpacity>
+              <Text style={styles.buttonText}>NO</Text>
+            </Pressable>
           </View>
 
         </View>
@@ -251,9 +263,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#CCCCCC',
     position: 'absolute',
-    left: 225,
-    top: 359,
+    left: 234,
+    top: 380,
     zIndex: 3,
+    elevation: 2,
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
   },
   scoreText: {
     fontSize: 18,
@@ -271,10 +285,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     elevation: 2,
   },
   trainingImage: {
@@ -305,9 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     color: 'white',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.75)',
   },
   completionText: {
     fontSize: 32,
@@ -318,17 +327,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
-    gap: 90,
+    gap: 120,
   },
-  buttonWrapper: {
+  simpleButton: {
+    width: 120,
+    height: 60,
+    borderRadius: 10,
+    justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ scale: 0.7 }],
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    elevation: 2,
   },
-  buttonLabel: {
-    marginTop: -15,
-    fontSize: 16,
+  yesButton: {
+    backgroundColor: '#4CC0B9',
+  },
+  noButton: {
+    backgroundColor: '#F26F63',
+  },
+  buttonHovered: {
+    opacity: 0.85,
+    backgroundColor: '#333333',
+  },
+  buttonPressed: {
+    opacity: 0.8,
+    backgroundColor: '#222222',
+  },
+  buttonText: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: 'white',
   },
   footer: {
     flexDirection: 'row',
