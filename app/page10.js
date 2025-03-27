@@ -12,7 +12,7 @@ export default function Page10() {
     <View style={styles.container}>
       {/* Main Content: BackDrop, AnswerBox and Shark */}
       <View style={styles.mainContent}>
-        
+
         {/* Added SharkFramingGame */}
         <View style={styles.gameSection}>
           <SharkFramingGame />
@@ -30,7 +30,7 @@ export default function Page10() {
       </View>
     </View>
   );
-  return <BasePage pageNumber={10} description={description} />;
+  return <BasePage pageNumber={10} title=" " description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   sharkSection: {
     marginTop: 0,
-    left:-400,
+    left: -400,
   },
   gameSection: {
     marginTop: 0,

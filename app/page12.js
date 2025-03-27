@@ -16,7 +16,7 @@ export default function Page12() {
         <View style={styles.sharkSection}>
           <Shark />
         </View>
-        
+
         {/* Added SharkFramingGame */}
         <View style={styles.gameSection}>
           <MurkySharkFramingGame />
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   sharkSection: {
     marginTop: 0,
-    left:-400,
+    left: -400,
   },
   gameSection: {
     marginTop: -500,
