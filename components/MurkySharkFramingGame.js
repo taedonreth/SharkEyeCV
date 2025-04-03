@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 
 const UnderwaterClassificationGame = () => {
   // Game state
@@ -20,62 +20,56 @@ const UnderwaterClassificationGame = () => {
     {
       id: 1,
       name: 'fish',
-      position: { x: 80, y: 110 },
-      size: { width: 70, height: 60 }
+      position: { x: 260, y: 160 },
+      size: { width: 100, height: 48 }
     },
     {
       id: 2,
       name: 'fish',
-      position: { x: 400, y: 130 },
-      size: { width: 120, height: 70 }
+      position: { x: 250, y: 230 },
+      size: { width: 100, height: 50 }
     },
     {
       id: 3,
       name: 'fish',
-      position: { x: 210, y: 50 },
-      size: { width: 240, height: 80 }
+      position: { x: 150, y: 25 },
+      size: { width: 100, height: 250 }
     },
     {
       id: 4,
       name: 'plant',
-      position: { x: 0, y: 100 },
-      size: { width: 80, height: 190 }
+      position: { x: 20, y: 0 },
+      size: { width: 140, height: 355 }
     },
     {
       id: 5,
       name: 'plant',
-      position: { x: 520, y: 170 },
-      size: { width: 60, height: 140 }
+      position: { x: 500, y: 100 },
+      size: { width: 150, height: 255 }
     },
     {
       id: 6,
-      name: 'plant',
-      position: { x: 190, y: 160 },
-      size: { width: 50, height: 180 }
+      name: 'fish',
+      position: { x: 200, y: 300 },
+      size: { width: 115, height: 55 }
     },
     {
       id: 7,
-      name: 'plant',
-      position: { x: 350, y: 190 },
-      size: { width: 200, height: 150 }
+      name: 'fish',
+      position: { x: 400, y: 50 },
+      size: { width: 100, height: 150 }
     },
     {
       id: 8,
-      name: 'plant',
-      position: { x: 60, y: 180 },
-      size: { width: 80, height: 90 }
+      name: 'fish',
+      position: { x: 365, y: 250 },
+      size: { width: 100, height: 60 }
     },
-    {
-      id: 9,
-      name: 'plant',
-      position: { x: 100, y: 210 },
-      size: { width: 80, height: 120 }
-    }
   ];
 
-  // User input
-  const [userLabel, setUserLabel] = useState('');
-  const [showLabelInput, setShowLabelInput] = useState(false);
+  // User input - replaced with selection type
+  const [userSelection, setUserSelection] = useState('');
+  const [showSelectionButtons, setShowSelectionButtons] = useState(false);
 
   // Game area dimensions - adjust as needed to match your image aspect ratio
   const gameWidth = 640;
@@ -224,8 +218,8 @@ const UnderwaterClassificationGame = () => {
       setFramePosition({ x: left, y: top });
       setFrameSize({ width, height });
 
-      // Show label input after selection
-      setShowLabelInput(true);
+      // Show selection buttons after selection
+      setShowSelectionButtons(true);
     };
 
     // Add event listeners to the game box
@@ -246,8 +240,14 @@ const UnderwaterClassificationGame = () => {
     };
   }, [gameStarted, gameComplete, gameWidth, gameHeight]);
 
+  // Handle user selection
+  const handleSelection = (type) => {
+    setUserSelection(type);
+    checkSelection(type);
+  };
+
   // Check if the selection is correct
-  const checkSelection = () => {
+  const checkSelection = (selectionType) => {
     setAttempts(prev => prev + 1);
 
     // First, check if the selection is too small (prevents accidental clicks)
@@ -258,7 +258,7 @@ const UnderwaterClassificationGame = () => {
         message: 'Selection too small. Try to frame the item better!',
         visible: true
       });
-      setShowLabelInput(false);
+      setShowSelectionButtons(false);
       return; // Don't count this as an attempt
     }
 
@@ -319,7 +319,7 @@ const UnderwaterClassificationGame = () => {
       console.log(`Selection precision: ${bestSelectionPrecision.toFixed(2)}%`);
 
       // Check if the label is correct
-      const labelCorrect = userLabel.trim().toLowerCase() === bestMatch.name.toLowerCase();
+      const labelCorrect = selectionType.toLowerCase() === bestMatch.name.toLowerCase();
 
       // Calculate score
       let pointsEarned = 0;
@@ -350,7 +350,7 @@ const UnderwaterClassificationGame = () => {
           }
         } else {
           pointsEarned = 25;
-          message = `Good selection, but that's not a ${userLabel}. It's a ${bestMatch.name}! +25`;
+          message = `Good selection, but that's not a ${selectionType}. It's a ${bestMatch.name}! +25`;
         }
       } else if (effectiveOverlapPercentage > 30) { // Partial match
         if (labelCorrect) {
@@ -360,7 +360,7 @@ const UnderwaterClassificationGame = () => {
           setFoundItems(prev => [...prev, bestMatch.id]);
         } else {
           pointsEarned = 10;
-          message = `Partial selection but wrong label. It's a ${bestMatch.name}, not a ${userLabel}! +10`;
+          message = `Partial selection but wrong label. It's a ${bestMatch.name}, not a ${selectionType}! +10`;
         }
       } else {
         // Poor selection
@@ -377,9 +377,9 @@ const UnderwaterClassificationGame = () => {
     }
 
     // Reset selection and prepare for next round
-    setUserLabel('');
+    setUserSelection('');
     setFrameSize({ width: 0, height: 0 });
-    setShowLabelInput(false);
+    setShowSelectionButtons(false);
   };
 
   // Start new game
@@ -516,7 +516,7 @@ const UnderwaterClassificationGame = () => {
       marginTop: 15,
       marginBottom: 20,
     },
-    labelInputContainer: {
+    selectionButtonsContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
@@ -524,27 +524,22 @@ const UnderwaterClassificationGame = () => {
       maxWidth: 500,
       marginVertical: 10,
     },
-    labelInput: {
-      flex: 1,
-      height: 50,
-      borderWidth: 1,
-      borderColor: '#ccc',
+    selectionButton: {
+      paddingHorizontal: 30,
+      paddingVertical: 15,
       borderRadius: 25,
-      paddingHorizontal: 20,
-      backgroundColor: '#fff',
-      fontSize: 16,
-    },
-    submitButton: {
-      backgroundColor: '#4CAF50',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      borderRadius: 25,
-      marginLeft: 10,
+      marginHorizontal: 10,
       elevation: 2,
     },
-    submitButtonText: {
+    fishButton: {
+      backgroundColor: '#4682B4', // Steel Blue
+    },
+    plantButton: {
+      backgroundColor: '#228B22', // Forest Green
+    },
+    buttonText: {
       color: '#fff',
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: 'bold',
     },
     selectionPrompt: {
@@ -632,9 +627,8 @@ const UnderwaterClassificationGame = () => {
           <Text style={styles.gameTitle}>Underwater Classification Game</Text>
           <Text style={styles.instructions}>
             Click and drag to select either a fish or a plant in the underwater scene.{'\n'}
-            Label your selection correctly as "fish" or "plant".{'\n'}
-            Press "Submit" to check your answer.{'\n\n'}
-            Better selections and correct labels earn more points!{'\n'}
+            Click "Fish" or "Plant" to classify your selection.{'\n'}
+            Better selections and correct classifications earn more points!{'\n\n'}
             Perfect match = 150 points
           </Text>
           <TouchableOpacity style={styles.startButton} onPress={startGame}>
@@ -667,7 +661,7 @@ const UnderwaterClassificationGame = () => {
               >
                 {/* Underwater background image */}
                 <Image
-                  source={require('../assets/images/underwater-image.jpg')}
+                  source={require('../assets/images/murkyimage.jpg')}
                   style={styles.backgroundImage}
                   resizeMode="cover"
                 />
@@ -745,21 +739,19 @@ const UnderwaterClassificationGame = () => {
 
               {/* Controls */}
               <View style={styles.controls}>
-                {showLabelInput ? (
-                  <View style={styles.labelInputContainer}>
-                    <TextInput
-                      style={styles.labelInput}
-                      placeholder="Type 'fish' or 'plant'"
-                      value={userLabel}
-                      onChangeText={setUserLabel}
-                      autoFocus
-                    />
+                {showSelectionButtons ? (
+                  <View style={styles.selectionButtonsContainer}>
                     <TouchableOpacity
-                      style={styles.submitButton}
-                      onPress={checkSelection}
-                      disabled={!userLabel.trim()}
+                      style={[styles.selectionButton, styles.fishButton]}
+                      onPress={() => handleSelection('fish')}
                     >
-                      <Text style={styles.submitButtonText}>Submit</Text>
+                      <Text style={styles.buttonText}>Fish</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.selectionButton, styles.plantButton]}
+                      onPress={() => handleSelection('plant')}
+                    >
+                      <Text style={styles.buttonText}>Plant</Text>
                     </TouchableOpacity>
                   </View>
                 ) : (
