@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 
-const SeaCreaturesLabelingGame = () => {
+const SeaCreaturesGame = () => {
   // Game state
   const [gameStarted, setGameStarted] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [maxAttempts, setMaxAttempts] = useState(8);
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  
+  // Debug mode - Set to true to show item boundaries (no toggle button)
+  const debugMode = false;
 
   // Feedback state
   const [feedbackState, setFeedbackState] = useState({
@@ -19,60 +23,44 @@ const SeaCreaturesLabelingGame = () => {
   const seaCreatures = [
     {
       id: 1,
-      name: 'shark',
-      position: { x: 50, y: 80 },
-      size: { width: 165, height: 80 }
+      name: 'sting ray',
+      position: { x: 40, y: 10 },
+      size: { width: 145, height: 90 }
     },
     {
       id: 2,
       name: 'clownfish',
-      position: { x: 105, y: 165 },
-      size: { width: 57, height: 40 }
+      position: { x: 140, y: 180 },
+      size: { width: 50, height: 40 }
     },
     {
       id: 3,
       name: 'jellyfish',
-      position: { x: 530, y: 15 },
-      size: { width: 90, height: 110 }
+      position: { x: 515, y: 0 },
+      size: { width: 95, height: 153 }
     },
     {
       id: 4,
       name: 'turtle',
-      position: { x: 380, y: 225 },
-      size: { width: 120, height: 76 }
-    },
-    {
-      id: 5,
-      name: 'shrimp',
-      position: { x: 410, y: 160 },
-      size: { width: 95, height: 75 }
+      position: { x: 310, y: 115 },
+      size: { width: 240, height: 145 }
     },
     {
       id: 6,
-      name: 'lionfish',
-      position: { x: 37, y: 180 },
-      size: { width: 88, height: 75 }
+      name: 'clownfish',
+      position: { x:190, y: 90 },
+      size: { width: 50, height: 50 }
     },
     {
       id: 7,
-      name: 'seahorse',
-      position: { x: 150, y: 190 },
-      size: { width: 50, height: 80 }
+      name: 'octopus',
+      position: { x: 160, y: 235 },
+      size: { width: 145, height: 120 }
     },
-    {
-      id: 8,
-      name: 'rainbow fish',
-      position: { x: 465, y: 100 },
-      size: { width: 78, height: 48 }
-    }
   ];
 
   // Current creature to find
   const [currentCreature, setCurrentCreature] = useState(null);
-
-  // User input
-  const [userLabel, setUserLabel] = useState('');
-  const [showLabelInput, setShowLabelInput] = useState(false);
 
   // Game area dimensions - adjust as needed to match your image aspect ratio
   const gameWidth = 640;
@@ -226,33 +214,14 @@ const SeaCreaturesLabelingGame = () => {
       marginTop: 15,
       marginBottom: 20,
     },
-    labelInputContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '80%',
-      maxWidth: 500,
-      marginVertical: 10,
-    },
-    labelInput: {
-      flex: 1,
-      height: 50,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 25,
-      paddingHorizontal: 20,
-      backgroundColor: '#fff',
-      fontSize: 16,
-    },
-    submitButton: {
+    captureButton: {
       backgroundColor: '#4CAF50',
       paddingHorizontal: 20,
       paddingVertical: 10,
       borderRadius: 25,
-      marginLeft: 10,
       elevation: 2,
     },
-    submitButtonText: {
+    captureButtonText: {
       color: '#fff',
       fontSize: 16,
       fontWeight: 'bold',
@@ -331,6 +300,11 @@ const SeaCreaturesLabelingGame = () => {
       fontSize: 18,
       fontWeight: 'bold',
     },
+    foundItemHighlight: {
+      borderColor: 'rgba(0, 255, 0, 0.5)',
+      backgroundColor: 'rgba(0, 255, 0, 0.1)',
+      zIndex: 2,
+    },
   });
 
 
@@ -372,10 +346,9 @@ const SeaCreaturesLabelingGame = () => {
     // Add this creature to the prompted list
     setPromptedCreatures(prev => [...prev, nextCreature.id]);
 
-    // Reset user label and frame
-    setUserLabel('');
+    // Reset frame and hide submit button
     setFrameSize({ width: 0, height: 0 });
-    setShowLabelInput(false);
+    setShowSubmitButton(false);
   };
 
   // Initialize game
@@ -499,8 +472,11 @@ const SeaCreaturesLabelingGame = () => {
       setFramePosition({ x: left, y: top });
       setFrameSize({ width, height });
 
-      // Show label input after selection
-      setShowLabelInput(true);
+      // Add a submit button if the selection is valid
+      if (width > 10 && height > 10) {
+        // Show a submit button instead of auto-checking
+        setShowSubmitButton(true);
+      }
     };
 
     // Add event listeners to the game box
@@ -546,8 +522,11 @@ const SeaCreaturesLabelingGame = () => {
       creatureTop > frameBottom
     );
 
-    // Calculate overlap percentage
-    let overlapPercentage = 0;
+    // Calculate overlap percentage of creature covered by frame
+    let creatureOverlapPercentage = 0;
+    // Calculate how much of the frame is actually covering the creature (precision)
+    let frameOverlapPercentage = 0;
+    
     if (overlap) {
       const overlapLeft = Math.max(creatureLeft, frameLeft);
       const overlapTop = Math.max(creatureTop, frameTop);
@@ -559,54 +538,54 @@ const SeaCreaturesLabelingGame = () => {
       const overlapArea = overlapWidth * overlapHeight;
 
       const creatureArea = currentCreature.size.width * currentCreature.size.height;
-      overlapPercentage = (overlapArea / creatureArea) * 100;
+      const frameArea = frameSize.width * frameSize.height;
+      
+      creatureOverlapPercentage = (overlapArea / creatureArea) * 100;
+      frameOverlapPercentage = (overlapArea / frameArea) * 100;
     }
 
-    // Check if the label is correct
-    const labelCorrect = userLabel.trim().toLowerCase() === currentCreature.name.toLowerCase();
-
-    // Calculate score
+    // Calculate score - now accounting for both coverage and precision
     let pointsEarned = 0;
     let message = '';
 
-    if (overlap && overlapPercentage > 50) {
-      if (labelCorrect) {
-        if (overlapPercentage > 90) {
-          pointsEarned = 150;
-          message = 'Perfect match! +150';
-          // Mark this creature as found
-          setFoundCreatures(prev => [...prev, currentCreature.id]);
-        } else if (overlapPercentage > 75) {
-          pointsEarned = 100;
-          message = 'Great match! +100';
-          // Mark this creature as found
-          setFoundCreatures(prev => [...prev, currentCreature.id]);
-        } else {
-          pointsEarned = 75;
-          message = 'Good match! +75';
-          // Mark this creature as found
-          setFoundCreatures(prev => [...prev, currentCreature.id]);
-        }
-      } else {
-        pointsEarned = 25;
-        message = `Good selection, but that's not a ${userLabel}. +25`;
+    // Frame is too large (less than 30% of frame is the creature)
+    const frameTooLarge = frameOverlapPercentage < 30;
+    
+    if (overlap && creatureOverlapPercentage > 50) {
+      if (frameTooLarge) {
+        // Penalize selections that are too big
+        pointsEarned = 20;
+        message = 'Your selection is too large! +20';
       }
-    } else if (overlap) {
-      if (labelCorrect) {
-        pointsEarned = 50;
-        message = 'Right label, but selection needs work. +50';
-        // Mark this creature as found despite poor selection
+      else if (creatureOverlapPercentage > 90 && frameOverlapPercentage > 70) {
+        pointsEarned = 150;
+        message = 'Perfect capture! +150';
+        // Mark this creature as found
+        setFoundCreatures(prev => [...prev, currentCreature.id]);
+      } else if (creatureOverlapPercentage > 75 && frameOverlapPercentage > 50) {
+        pointsEarned = 100;
+        message = 'Great capture! +100';
+        // Mark this creature as found
         setFoundCreatures(prev => [...prev, currentCreature.id]);
       } else {
-        pointsEarned = 10;
-        message = 'Poor selection and wrong label. +10';
+        pointsEarned = 75;
+        message = 'Good capture! +75';
+        // Mark this creature as found
+        setFoundCreatures(prev => [...prev, currentCreature.id]);
       }
+    } else if (overlap) {
+      pointsEarned = 25;
+      message = 'Partial capture. Try to select more of the creature! +25';
     } else {
       message = 'Missed the creature! +0';
     }
 
     setScore(prev => prev + pointsEarned);
     setFeedbackState({ message, visible: true });
+
+    // Reset frame size
+    setFrameSize({ width: 0, height: 0 });
+    setShowSubmitButton(false);
 
     // Load next creature
     loadNextCreature();
@@ -624,33 +603,38 @@ const SeaCreaturesLabelingGame = () => {
 
   // Get current creature prompt
   const getCreaturePrompt = () => {
-    if (!currentCreature) return "Find and label a sea creature";
+    if (!currentCreature) return "Capture a sea creature";
+
+    // Use ID to distinguish between similar creatures
+    if (currentCreature.name === "clownfish") {
+      if (currentCreature.id === 2) {
+        return "Capture the clownfish atthe bottom";
+      } else if (currentCreature.id === 6) {
+        return "Capture the clownfish on top";
+      }
+    }
 
     const creatureTypes = {
-      shark: "Find and label the predator with sharp teeth",
-      clownfish: "Find and label the orange and white striped fish",
-      jellyfish: "Find and label the transparent floating creature",
-      turtle: "Find and label the slow reptile with a shell",
-      shrimp: "Find and label the small red crustacean",
-      lionfish: "Find and label the fish with spiky fins",
-      seahorse: "Find and label the tiny creature that swims upright",
-      "rainbow fish": "Find and label the colorful fish with multiple hues"
+      "sting ray": "Capture the stingray",
+      "jellyfish": "Capture the jellyfish",
+      "turtle": "Capture the turtle",
+      "octopus": "Capture the octopus"
     };
 
-    return creatureTypes[currentCreature.name] || `Find and label the ${currentCreature.name}`;
+    return creatureTypes[currentCreature.name] || `Capture the ${currentCreature.name}`;
   };
-
+  
   return (
     <View style={styles.container}>
       {!gameStarted ? (
         <View style={styles.startScreen}>
-          <Text style={styles.gameTitle}>Sea Creatures Labeling Game</Text>
+          <Text style={styles.gameTitle}>Sea Creatures Capture Game</Text>
           <Text style={styles.instructions}>
-            Click and drag to select a sea creature in the image.{'\n'}
-            Label the creature correctly.{'\n'}
-            Press "Submit" to check your answer.{'\n\n'}
-            Better selections and correct labels earn more points!{'\n'}
-            Perfect match = 150 points
+            Click and drag to capture a sea creature in the image.{'\n'}
+            After selecting, click the "Capture!" button to submit.{'\n'}
+            You can readjust your selection before capturing.{'\n\n'}
+            Better captures earn more points!{'\n'}
+            Perfect capture = 150 points
           </Text>
           <TouchableOpacity style={styles.startButton} onPress={startGame}>
             <Text style={styles.startButtonText}>Start Game</Text>
@@ -682,10 +666,55 @@ const SeaCreaturesLabelingGame = () => {
               >
                 {/* Sea background image */}
                 <Image
-                  source={require('../assets/images/underthesea.jpg')}
+                  source={require('../assets/images/clearimage.jpg')}
                   style={styles.backgroundImage}
                   resizeMode="cover"
                 />
+                
+                {/* Debug mode visualization */}
+                {debugMode && seaCreatures.map(creature => (
+                  <View
+                    key={creature.id}
+                    style={{
+                      position: 'absolute',
+                      left: creature.position.x,
+                      top: creature.position.y,
+                      width: creature.size.width,
+                      height: creature.size.height,
+                      borderWidth: 2,
+                      borderColor: foundCreatures.includes(creature.id) ? 'green' : 'red',
+                      backgroundColor: foundCreatures.includes(creature.id)
+                        ? 'rgba(0, 255, 0, 0.2)'
+                        : 'rgba(255, 0, 0, 0.2)',
+                      zIndex: 10
+                    }}
+                  >
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                      {creature.name}
+                    </Text>
+                  </View>
+                ))}
+                
+                {/* Highlight found creatures */}
+                {foundCreatures.map(id => {
+                  const creature = seaCreatures.find(c => c.id === id);
+                  return creature ? (
+                    <View
+                      key={`found-${id}`}
+                      style={{
+                        position: 'absolute',
+                        left: creature.position.x,
+                        top: creature.position.y,
+                        width: creature.size.width,
+                        height: creature.size.height,
+                        borderWidth: 2,
+                        borderColor: 'rgba(0, 255, 0, 0.5)',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        zIndex: 2
+                      }}
+                    />
+                  ) : null;
+                })}
 
                 {/* Selection Frame */}
                 <View
@@ -715,26 +744,16 @@ const SeaCreaturesLabelingGame = () => {
 
               {/* Controls */}
               <View style={styles.controls}>
-                {showLabelInput ? (
-                  <View style={styles.labelInputContainer}>
-                    <TextInput
-                      style={styles.labelInput}
-                      placeholder="What sea creature is this?"
-                      value={userLabel}
-                      onChangeText={setUserLabel}
-                      autoFocus
-                    />
-                    <TouchableOpacity
-                      style={styles.submitButton}
-                      onPress={checkSelection}
-                      disabled={!userLabel.trim()}
-                    >
-                      <Text style={styles.submitButtonText}>Submit</Text>
-                    </TouchableOpacity>
-                  </View>
+                {showSubmitButton ? (
+                  <TouchableOpacity
+                    style={styles.captureButton}
+                    onPress={checkSelection}
+                  >
+                    <Text style={styles.captureButtonText}>Capture!</Text>
+                  </TouchableOpacity>
                 ) : (
                   <Text style={styles.selectionPrompt}>
-                    Click and drag to select a sea creature
+                    Click and drag to capture a sea creature
                   </Text>
                 )}
               </View>
@@ -745,4 +764,5 @@ const SeaCreaturesLabelingGame = () => {
     </View>
   );
 };
-export default SeaCreaturesLabelingGame;
+
+export default SeaCreaturesGame;
