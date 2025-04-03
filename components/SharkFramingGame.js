@@ -608,7 +608,7 @@ const SeaCreaturesGame = () => {
     // Use ID to distinguish between similar creatures
     if (currentCreature.name === "clownfish") {
       if (currentCreature.id === 2) {
-        return "Capture the clownfish atthe bottom";
+        return "Capture the clownfish at the bottom";
       } else if (currentCreature.id === 6) {
         return "Capture the clownfish on top";
       }
