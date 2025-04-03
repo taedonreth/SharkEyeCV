@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -100 }, { translateY: -50 }], // Adjust positioning
     alignItems: 'center',
     zIndex: 1, // Keep it behind other elements if necessary
-    paddingTop: 80,
+    paddingTop: 150,
   },
   speechText: {
     fontSize: 110,

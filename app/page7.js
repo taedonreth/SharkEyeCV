@@ -77,7 +77,7 @@ export default function Page7() {
         setFeedback({
           visible: true,
           correct: true,
-          message: 'Game completed! Press Continue to move to the next page!'
+          message: 'Great job! You reached a score of 5! Press Continue to move to the next page!'
         });
         return;
       }
