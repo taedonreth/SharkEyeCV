@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
+import DumbShark from '../components/dumbshark';
 import { Link } from 'expo-router';
-import { ThemedText } from '../components/ThemedText';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 
@@ -46,18 +44,15 @@ export default function Page3() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble>
-                <ThemedText style={styles.speechText}>
-                  This is how computer
-                  vision is used to
-                  detect me in real
-                  life!
-                </ThemedText>
-              </SpeechBubble>
+              <Image
+                source={require('../assets/images/page3bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <Shark />
+              <DumbShark />
             </View>
           </View>
 
@@ -120,16 +115,20 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -200,
-    left: 1,
-    zIndex: 2,
-    transform: [{ scale: 0.4 }],
+    top: 0,
+    left: 350,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 400,
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   sharkContainer: {
     marginTop: 200,
     zIndex: 1,
-    marginLeft: -340,
-    transform: [{ scale: 0.7 }],
+    marginLeft: -250,
+    transform: [{ scale: 1.5 }],
   },
   videoContainer: {
     width: 600,

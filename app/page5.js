@@ -1,14 +1,12 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
+import DumbShark from '../components/dumbshark';
 import ReviewProcess from '../components/ReviewProcessPage5';
 import ReviewProcessAI from '../components/ReviewProcessAI';
 import Arrow from '../components/Arrow';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
-import { ThemedText } from '../components/ThemedText';
 import ContinueButton from '../components/ContinueButton';
 
 export default function Page5() {
@@ -30,13 +28,13 @@ export default function Page5() {
 
           {/* Shark and Speech Bubble positioned in the middle */}
           <View style={styles.sharkBubbleContainer}>
-            <Shark style={styles.shark} />
-            <View style={styles.speechBubble}>
-              <SpeechBubble>
-                <ThemedText style={styles.speechText}>
-                  We use AI to shorten it!
-                </ThemedText>
-              </SpeechBubble>
+            <DumbShark style={styles.shark} />
+            <View style={styles.speechBubbleContainer}>
+              <Image
+                source={require('../assets/images/page5bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
             </View>
           </View>
 
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -100 }, { translateY: -50 }], // Adjust positioning
     alignItems: 'center',
     zIndex: 1, // Keep it behind other elements if necessary
-    paddingTop: 80,
+    paddingTop: 150,
   },
   speechText: {
     fontSize: 110,
@@ -111,15 +109,21 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   shark: {
-    width: 150,
-    height: 150,
-  },
-  speechBubble: {
-    position: 'absolute',
-    transform: [{ scale: 0.3 }], // Adjust fine positioning
-    zIndex: 2, // Ensure it's above the shark
+    transform: [{ scale: 1.5 }],
     bottom: 100,
-    left: 200,
+    left: 50,
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    top: -100,
+    left: 500,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 400,
+    transform: [{ scale: 0.9 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   footerContainer: {
     flexDirection: 'row',

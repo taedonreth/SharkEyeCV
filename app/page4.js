@@ -1,13 +1,11 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
+import DumbShark from '../components/dumbshark';
 import ReviewProcess from '../components/ReviewProcess';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import { ThemedText } from '../components/ThemedText';
 
 export default function Page4() {
   const title = " ";
@@ -20,16 +18,16 @@ export default function Page4() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble>
-                <ThemedText style={styles.speechText}>
-                  The review process is long...
-                </ThemedText>
-              </SpeechBubble>
+              <Image
+                source={require('../assets/images/page4bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
             </View>
             {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <Shark />
+              <DumbShark />
             </View>
           </View>
 
@@ -97,14 +95,18 @@ const styles = StyleSheet.create({
     marginTop: 200, // Add space above the shark to make room for speech bubble
     zIndex: 1,
     marginLeft: -340,
-    transform: [{ scale: 0.7 }], // Adjust scale if needed
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -200,
-    left: 1,
+    top: 80,
+    left: 210,
     zIndex: 2, // Ensure speech bubble appears above other elements
-    transform: [{ scale: 0.4 }], // Adjust scale if needed
+    width: 400,
+    transform: [{ scale: 0.75 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   reviewProcessContainer: {
     transform: [{ scale: 0.75 }],

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
 import MurkySharkFramingGame from '../components/MurkySharkFramingGame';
 
 import { Link } from 'expo-router';
@@ -13,9 +12,6 @@ export default function Page12() {
     <View style={styles.container}>
       {/* Main Content: BackDrop, AnswerBox and Shark */}
       <View style={styles.mainContent}>
-        <View style={styles.sharkSection}>
-          <Shark />
-        </View>
 
         {/* Added SharkFramingGame */}
         <View style={styles.gameSection}>
@@ -46,13 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sharkSection: {
-    marginTop: 0,
-    left: -400,
-  },
   gameSection: {
-    marginTop: -500,
-    marginBottom: 20,
   },
   footer: {
     flexDirection: 'row',
