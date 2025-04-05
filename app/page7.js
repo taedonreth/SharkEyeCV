@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Animated, Pressable, Text } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
+import DumbShark from '../components/dumbshark';
 import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
@@ -118,16 +117,16 @@ export default function Page7() {
         {/* Left section with shark and speech bubble */}
         <View style={styles.leftSection}>
           <View style={styles.sharkContainer}>
-            <Shark />
+            <DumbShark />
           </View>
         </View>
 
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble>
-            <ThemedText style={styles.questionText}>
-              Is this image{'\n'}good or bad{'\n'}training data?
-            </ThemedText>
-          </SpeechBubble>
+          <Image
+            source={require('../assets/images/page7bubble.png')}
+            style={styles.speechBubbleImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Center content with image and buttons */}
@@ -231,15 +230,20 @@ const styles = StyleSheet.create({
   },
   sharkContainer: {
     right: 190,
-    bottom: 150,
-    transform: [{ scale: 0.65 }, { rotate: '20deg' }],
+    bottom: 120,
+    transform: [{ scale: 1 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: -90,
-    top: -350,
-    transform: [{ scale: 0.25 }],
-    zIndex: 20,
+    top: -150,
+    left: 150,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 400,
+    transform: [{ scale: 0.7 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   questionText: {
     fontSize: 70,

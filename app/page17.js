@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
@@ -19,15 +19,13 @@ export default function Page17() {
           {/* Left side container for Shark and Speech Bubble */}
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
-            <View style={styles.speechBubbleContainer}>
-              <SpeechBubble>
-                <ThemedText style={styles.speechText}>
-                  Congrats!
-                  Here are some
-                  more resources!
-                </ThemedText>
-              </SpeechBubble>
-            </View>
+        <View style={styles.speechBubbleContainer}>
+          <Image
+            source={require('../assets/images/page17bubble.png')}
+            style={styles.speechBubbleImage}
+            resizeMode="contain"
+          />
+        </View>
             {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
@@ -96,16 +94,20 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -200,
-    left: -50,
+    left: 230,
+    bottom: 300,
     zIndex: 2, // Ensure speech bubble appears above other elements
-    transform: [{ scale: 0.4 }], // Adjust scale if needed
+    width: 400,
+    transform: [{ scale: 0.8 }],
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   sharkContainer: {
     marginTop: 200, // Add space above the shark to make room for speech bubble
     zIndex: 1,
     marginLeft: -340,
-    transform: [{ scale: 0.7 }], // Adjust scale if needed
   },
   bubbleContainer: {
     transform: [{ scale: 0.3 }, { rotate: '5deg' }],

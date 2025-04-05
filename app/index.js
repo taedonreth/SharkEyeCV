@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
 import { Link } from 'expo-router';
 import ContinueButton from '../components/ContinueButton';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
-import { ThemedText } from '../components/ThemedText';
+import DumbShark from '../components/dumbshark';
 
 export default function Index() {
   const title = " ";
@@ -18,18 +16,15 @@ export default function Index() {
         <View style={styles.sharkBubbleWrapper}>
           {/* Wrap Shark in a View that you can style/transform */}
           <View style={styles.sharkPosition}>
-            <Shark />
+            <DumbShark />
           </View>
 
           <View style={styles.speechBubbleContainer}>
-            <SpeechBubble>
-              <ThemedText style={styles.speechText}>
-                Welcome!
-                My name is BotShark.
-                Ready to learn about
-                computer vision?...
-              </ThemedText>
-            </SpeechBubble>
+            <Image
+              source={require('../assets/images/page1bubble.png')}
+              style={styles.speechBubbleImage}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
@@ -77,22 +72,25 @@ const styles = StyleSheet.create({
     width: 300,  // tweak
     height: 250, // tweak
     position: 'relative',
-    transform: [{ scale: 0.9 }],
+    transform: [{ scale: 0.8 }],
     // borderWidth: 1, borderColor: 'red', // enable for debugging
   },
   // Optional: additional styling for Shark
   sharkPosition: {
-    marginLeft: -340,
+    marginLeft: -400,
     marginTop: 25,
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 1.5 }],
   },
   // Absolutely position the bubble so it overlaps the Shark
   speechBubbleContainer: {
     position: 'absolute',
-    top: -300,          // Adjust to move bubble up/down
-    right: 0,      // Adjust to move bubble left/right
-    width: 250,      // So text wraps nicely
-    transform: [{ scale: 0.45, rotate: '5deg' }],
+    top: -120,          // Adjust to move bubble up/down
+    right: -200,      // Adjust to move bubble left/right
+    width: 400,      // Increased width for the image
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   footerContainer: {
     flexDirection: 'row',
