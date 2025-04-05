@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SharkIcon from '../components/SharkIcon';
 import Surfer from '../components/surfer';
 import CorrectButton from '../components/CorrectButton';
 import FalseButton from '../components/FalseButton';
-import SpeechBubble from '../components/SpeechBubble';
 import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
@@ -21,15 +20,15 @@ export default function Page6() {
         {/* Shark with Speech Bubble */}
         <View style={styles.sharkBubbleWrapper}>
           <View style={styles.sharkPosition}>
-            <Shark />
+            <DumbShark />
           </View>
-          <View style={styles.speechBubbleContainer}>
-            <SpeechBubble>
-              <ThemedText style={styles.questionText}>What is data?</ThemedText>
-              <ThemedText style={styles.questionText}>How is data collected?</ThemedText>
-              <ThemedText style={styles.questionText}>What is good vs bad data?</ThemedText>
-            </SpeechBubble>
-          </View>
+            <View style={styles.speechBubbleContainer}>
+              <Image
+                source={require('../assets/images/page6bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
+            </View>
         </View>
 
         {/* Cards Section */}
@@ -172,18 +171,22 @@ const styles = StyleSheet.create({
   // Styling for Shark position
   sharkPosition: {
     marginLeft: -340,
-    marginTop: 190,
-    transform: [{ scale: 0.7 }],
+    marginTop: 250,
     //borderWidth: 1,
     //borderColor: 'blue'
   },
   // Absolutely position the bubble so it can overlap the Shark
   speechBubbleContainer: {
     position: 'absolute',
-    top: -110,
-    right: -350,
-    zIndex: 2,
-    transform: [{ scale: 0.35, rotate: '5deg' }],
+    top: 100,
+    left: 350,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 400,
+    transform: [{ scale: 2.3 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   // Keep the original styles for the text inside the bubble
   questionText: {

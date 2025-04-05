@@ -1,17 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import BasePage from './BasePage';
-import SharkIcon from '../components/SharkIcon';
+import GoodSharkIcon from '../components/GoodSharkIcon';
+import BadSharkIcon from '../components/BadSharkIcon';
 import CorrectButton from '../components/CorrectButton';
 import FalseButton from '../components/FalseButton';
-import CroppingRectangle from '../components/CroppingRectangle';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
-import { ThemedText } from '../components/ThemedText';
+import DumbShark from '../components/dumbshark';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import { transform } from 'typescript';
 
 // Component layout configuration
 const layoutConfig = {
@@ -23,7 +20,8 @@ const layoutConfig = {
 
   // Box section layout
   boxSection: {
-    marginBottom: 600,    // space below the box section
+    marginBottom: 0,     // Removed large bottom margin
+    marginTop: 40,       // Added top margin to push content down
     padding: 10,         // reduced internal padding
     gap: 15,             // gap between boxes
     width: '50%',
@@ -44,33 +42,10 @@ const layoutConfig = {
     scale: 0.75,         // reduced scale factor
   },
 
-  // Cropping section layout
-  croppingRow: {
-    marginVertical: -150,  // Move the entire row higher (negative value moves up)
-    gap: 30,               // Reasonable gap between elements
-    justifyContent: 'center', // Center the row
-  },
-  croppingGood: {
-    flex: 0,               // Remove flex to prevent stretching
-    marginRight: 0,        // Small margin for spacing
-    marginLeft: 0,         // Reset any left margin
-    scale: 0.62,           // Reduced scale to make it narrower (changed from 0.64)
-    marginTop: -1000,       // Keep your vertical positioning
-  },
-  croppingBad: {
-    flex: 0,               // Remove flex to prevent stretching
-    marginLeft: 400,       // Small margin for spacing
-    marginRight: 50,       // Reset any right margin
-    scale: 0.30,           // Keep your scale
-    marginTop: -1200,      // Added vertical positioning
-  },
-
   // Shark section
   sharkSection: {
-    marginTop: -700,       // top margin
-    marginBottom: 0,
-    marginLeft: -900,  // negative margin to adjust position
-    transform: [{ scale: 0.8 }],
+    marginTop: -400,    // Adjusted top margin to be closer to boxes
+    marginLeft: -1000,  // negative margin to adjust position
   },
 
   // Text and label customization
@@ -98,16 +73,17 @@ export default function Page9() {
       <View style={styles.mainContent}>
         {/* Speech Bubble */}
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble>
-            <ThemedText style={styles.questionText}>
-              Is this image{'\n'}good or bad{'\n'}training data?
-            </ThemedText>
-          </SpeechBubble>
+          <Image
+            source={require('../assets/images/page9bubble.png')}
+            style={styles.speechBubbleImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Box Section with Good and Bad Boxes */}
         <View style={[styles.boxSection, {
           marginBottom: layoutConfig.boxSection.marginBottom,
+          marginTop: layoutConfig.boxSection.marginTop,
           padding: layoutConfig.boxSection.padding,
           gap: layoutConfig.boxSection.gap,
           width: layoutConfig.boxSection.width,
@@ -121,7 +97,9 @@ export default function Page9() {
             transform: [{ scale: layoutConfig.goodBox.scale }]
           }]}>
             <View style={styles.iconContainer}>
-              <SharkIcon />
+              <View style={styles.sharkicon}>
+                <GoodSharkIcon />
+              </View>
               <View style={styles.correctButton}>
                 <CorrectButton />
               </View>
@@ -146,7 +124,9 @@ export default function Page9() {
             transform: [{ scale: layoutConfig.badBox.scale }]
           }]}>
             <View style={styles.iconContainer}>
-              <SharkIcon />
+              <View style={styles.sharkicon}>
+                <BadSharkIcon />
+              </View>
               <View style={styles.falseButton}>
                 <FalseButton />
               </View>
@@ -164,40 +144,12 @@ export default function Page9() {
           </View>
         </View>
 
-        {/* Cropping Rectangles */}
-        <View style={[styles.croppingRow, {
-          marginVertical: layoutConfig.croppingRow.marginVertical,
-          gap: layoutConfig.croppingRow.gap,
-          justifyContent: 'center'
-        }]}>
-          <View style={[styles.croppingGood, {
-            flex: layoutConfig.croppingGood.flex,
-            marginRight: layoutConfig.croppingGood.marginRight,
-            marginLeft: layoutConfig.croppingGood.marginLeft,
-            marginTop: layoutConfig.croppingGood.marginTop,
-            transform: [{ scale: layoutConfig.croppingGood.scale }]
-          }]}>
-            <CroppingRectangle />
-          </View>
-          <View style={[styles.croppingBad, {
-            flex: layoutConfig.croppingBad.flex,
-            marginLeft: layoutConfig.croppingBad.marginLeft,
-            marginRight: layoutConfig.croppingBad.marginRight,
-            marginTop: layoutConfig.croppingBad.marginTop,
-            transform: [{ scale: layoutConfig.croppingBad.scale }]
-          }]}>
-            <CroppingRectangle />
-          </View>
-        </View>
-
         {/* Shark Component */}
         <View style={[styles.sharkSection, {
           marginTop: layoutConfig.sharkSection.marginTop,
-          marginBottom: layoutConfig.sharkSection.marginBottom,
           marginLeft: layoutConfig.sharkSection.marginLeft,
-          transform: layoutConfig.sharkSection.transform
         }]}>
-          <Shark />
+          <DumbShark />
         </View>
       </View>
 
@@ -222,7 +174,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center', // This will help center content vertically
     alignItems: 'center',
   },
   boxSection: {
@@ -242,6 +194,9 @@ const styles = StyleSheet.create({
     width: 100,         // Reduced width
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  sharkicon: {
+    transform: [{ scale: 1.4 }],
   },
   correctButton: {
     position: 'absolute',
@@ -267,15 +222,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,         // smaller font size
   },
-  croppingRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  croppingGood: {},
-  croppingBad: {},
   sharkSection: {
     alignItems: 'center',
+    bottom: 100,
   },
   footer: {
     flexDirection: 'row',
@@ -285,16 +234,20 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 10,
-    top: -370,
-    transform: [{ scale: 0.25 }],
-    zIndex: 20,
+    left: 280,
+    bottom: 250,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 450, // Increased from 400 to accommodate the full image width
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   questionText: {
-    fontSize: 70,
+    fontSize: 55,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
-    lineHeight: 100,
+    lineHeight: 70,
   },
 });

@@ -1,30 +1,39 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import { View, StyleSheet } from 'react-native';
-import Wave from '../components/Wave';
-import SpeechBubble from '../components/SpeechBubble';
+import { View, StyleSheet, Image } from 'react-native';
 import TextBox from '../components/TextBoxPage14';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import { ThemedText } from '../components/ThemedText';
 
 export default function Page14() {
   const description = (
     <View style={styles.container}>
-
-      {/* Main content with Shark, SpeechBubble and TextBox */}
+      {/* Main content area */}
       <View style={styles.mainContent}>
-        <View style={styles.sharkSection}>
-          <Shark />
-        </View>
-        <View style={styles.contentSection}>
-          <ThemedText style={styles.centerText}>
-            Moving on to{'\n'}model testing!
-          </ThemedText>
-          <SpeechBubble style={styles.speechBubble} />
-          <TextBox style={styles.textBox} />
+        {/* Content row with shark and text */}
+        <View style={styles.contentRow}>
+          {/* Left side with shark */}
+          <View style={styles.leftContainer}>
+            <View style={styles.speechBubbleContainer}>
+              <Image
+                source={require('../assets/images/page14bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={styles.sharkContainer}>
+              <Shark />
+            </View>
+          </View>
+
+          {/* Right side with speech bubble and text box */}
+          <View style={styles.rightContainer}>
+            <View style={styles.textBoxContainer}>
+              <TextBox />
+            </View>
+          </View>
         </View>
       </View>
 
@@ -39,7 +48,7 @@ export default function Page14() {
       </View>
     </View>
   );
-  
+
   return <BasePage pageNumber={14} title=" " description={description} />;
 }
 
@@ -47,63 +56,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  waveSection: {
-    flex: 0.2,
-    justifyContent: 'flex-end',
-  },
   mainContent: {
-    flex: 1,
+    flex: 1, // Pushes footer to the bottom
+    justifyContent: 'center',
+  },
+  sceneContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sharkSection: {
-    top: 920,
-    right: 400,
-    marginBottom: 20,
-    transform: [ {scale: 0.8} ]
-  },
-  contentSection: {
+  contentRow: {
+    flexDirection: 'row', // Arrange children horizontally
     alignItems: 'center',
-    position: 'relative',
-    top: -525,
-    right: -175,
-    transform: [{ scale: 0.75 }],
   },
-  speechBubble: {
+  leftContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Align items at the bottom of container
+    paddingRight: 10,
     position: 'relative',
-    top: 600,
-    left: -500,
-    marginBottom: 20,
-    transform: [{ scale: 0.50 }],
   },
-  textBox: {
-    position: 'relative',
-    top: 0,
-    left: 0,
+  rightContainer: {
+    flex: 1, // Takes up half the available width
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10,
+  },
+  sharkContainer: {
+    marginTop: 200, // Add space above the shark to make room for speech bubble
+    zIndex: 1,
+    marginLeft: -340,
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 300,
+    zIndex: 2, // Ensure speech bubble appears above other elements
+    width: 400,
+    transform: [{ scale: 0.8 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
+  },
+  textBoxContainer: {
     transform: [{ scale: 0.75 }],
+    right: 160,
+    top: 5,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
-  },
-  backdrop: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    marginBottom: 20,
-    transform: [{ scale: 0.75 }],
-  },
-  centerText: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'black',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -660 }, { translateY: 100 }],
-    zIndex: 3,
-    lineHeight: 60,
   },
 });

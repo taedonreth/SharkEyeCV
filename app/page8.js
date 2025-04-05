@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, Platform } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
@@ -17,15 +17,15 @@ export default function Page8() {
         <View style={styles.sharkSection}>
           {/* Wrapper View with margins for positioning the shark */}
           <View style={styles.sharkContainer}>
-            <Shark />
+            <DumbShark />
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble>
-            <ThemedText style={styles.speechText}>
-              Good job!
-            </ThemedText>
-          </SpeechBubble>
+          <Image
+            source={require('../assets/images/page8bubble.png')}
+            style={styles.speechBubbleImage}
+            resizeMode="contain"
+          />
         </View>
       </View>
 
@@ -48,17 +48,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  speechText: {
-    fontSize: 110,
-    fontWeight: 'bold',
-    marginVertical: 4,
-    textAlign: 'center',
-    lineHeight: 70,
-    color: 'black',
-  },
   sharkContainer: {
-    marginLeft: 500,
     marginTop: 200,
+    left: -200,
+    transform: [{ scale: 1.3 }],
   },
   mainContent: {
     flex: 1,
@@ -73,9 +66,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   speechBubbleContainer: {
+    position: 'absolute',
+    left: 660,
+    bottom: 100,
     zIndex: 2, // Ensure speech bubble appears above other elements
-    transform: [{ scale: 0.4 }], // Adjust scale if needed
-    top: -100,
+    width: 400,
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   footer: {
     flexDirection: 'row',

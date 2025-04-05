@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image } from 'react-native';
 
-const Shark = (props) => {
+const DumbShark = (props) => {
   return (
     <Image
-      source={require('../assets/images/shark.png')}
+      source={require('../assets/images/dumbshark.png')}
       style={{
         width: 714,
         height: 492,
@@ -15,4 +15,4 @@ const Shark = (props) => {
   );
 };
 
-export default Shark;
+export default DumbShark;
