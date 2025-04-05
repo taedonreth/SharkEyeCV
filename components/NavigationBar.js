@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Linking, Image } from "react-native";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 
 const NavigationBar = ({ onAboutPress }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleAboutPress = () => {
+    Linking.openURL('https://bosl.ucsb.edu');
+  };
 
   return (
     <ThemedView style={styles.container} lightColor="#FFFFFF">
@@ -12,7 +16,11 @@ const NavigationBar = ({ onAboutPress }) => {
         {/* Logo and Title Section */}
         <View style={styles.logoSection}>
           <View style={styles.logoContainer}>
-            <ThemedText style={styles.logoText}>Logo</ThemedText>
+            <Image 
+              source={require('../assets/images/SharkEyeLogo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
           <ThemedText style={styles.title}>SharkEye Computer Vision Game</ThemedText>
         </View>
@@ -24,7 +32,7 @@ const NavigationBar = ({ onAboutPress }) => {
             isHovered && styles.aboutButtonHovered
           ]}
           activeOpacity={0.7}
-          onPress={onAboutPress}
+          onPress={handleAboutPress}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -39,7 +47,7 @@ const NavigationBar = ({ onAboutPress }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 80, // Increased to 80px for a taller navbar
+    height: 80,
     borderBottomWidth: 0,
     backgroundColor: 'white',
   },
@@ -55,17 +63,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoContainer: {
-    width: 55,
-    height: 35,
-    backgroundColor: '#C8C8C8',
-    borderRadius: 4,
+    width: 80,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
   },
-  logoText: {
-    fontSize: 14,
-    color: "#333",
+  logo: {
+    width: '100%',
+    height: '100%',
   },
   title: {
     fontSize: 26,

@@ -1,11 +1,37 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Platform, Image } from 'react-native';
+import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
-import IntroToBenioff from '../components/IntroToBenioff';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+
+const VideoComponent = () => {
+  if (Platform.OS === 'web') {
+    return (
+      <iframe
+        src="https://sharkeye.org?wvideo=ajmwpt0hu3"
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+        }}
+        allow="autoplay; fullscreen"
+      />
+    );
+  }
+
+  return (
+    <WebView
+      source={{ uri: 'https://sharkeye.org?wvideo=ajmwpt0hu3' }}
+      style={styles.video}
+      javaScriptEnabled={true}
+      domStorageEnabled={true}
+      allowsFullscreenVideo={true}
+    />
+  );
+};
 
 export default function Page3() {
   const title = " ";
@@ -30,10 +56,10 @@ export default function Page3() {
             </View>
           </View>
 
-          {/* Right side container for Intro to Benioff */}
+          {/* Right side container for video */}
           <View style={styles.rightContainer}>
-            <View style={styles.introContainer}>
-              <IntroToBenioff />
+            <View style={styles.videoContainer}>
+              <VideoComponent />
             </View>
           </View>
         </View>
@@ -67,48 +93,52 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   mainContent: {
-    flex: 1, // Pushes footer to the bottom
+    flex: 1,
     justifyContent: 'center',
   },
   contentRow: {
-    flexDirection: 'row', // Arrange children horizontally
+    flexDirection: 'row',
     alignItems: 'center',
   },
   leftContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align items at the bottom of container
+    justifyContent: 'flex-end',
     paddingRight: 10,
     position: 'relative',
   },
   rightContainer: {
-    flex: 1, // Takes up half the available width
-    alignItems: 'center',
+    flex: 1,
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    paddingLeft: 10,
+    paddingRight: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 80,
-    left: 210,
+    top: 0,
+    left: 350,
     zIndex: 2, // Ensure speech bubble appears above other elements
     width: 400,
-    transform: [{ scale: 0.75 }], // Increased scale to make it more visible
   },
   speechBubbleImage: {
     width: '100%',
     height: 400,
   },
   sharkContainer: {
-    marginTop: 200, // Add space above the shark to make room for speech bubble
+    marginTop: 200,
     zIndex: 1,
-    marginLeft: -340,
+    marginLeft: -250,
+    transform: [{ scale: 1.5 }],
   },
-  introContainer: {
-    width: '100%',
-    position: 'absolute',
-    right: 500,
-    transform: [{ scale: 0.75 }],
+  videoContainer: {
+    width: 600,
+    height: 500,
+    backgroundColor: '#E6EBEA',
+    borderRadius: 30,
+    overflow: 'hidden',
+  },
+  video: {
+    flex: 1,
   },
   footerContainer: {
     flexDirection: 'row',
