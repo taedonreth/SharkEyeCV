@@ -1,13 +1,11 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { Link } from 'expo-router';
 import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
+import DumbShark from '../components/dumbshark';
 import Overview from '../components/Overview';
-import { ThemedText } from '../components/ThemedText';
 
 export default function OverviewPage() {
   const title = " ";
@@ -20,17 +18,16 @@ export default function OverviewPage() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble>
-                <ThemedText style={styles.speechText}>
-                  So...
-                  What is computer vision?
-                </ThemedText>
-              </SpeechBubble>
+              <Image
+                source={require('../assets/images/page2bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
             </View>
             {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <Shark />
+              <DumbShark />
             </View>
           </View>
 
@@ -99,16 +96,21 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -200,
-    left: 1,
+    top: 80,
+    left: 210,
     zIndex: 2, // Ensure speech bubble appears above other elements
-    transform: [{ scale: 0.4 }], // Adjust scale if needed
+    width: 400,
+    transform: [{ scale: 0.75 }], // Increased scale to make it more visible
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   sharkContainer: {
     marginTop: 200, // Add space above the shark to make room for speech bubble
     zIndex: 1,
     marginLeft: -340,
-    transform: [{ scale: 0.7 }], // Adjust scale if needed
+    transform: [{ scale: 1.1 }],
   },
   overviewContainer: {
     width: '100%',

@@ -42,13 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sharkSection: {
-    marginTop: 0,
-    left: -400,
-  },
   gameSection: {
-    marginTop: 0,
-    marginBottom: 20,
   },
   footer: {
     flexDirection: 'row',

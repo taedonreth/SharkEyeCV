@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import BackDrop from '../components/BackDropPage15';
 import { Link } from 'expo-router';
@@ -71,8 +71,8 @@ export default function Page11() {
             </View>
             
             {/* Shark below the speech bubble */}
-            <View style={styles.sharkContainer}>
-              <Shark />
+            <View>
+              <DumbShark />
             </View>
           </View>
 
@@ -137,11 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
     position: 'relative',
-  },
-  sharkContainer: {
-    zIndex: 1,
-    marginLeft: -140,
-    marginTop: 70,
   },
   speechBubbleContainer: {
     position: 'absolute',

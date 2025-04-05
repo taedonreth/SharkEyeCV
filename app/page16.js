@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, Platform } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
-import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -20,11 +18,11 @@ export default function Page16() {
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble>
-            <ThemedText style={styles.speechText}>
-              That was wrong, try again!
-            </ThemedText>
-          </SpeechBubble>
+          <Image
+            source={require('../assets/images/page8bubble.png')}
+            style={styles.speechBubbleImage}
+            resizeMode="contain"
+          />
         </View>
       </View>
 
@@ -56,8 +54,9 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   sharkContainer: {
-    marginLeft: 500,
-    marginTop: 200,
+    marginTop: 300,
+    right: 200,
+    bottom: 50,
   },
   mainContent: {
     flex: 1,
@@ -72,9 +71,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   speechBubbleContainer: {
+    position: 'absolute',
+    left: 660,
+    bottom: 150,
     zIndex: 2, // Ensure speech bubble appears above other elements
-    transform: [{ scale: 0.4 }], // Adjust scale if needed
-    top: -100,
+    width: 400,
+  },
+  speechBubbleImage: {
+    width: '100%',
+    height: 400,
   },
   footer: {
     flexDirection: 'row',

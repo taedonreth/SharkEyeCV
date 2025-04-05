@@ -305,8 +305,8 @@ const styles = StyleSheet.create({
   sharkContainer: {
     zIndex: 1,
     marginLeft: -340,
-    left: 150,
-    top: 140,
+    left: 130,
+    top: 160,
     transform: [{ scale: .90 }],
   },
   speechBubbleContainer: {
