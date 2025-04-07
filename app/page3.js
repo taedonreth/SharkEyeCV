@@ -11,7 +11,7 @@ const VideoComponent = () => {
   if (Platform.OS === 'web') {
     return (
       <video
-        src={require('../assets/videos/sharkeyevideo.mov')}
+        src={require('../assets/videos/sharkeyevideo2.mov')}
         style={{
           width: '100%',
           height: '100%',
@@ -27,7 +27,7 @@ const VideoComponent = () => {
 
   return (
     <WebView
-      source={{ uri: require('../assets/videos/sharkeyevideo.mov') }}
+      source={{ uri: require('../assets/videos/sharkeyevideo2.mov') }}
       style={styles.video}
       javaScriptEnabled={true}
       domStorageEnabled={true}
