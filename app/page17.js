@@ -1,42 +1,63 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Platform } from 'react-native';
+import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
-import SpeechBubble from '../components/SpeechBubble';
-import Resources from '../components/Resources';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
-import { ThemedText } from '../components/ThemedText';
 
+const VideoComponent = () => {
+  if (Platform.OS === 'web') {
+    return (
+      <iframe
+        src="https://sharkeye.org?wvideo=ajmwpt0hu3"
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+        }}
+        allow="autoplay; fullscreen"
+      />
+    );
+  }
+
+  return (
+    <WebView
+      source={{ uri: 'https://sharkeye.org?wvideo=ajmwpt0hu3' }}
+      style={styles.video}
+      javaScriptEnabled={true}
+      domStorageEnabled={true}
+      allowsFullscreenVideo={true}
+    />
+  );
+};
 
 export default function Page17() {
-  const title = ' '; // Or any title you'd like
+  const title = ' ';
   const description = (
     <View style={styles.container}>
-      {/* Main content: shark + speech bubble + resources */}
       <View style={styles.mainContent}>
         <View style={styles.contentRow}>
           {/* Left side container for Shark and Speech Bubble */}
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
-        <View style={styles.speechBubbleContainer}>
-          <Image
-            source={require('../assets/images/page17bubble.png')}
-            style={styles.speechBubbleImage}
-            resizeMode="contain"
-          />
-        </View>
-            {/* Shark 
+            <View style={styles.speechBubbleContainer}>
+              <Image
+                source={require('../assets/images/page17bubble.png')}
+                style={styles.speechBubbleImage}
+                resizeMode="contain"
+              />
+            </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <Shark />
             </View>
           </View>
 
-          {/* Right side container for Overview */}
+          {/* Right side container for Video */}
           <View style={styles.rightContainer}>
-            <View style={styles.resourcesContainer}>
-              <Resources />
+            <View style={styles.videoContainer}>
+              <VideoComponent />
             </View>
           </View>
         </View>
@@ -51,7 +72,6 @@ export default function Page17() {
     </View>
   );
 
-  // Render BasePage with custom description
   return <BasePage pageNumber={17} title={title} description={description} />;
 }
 
@@ -59,44 +79,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  // Fills available space (below the title/description in BasePage)
   mainContent: {
     flex: 1,
-    flexDirection: 'row',    // Place items in a row
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // If you want them stacked vertically, do flexDirection: 'column'
   },
   contentRow: {
-    flexDirection: 'row', // Arrange children horizontally
+    flexDirection: 'row',
     alignItems: 'center',
-  },
-  speechText: {
-    fontSize: 90,
-    fontWeight: 'bold',
-    marginVertical: 4,
-    textAlign: 'center',
-    lineHeight: 100,
-    color: 'black',
   },
   leftContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align items at the bottom of container
+    justifyContent: 'flex-end',
     paddingRight: 10,
     position: 'relative',
   },
   rightContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
+    marginRight: -100,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 230,
+    left: 130,
     bottom: 300,
-    zIndex: 2, // Ensure speech bubble appears above other elements
+    zIndex: 2,
     width: 400,
     transform: [{ scale: 0.8 }],
   },
@@ -105,25 +116,23 @@ const styles = StyleSheet.create({
     height: 400,
   },
   sharkContainer: {
-    marginTop: 200, // Add space above the shark to make room for speech bubble
+    marginTop: 200,
     zIndex: 1,
-    marginLeft: -340,
+    marginLeft: -140,
   },
-  bubbleContainer: {
-    transform: [{ scale: 0.3 }, { rotate: '5deg' }],
-    marginBottom: 200,
+  videoContainer: {
+    width: 600,
+    height: 500,
+    backgroundColor: '#E6EBEA',
+    borderRadius: 30,
+    overflow: 'hidden',
   },
-  resourcesContainer: {
-    // Additional styling if needed
-    transform: [{ scale: 0.8 }],
-    top: 20,
-    left: 70,
+  video: {
+    flex: 1,
   },
   footerContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start', // Or 'center' / 'space-between'
+    justifyContent: 'flex-start',
     paddingVertical: 25,
-    // If you need it pinned truly at the bottom, you can do:
-    // alignSelf: 'stretch',
   },
 });
