@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import BasePage from './BasePage';
 import GoodSharkIcon from '../components/GoodSharkIcon';
 import BadSharkIcon from '../components/BadSharkIcon';
 import CorrectButton from '../components/CorrectButton';
 import FalseButton from '../components/FalseButton';
 import DumbShark from '../components/dumbshark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -73,11 +75,13 @@ export default function Page9() {
       <View style={styles.mainContent}>
         {/* Speech Bubble */}
         <View style={styles.speechBubbleContainer}>
-          <Image
-            source={require('../assets/images/page9bubble.png')}
-            style={styles.speechBubbleImage}
-            resizeMode="contain"
-          />
+          <SpeechBubble scale={2.2}>
+            <TypewriterText
+              text="Let's see what happens when we put our data into boxes!"
+              style={styles.speechText}
+              typingSpeed={40}
+            />
+          </SpeechBubble>
         </View>
 
         {/* Box Section with Good and Bad Boxes */}
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    justifyContent: 'center', // This will help center content vertically
+    justifyContent: 'center',
     alignItems: 'center',
   },
   boxSection: {
@@ -190,8 +194,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     position: 'relative',
     marginBottom: -50,
-    height: 400,        // Reduced height
-    width: 100,         // Reduced width
+    height: 400,
+    width: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -212,15 +216,15 @@ const styles = StyleSheet.create({
   },
   boxLabel: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 6,      // smaller border radius
-    padding: 6,           // reduced padding
+    borderRadius: 6,
+    padding: 6,
     alignItems: 'center',
-    width: '90%',         // slightly narrower
+    width: '90%',
   },
   labelText: {
     color: 'black',
     textAlign: 'center',
-    fontSize: 12,         // smaller font size
+    fontSize: 12,
   },
   sharkSection: {
     alignItems: 'center',
@@ -236,18 +240,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 280,
     bottom: 250,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 450, // Increased from 400 to accommodate the full image width
+    zIndex: 2,
+    width: 250,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
-  },
-  questionText: {
-    fontSize: 55,
-    fontWeight: 'bold',
+  speechText: {
+    fontSize: 36,
     textAlign: 'center',
     color: 'black',
-    lineHeight: 70,
+    lineHeight: 44,
+    fontWeight: '500',
   },
 });

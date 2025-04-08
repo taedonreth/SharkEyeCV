@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
-import { ThemedText } from '../components/ThemedText';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -12,20 +12,20 @@ export default function Page8() {
   const title = " ";
   const description = (
     <View style={styles.container}>
-      {/* Main Content: Shark and Speech Bubble */}
       <View style={styles.mainContent}>
         <View style={styles.sharkSection}>
-          {/* Wrapper View with margins for positioning the shark */}
           <View style={styles.sharkContainer}>
             <DumbShark />
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <Image
-            source={require('../assets/images/page8bubble.png')}
-            style={styles.speechBubbleImage}
-            resizeMode="contain"
-          />
+          <SpeechBubble scale={2.2}>
+            <TypewriterText
+              text="Now that we have good data, we can train our model to recognize sharks!"
+              style={styles.speechText}
+              typingSpeed={40}
+            />
+          </SpeechBubble>
         </View>
       </View>
 
@@ -60,21 +60,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sharkSection: {
-    // Changed from marginRight to flex to give it proper space allocation
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 660,
-    bottom: 100,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
+    left: 580,
+    bottom: 180,
+    zIndex: 2,
+    width: 250,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
+  speechText: {
+    fontSize: 36,
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',

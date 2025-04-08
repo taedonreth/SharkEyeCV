@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Image } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -50,11 +52,13 @@ export default function Page3() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page3bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
-              />
+              <SpeechBubble scale={2.2}>
+                <TypewriterText
+                  text="Let me show you how SharkEye works!"
+                  style={styles.speechText}
+                  typingSpeed={40}
+                />
+              </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
@@ -91,12 +95,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   speechText: {
-    fontSize: 70,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontSize: 36,
     textAlign: 'center',
-    lineHeight: 70,
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   mainContent: {
     flex: 1,
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 350,
     zIndex: 2,
-    width: 400,
+    width: 250,
   },
   speechBubbleImage: {
     width: '100%',

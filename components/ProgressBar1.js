@@ -1,20 +1,54 @@
 import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet, Animated, Easing } from "react-native";
 
 const Progressbar1 = ({ percentage = 0 }) => {
+  const animatedWidth = React.useRef(new Animated.Value(0)).current;
+  const animatedNumber = React.useRef(new Animated.Value(0)).current;
+  const [displayedNumber, setDisplayedNumber] = React.useState(0);
+
+  React.useEffect(() => {
+    Animated.parallel([
+      Animated.spring(animatedWidth, {
+        toValue: percentage,
+        tension: 12,
+        friction: 8,
+        useNativeDriver: false
+      }),
+      Animated.spring(animatedNumber, {
+        toValue: percentage,
+        tension: 12,
+        friction: 8,
+        useNativeDriver: false
+      })
+    ]).start();
+
+    const listener = animatedNumber.addListener(({ value }) => {
+      setDisplayedNumber(Math.round(value));
+    });
+
+    return () => {
+      animatedNumber.removeListener(listener);
+    };
+  }, [percentage]);
+
   return (
     <View style={styles.container}>
-      {/* Percentage text - now positioned to the left of the bar */}
-      <Text style={styles.percentageText}>{Math.round(percentage)}%</Text>
+      <Animated.Text style={styles.percentageText}>
+        {displayedNumber}%
+      </Animated.Text>
 
       <View style={styles.progressContainer}>
-        {/* Background bar */}
         <View style={styles.progressBackground}>
-          {/* Filled portion */}
-          <View
+          <Animated.View
             style={[
               styles.progressFill,
-              { width: `${percentage}%` }
+              {
+                width: animatedWidth.interpolate({
+                  inputRange: [0, 100],
+                  outputRange: ['0%', '100%'],
+                  extrapolate: 'clamp'
+                })
+              }
             ]}
           />
         </View>

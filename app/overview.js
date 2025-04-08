@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import DumbShark from '../components/dumbshark';
 import Overview from '../components/Overview';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 
 export default function OverviewPage() {
   const title = " ";
@@ -18,13 +20,14 @@ export default function OverviewPage() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page2bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
-              />
+              <SpeechBubble scale={2.2}>
+                <TypewriterText
+                  text="Hi! I'm BotShark, ready to learn about computer vision?"
+                  style={styles.speechText}
+                  typingSpeed={40}
+                />
+              </SpeechBubble>
             </View>
-            {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <DumbShark />
@@ -66,30 +69,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContent: {
-    flex: 1, // Pushes footer to the bottom
+    flex: 1,
     justifyContent: 'center',
   },
   speechText: {
-    fontSize: 90,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontSize: 36,
     textAlign: 'center',
-    lineHeight: 100,
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   contentRow: {
-    flexDirection: 'row', // Arrange children horizontally
+    flexDirection: 'row',
     alignItems: 'center',
   },
   leftContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align items at the bottom of container
+    justifyContent: 'flex-end',
     paddingRight: 10,
     position: 'relative',
   },
   rightContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
@@ -98,16 +100,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 80,
     left: 210,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
-    transform: [{ scale: 0.75 }], // Increased scale to make it more visible
+    zIndex: 2,
+    width: 250,
   },
   speechBubbleImage: {
     width: '100%',
     height: 400,
   },
   sharkContainer: {
-    marginTop: 200, // Add space above the shark to make room for speech bubble
+    marginTop: 200,
     zIndex: 1,
     marginLeft: -340,
     transform: [{ scale: 1.1 }],

@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import { Link } from 'expo-router';
 import ContinueButton from '../components/ContinueButton';
 import DumbShark from '../components/dumbshark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Index() {
   const title = " ";
@@ -11,23 +14,23 @@ export default function Index() {
     <View style={styles.container}>
       {/* Main content area */}
       <View style={styles.mainContent}>
-
         {/* Shark + Bubble in the same wrapper, using relative positioning */}
         <View style={styles.sharkBubbleWrapper}>
-          {/* Wrap Shark in a View that you can style/transform */}
-          <View style={styles.sharkPosition}>
+          {/* Wrap Shark in SharkWrapper for animation */}
+          <SharkWrapper style={styles.sharkPosition}>
             <DumbShark />
-          </View>
+          </SharkWrapper>
 
           <View style={styles.speechBubbleContainer}>
-            <Image
-              source={require('../assets/images/page1bubble.png')}
-              style={styles.speechBubbleImage}
-              resizeMode="contain"
-            />
+            <SpeechBubble scale={2.2}>
+              <TypewriterText
+                text="Welcome to SharkEye! Click continue to learn about computer vision!"
+                style={styles.speechText}
+                typingSpeed={40}
+              />
+            </SpeechBubble>
           </View>
         </View>
-
       </View>
 
       {/* Footer with the Continue button */}
@@ -52,45 +55,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  speechText: {
-    fontSize: 70,
-    fontWeight: 'bold',
-    marginVertical: 4,
-    textAlign: 'center',
-    lineHeight: 80,
-    color: 'black',
-  },
   mainContent: {
     flex: 1,
-    // Center everything in the main area
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  // Wrapper for both Shark and Bubble
   sharkBubbleWrapper: {
-    width: 300,  // tweak
-    height: 250, // tweak
+    width: 300,
+    height: 250,
     position: 'relative',
     transform: [{ scale: 0.8 }],
-    // borderWidth: 1, borderColor: 'red', // enable for debugging
   },
-  // Optional: additional styling for Shark
   sharkPosition: {
     marginLeft: -400,
     marginTop: 25,
     transform: [{ scale: 1.5 }],
   },
-  // Absolutely position the bubble so it overlaps the Shark
   speechBubbleContainer: {
     position: 'absolute',
-    top: -120,          // Adjust to move bubble up/down
-    right: -200,      // Adjust to move bubble left/right
-    width: 400,      // Increased width for the image
+    top: -120,
+    right: -200,
+    width: 250,
+    zIndex: 2,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
+  speechText: {
+    fontSize: 36,
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   footerContainer: {
     flexDirection: 'row',

@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, Image, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
-// IMPORTANT: This import works if your Expo Router uses react-navigation under the hood
 import { useFocusEffect } from '@react-navigation/native';
 
 const VideoComponent = () => {
@@ -37,18 +38,12 @@ const VideoComponent = () => {
 export default function Page17() {
   const title = ' ';
 
-  // Track if video is visible (i.e. if screen is focused)
   const [showVideo, setShowVideo] = useState(true);
 
-  // useFocusEffect from react-navigation lets us run code on focus & cleanup on blur
   useFocusEffect(
     useCallback(() => {
-      // Screen has come into focus, show the video component
       setShowVideo(true);
-
-      // Return a function that runs on blur (i.e. leaving the page)
       return () => {
-        // Hide/unmount the video component to stop playback
         setShowVideo(false);
       };
     }, [])
@@ -58,33 +53,27 @@ export default function Page17() {
     <View style={styles.container}>
       <View style={styles.mainContent}>
         <View style={styles.contentRow}>
-          {/* Left side container for Shark and Speech Bubble */}
           <View style={styles.leftContainer}>
-            {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page17bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
-              />
+              <SpeechBubble scale={2.2}>
+                <TypewriterText
+                  text="Check out this video to see SharkEye in action!"
+                  style={styles.speechText}
+                  typingSpeed={40}
+                />
+              </SpeechBubble>
             </View>
-            {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <Shark />
             </View>
           </View>
-
-          {/* Right side container for Video */}
           <View style={styles.rightContainer}>
             <View style={styles.videoContainer}>
-              {/* Render the video only if showVideo is true */}
               {showVideo && <VideoComponent />}
             </View>
           </View>
         </View>
       </View>
-
-      {/* Footer with Back button only */}
       <View style={styles.footerContainer}>
         <Link href="/page16" asChild>
           <BackButton isNavigation={true} />
@@ -129,12 +118,14 @@ const styles = StyleSheet.create({
     left: 230,
     bottom: 300,
     zIndex: 2,
-    width: 400,
-    transform: [{ scale: 0.8 }],
+    width: 250,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
+  speechText: {
+    fontSize: 36,
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   sharkContainer: {
     marginTop: 200,
