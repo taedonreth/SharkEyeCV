@@ -1,50 +1,86 @@
-# Welcome to your Expo app 👋
+# SharkEyeCV 🦈
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+SharkEyeCV is an educational mobile application designed to teach users about shark identification and marine conservation through interactive learning experiences and computer vision technology.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Interactive learning modules about shark identification
+- Computer vision-assisted shark recognition games
+- Educational content about marine conservation
+- Progressive learning path with multiple chapters
+- Cross-platform support (iOS, Android, Web)
 
+## Tech Stack
+
+- [Expo](https://expo.dev) - React Native framework
+- [React Navigation](https://reactnavigation.org/) - Navigation system
+- [Expo Router](https://docs.expo.dev/router/introduction/) - File-based routing
+- TypeScript - Type safety and developer experience
+- Various Expo modules for native functionality
+
+## Prerequisites
+
+- Node.js (LTS version recommended)
+- npm, yarn, or pnpm
+- Expo CLI
+- iOS Simulator (for iOS development) (WIP)
+- Android Studio (for Android development) (WIP)
+
+## Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/SharkEyeCV.git
+   cd SharkEyeCV
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Choose your platform:
+   - Press 'i' for iOS simulator
+   - Press 'a' for Android emulator
+   - Press 'w' for web browser
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+SharkEyeCV/
+├── app/                   # Main application screens
+├── assets/               # Static assets (images, fonts)
+├── components/           # Reusable React components
+├── constants/            # App-wide constants
+├── hooks/               # Custom React hooks
+└── scripts/             # Utility scripts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Development
 
-## Learn more
+- The app uses file-based routing through Expo Router
+- Screens are located in the `app` directory
+- Components are organized by feature in the `components` directory
+- Custom hooks are in the `hooks` directory
 
-To learn more about developing your project with Expo, look at the following resources:
+## Contributing
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Join the community
+## Acknowledgments
 
-Join our community of developers creating universal apps.
+- Thanks to all contributors and especially Benioff Ocean Science Labratory
+- Built with [Expo](https://expo.dev)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Disclaimer
+
+- At its current state, SharkEyeCV is only compatible on a 13 inch laptop
