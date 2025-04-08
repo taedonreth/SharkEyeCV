@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Image, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
+// IMPORTANT: This import works if your Expo Router uses react-navigation under the hood
+import { useFocusEffect } from '@react-navigation/native';
 
 const VideoComponent = () => {
   if (Platform.OS === 'web') {
@@ -34,6 +36,24 @@ const VideoComponent = () => {
 
 export default function Page17() {
   const title = ' ';
+
+  // Track if video is visible (i.e. if screen is focused)
+  const [showVideo, setShowVideo] = useState(true);
+
+  // useFocusEffect from react-navigation lets us run code on focus & cleanup on blur
+  useFocusEffect(
+    useCallback(() => {
+      // Screen has come into focus, show the video component
+      setShowVideo(true);
+
+      // Return a function that runs on blur (i.e. leaving the page)
+      return () => {
+        // Hide/unmount the video component to stop playback
+        setShowVideo(false);
+      };
+    }, [])
+  );
+
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
@@ -57,7 +77,8 @@ export default function Page17() {
           {/* Right side container for Video */}
           <View style={styles.rightContainer}>
             <View style={styles.videoContainer}>
-              <VideoComponent />
+              {/* Render the video only if showVideo is true */}
+              {showVideo && <VideoComponent />}
             </View>
           </View>
         </View>
@@ -105,7 +126,7 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 130,
+    left: 230,
     bottom: 300,
     zIndex: 2,
     width: 400,

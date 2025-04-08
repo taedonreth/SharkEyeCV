@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
-import BackDrop from '../components/BackDropPage15';
 import YesButton from '../components/YesButton';
 import NoButton from '../components/NoButton';
 import Question from '../components/QuestionPage15';
@@ -14,7 +13,6 @@ import { ThemedText } from '../components/ThemedText';
 
 export default function Page15() {
   // State for tracking the game
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [sharkSaying, setSharkSaying] = useState('');
   const [answerCorrect, setAnswerCorrect] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -23,9 +21,12 @@ export default function Page15() {
   const [score, setScore] = useState(0);
   const [correctAttempts, setCorrectAttempts] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
-  const maxAttempts = 10;
+  const maxAttempts = 15;
   
-  // Add game completion state
+  // Track which creatures have been correctly identified
+  const [foundCreatures, setFoundCreatures] = useState([]);
+  
+  // Game completion state
   const [gameCompleted, setGameCompleted] = useState(false);
 
   // Feedback state
@@ -35,46 +36,177 @@ export default function Page15() {
     message: '' 
   });
   
-  // Images array
-  const images = ['fish.jpg', 'shark1.jpg', 'shark2.jpg', 'turtle.jpg', 'whale.jpg'];
-  
-  // Pre-load all images to reduce lag
-  const imageRefs = useRef({
-    'fish.jpg': require('../assets/images/page15-game/fish.jpg'),
-    'shark1.jpg': require('../assets/images/page15-game/shark1.jpg'),
-    'shark2.jpg': require('../assets/images/page15-game/shark2.jpg'),
-    'turtle.jpg': require('../assets/images/page15-game/turtle.jpg'),
-    'whale.jpg': require('../assets/images/page15-game/whale.jpg')
-  }).current;
-
-  // Helper function to get display name
-  const getImageDisplayName = (imageName) => {
-    const baseName = imageName.split('.')[0];
-    if (baseName === 'shark1' || baseName === 'shark2') {
-      return 'shark';
+  // Sea creatures data with their positions in the image
+  const seaCreatures = [
+    {
+      id: 1,
+      name: 'turtle',
+      position: { x: 52, y: 40 },
+      size: { width: 140, height: 100 }
+    },
+    {
+      id: 2,
+      name: 'jellyfish',
+      position: { x: 480, y: 30 },
+      size: { width: 70, height: 150 }
+    },
+    {
+      id: 3,
+      name: 'shark',
+      position: { x: 200, y: 120 },
+      size: { width: 290, height: 140 }
+    },
+    {
+      id: 4,
+      name: 'stingray',
+      position: { x: 365, y: 250 },
+      size: { width: 150, height: 130 }
+    },
+    {
+      id: 5,
+      name: 'pufferfish',
+      position: { x: 120, y: 140 },
+      size: { width: 70, height: 70 }
+    },
+    {
+      id: 6,
+      name: 'crab',
+      position: { x: 115, y: 300 },
+      size: { width: 115, height: 110 }
     }
-    return baseName;
-  };
-  
-  // Set up what the shark says when the image changes
-  useEffect(() => {
-    // Skip setting new shark saying if game is completed
+  ];
+
+  // Current creature to highlight
+  const [currentCreature, setCurrentCreature] = useState(null);
+
+  // Selection frame for the shark's guess
+  const [framePosition, setFramePosition] = useState({ x: 0, y: 0 });
+  const [frameSize, setFrameSize] = useState({ width: 0, height: 0 });
+
+  // Start a new round with a new creature and frame
+  const startNewRound = () => {
     if (gameCompleted) return;
     
-    const actualImageName = getImageDisplayName(images[currentImageIndex]);
+    // Determine which creatures haven't been found yet
+    const unfoundCreatures = seaCreatures.filter(creature => 
+      !foundCreatures.includes(creature.id)
+    );
     
-    // Randomly decide if shark tells truth (70%) or lies (30%)
-    if (Math.random() < 0.7) {
-      // Truth - say what it actually is
-      setSharkSaying(actualImageName);
+    let creature;
+    
+    // If there are unfound creatures, strongly prefer those (90% chance)
+    if (unfoundCreatures.length > 0 && (Math.random() < 0.9 || foundCreatures.length === 0)) {
+      // Pick a random unfound creature
+      const randomIndex = Math.floor(Math.random() * unfoundCreatures.length);
+      creature = unfoundCreatures[randomIndex];
     } else {
-      // Lie - say something else
-      const options = ['fish', 'shark', 'turtle', 'whale'].filter(name => name !== actualImageName);
+      // Occasionally show a found creature, or if all have been found
+      // Avoid repeating the same creature if possible
+      let randomIndex = Math.floor(Math.random() * seaCreatures.length);
+      if (currentCreature && seaCreatures.length > 1) {
+        // Try to avoid the same creature twice in a row
+        let attempts = 0;
+        while (seaCreatures[randomIndex].id === currentCreature.id && attempts < 3) {
+          randomIndex = Math.floor(Math.random() * seaCreatures.length);
+          attempts++;
+        }
+      }
+      creature = seaCreatures[randomIndex];
+    }
+    
+    setCurrentCreature(creature);
+    
+    // Position the frame with variable accuracy to make the game challenging
+    // Sometimes the frame will be perfectly aligned, sometimes it will be off
+    const perfectFrameChance = 0.5; // 50% chance of perfect framing
+    
+    let newFramePosition = { ...creature.position };
+    let newFrameSize = { ...creature.size };
+    
+    // If not perfectly framed, adjust the frame position and size slightly
+    if (Math.random() > perfectFrameChance) {
+      // Create varying degrees of misalignment
+      const misalignmentLevel = Math.random();
+      
+      // Determine offset and size adjustment ranges based on misalignment level
+      const offsetRange = misalignmentLevel * 60; // Up to 60px offset
+      const sizeAdjustRange = misalignmentLevel * 40; // Up to 40px size change
+      
+      // Adjust position randomly within offset range
+      newFramePosition.x += Math.floor((Math.random() - 0.5) * offsetRange);
+      newFramePosition.y += Math.floor((Math.random() - 0.5) * offsetRange);
+      
+      // Adjust size randomly within size adjust range
+      newFrameSize.width += Math.floor((Math.random() - 0.5) * sizeAdjustRange);
+      newFrameSize.height += Math.floor((Math.random() - 0.5) * sizeAdjustRange);
+      
+      // Ensure minimum size
+      newFrameSize.width = Math.max(newFrameSize.width, 50);
+      newFrameSize.height = Math.max(newFrameSize.height, 50);
+    }
+    
+    setFramePosition(newFramePosition);
+    setFrameSize(newFrameSize);
+    
+    // Calculate the accuracy of the frame (overlap percentage and selection precision)
+    const frameRight = newFramePosition.x + newFrameSize.width;
+    const frameBottom = newFramePosition.y + newFrameSize.height;
+    
+    const creatureRight = creature.position.x + creature.size.width;
+    const creatureBottom = creature.position.y + creature.size.height;
+    
+    // Calculate the overlap area
+    const overlapLeft = Math.max(creature.position.x, newFramePosition.x);
+    const overlapTop = Math.max(creature.position.y, newFramePosition.y);
+    const overlapRight = Math.min(creatureRight, frameRight);
+    const overlapBottom = Math.min(creatureBottom, frameBottom);
+    
+    // Check if there is an actual overlap
+    const hasOverlap = overlapLeft < overlapRight && overlapTop < overlapBottom;
+    let overlapArea = 0;
+    let overlapPercentage = 0;
+    let selectionPrecision = 0;
+    
+    if (hasOverlap) {
+      const overlapWidth = overlapRight - overlapLeft;
+      const overlapHeight = overlapBottom - overlapTop;
+      overlapArea = overlapWidth * overlapHeight;
+      
+      const creatureArea = creature.size.width * creature.size.height;
+      overlapPercentage = (overlapArea / creatureArea) * 100;
+      
+      // Calculate selection precision (how much of the selection is filled by the creature)
+      const selectionArea = newFrameSize.width * newFrameSize.height;
+      selectionPrecision = (overlapArea / selectionArea) * 100;
+    }
+    
+    // Apply similar logic to MurkySharkFramingGame
+    let effectiveOverlapPercentage = overlapPercentage;
+    
+    // Penalize imprecise selections (large boxes around small items)
+    if (selectionPrecision < 30) {
+      // If the selection is very large and the creature is small within it,
+      // reduce the effective overlap percentage
+      effectiveOverlapPercentage = overlapPercentage * (selectionPrecision / 100);
+    }
+    
+    // Randomly decide what the shark says (regardless of what's in the frame)
+    // Sometimes it's correct, sometimes not
+    const correctIdentificationChance = 0.7; // 70% chance to correctly identify
+    
+    if (Math.random() < correctIdentificationChance) {
+      // Shark correctly identifies the creature
+      setSharkSaying(creature.name);
+    } else {
+      // Shark randomly identifies some other creature
+      const options = seaCreatures
+        .map(c => c.name)
+        .filter(name => name !== creature.name);
       const randomOption = options[Math.floor(Math.random() * options.length)];
       setSharkSaying(randomOption);
     }
     
-    // Enable buttons when image changes
+    // Enable buttons when new round starts
     setButtonDisabled(false);
     
     // Reset feedback
@@ -83,7 +215,12 @@ export default function Page15() {
       correct: false, 
       message: '' 
     });
-  }, [currentImageIndex, gameCompleted]);
+  };
+  
+  // Initialize the game
+  useEffect(() => {
+    startNewRound();
+  }, []);
 
   // Process the answer
   const processAnswer = (isYes) => {
@@ -94,13 +231,13 @@ export default function Page15() {
     // Increment total attempts
     setTotalAttempts(prev => Math.min(prev + 1, maxAttempts));
     
-    // Get actual image name
-    const actualImageName = getImageDisplayName(images[currentImageIndex]);
+    // The shark's identification is correct if it says the actual creature name
+    const sharkIsCorrect = sharkSaying === currentCreature.name;
     
-    // Check if answer is correct
-    const isCorrect = isYes ? 
-      (actualImageName === sharkSaying) : 
-      (actualImageName !== sharkSaying);
+    // Check if user's answer is correct:
+    // - User said "Yes" and shark is correct
+    // - User said "No" and shark is incorrect
+    const isCorrect = (isYes && sharkIsCorrect) || (!isYes && !sharkIsCorrect);
     
     // Set feedback and update score if correct
     setAnswerCorrect(isCorrect);
@@ -109,42 +246,64 @@ export default function Page15() {
       // Increment correct attempts and score
       const newCorrectAttempts = correctAttempts + 1;
       setCorrectAttempts(newCorrectAttempts);
-      setScore(prev => prev + 100);  // Award 100 points per correct answer
       
-      // Check if game should be completed (5 correct guesses)
-      if (newCorrectAttempts >= 5) {
-        // Game completed!
-        setGameCompleted(true);
+      // Award points
+      const pointsAwarded = 100;
+      setScore(prev => prev + pointsAwarded);
+      
+      // Track if we found a new creature
+      let newCreatureFound = false;
+      let newFoundCreatures = [...foundCreatures];
+      
+      // If shark was correct and this was a correct answer, we've found this creature
+      // But only if we haven't already found it
+      if (sharkIsCorrect && !foundCreatures.includes(currentCreature.id)) {
+        newFoundCreatures = [...foundCreatures, currentCreature.id];
+        setFoundCreatures(newFoundCreatures);
+        newCreatureFound = true;
         
-        // Show completion message
-        setFeedback({
-          visible: true,
-          correct: true,
-          message: "Great job! You got 5 correct answers! Click Continue to proceed."
-        });
-        
-        // Set answer as correct for navigation purposes
-        setAnswerCorrect(true);
-        return;
+        // Check if all creatures have been found
+        if (newFoundCreatures.length === seaCreatures.length) {
+          // Game completed!
+          setGameCompleted(true);
+          
+          // Show completion message
+          setFeedback({
+            visible: true,
+            correct: true,
+            message: "Great job! You've found all the sea creatures! Click Continue to proceed."
+          });
+          
+          // Set answer as correct for navigation purposes
+          setAnswerCorrect(true);
+          return;
+        }
       }
       
       // If not completed, show regular success message
+      let message = `Correct! The shark ${sharkIsCorrect ? 'was right' : 'was wrong'} about that ${currentCreature.name}. +${pointsAwarded}`;
+      
+      // Add discovery info if we found a new creature
+      if (newCreatureFound) {
+        message += `\nYou've found ${newFoundCreatures.length} of ${seaCreatures.length} creatures!`;
+      }
+      
       setFeedback({
         visible: true,
         correct: true,
-        message: "That's correct! Good job!"
+        message: message
       });
       
-      // After showing feedback, move to next image
+      // After showing feedback, move to next round
       setTimeout(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+        startNewRound();
       }, 2000);
     } else {
       // Set feedback with incorrect message
       setFeedback({
         visible: true,
         correct: false,
-        message: "That's not right. Try again!"
+        message: `Incorrect. It was ${sharkIsCorrect ? 'really' : 'not'} a ${sharkSaying}.`
       });
       
       // For incorrect answers, re-enable buttons after feedback
@@ -179,7 +338,7 @@ export default function Page15() {
             </View>
           </View>
 
-          {/* Right side container for BackDrop and Question */}
+          {/* Right side container for Image and Question */}
           <View style={styles.rightContainer}>
             {/* Scoreboard positioned directly on top of the image */}
             <View style={styles.scoreboardContainer}>
@@ -190,17 +349,32 @@ export default function Page15() {
                 <Text style={styles.scoreLabel}>Attempts: {totalAttempts}/{maxAttempts}</Text>
               </View>
               <View style={styles.scoreItem}>
-                <Text style={styles.scoreLabel}>Correct: {correctAttempts}/5</Text>
+                <Text style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</Text>
               </View>
             </View>
             
-            {/* Image container */}
+            {/* Image container with frame */}
             <View style={styles.backdropContainer}>
-              <BackDrop 
-                style={styles.backdrop} 
-                currentImage={images[currentImageIndex]}
-                imageRefs={imageRefs}
-              />
+              <View style={styles.imageContainer}>
+                <Image 
+                  source={require('../assets/images/page15-game/image1.png')}
+                  style={styles.backgroundImage}
+                  resizeMode="contain"
+                />
+                
+                {/* Selection Frame */}
+                <View
+                  style={[
+                    styles.frame,
+                    {
+                      left: framePosition.x,
+                      top: framePosition.y,
+                      width: frameSize.width,
+                      height: frameSize.height
+                    }
+                  ]}
+                />
+              </View>
               
               {/* Feedback overlay */}
               {feedback.visible && (
@@ -247,7 +421,7 @@ export default function Page15() {
   return <BasePage pageNumber={15} title=" " description={description} />;
 }
 
-// Update styles to include completion styling
+// Update styles to include frame styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -279,14 +453,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A4A4A',
     paddingVertical: 8,
     paddingHorizontal: 10,
-    width: 600, // Match the width of your image container
+    width: 600,
     justifyContent: 'space-between',
     position: 'absolute',
     right: 162,
-    top: -65, // Position it at the top of the image
-    zIndex: 10, // Ensure it appears above the image
-    borderRadius: 12, // Apply rounded corners to all sides
-    // Add subtle shadow for depth
+    top: 10,
+    zIndex: 10,
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -316,25 +489,38 @@ const styles = StyleSheet.create({
     zIndex: 2,
     transform: [{ scale: 0.3 }],
   },
-  backdropContainer: {
-    transform: [{ scale: 1.5 }],
-    top: 45,
-    right: 100,
-    marginBottom: 20,
-    position: 'relative', // Needed for absolute positioning of feedback overlay
+  imageContainer: {
+    position: 'relative',
+    width: 600,
+    height: 403.5,
+    overflow: 'hidden',
+    borderWidth: 5,
+    borderColor: '#000',
+    borderRadius: 10,
   },
-  // New feedback overlay styles (similar to Page7)
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+  },
+  // Frame style for highlighting creatures
+  frame: {
+    position: 'absolute',
+    borderWidth: 4,
+    borderColor: '#ffcc00',
+    backgroundColor: 'rgba(255, 204, 0, 0.2)',
+    zIndex: 5,
+  },
   feedbackOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
+    width: 600,
+    height: 403.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     zIndex: 20,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   correctOverlay: {
     backgroundColor: 'rgba(0, 180, 0, 0.6)',
@@ -353,7 +539,7 @@ const styles = StyleSheet.create({
   },
   questionContainer: {
     position: 'absolute',
-    top: 425,
+    top: 450,
     right: 400,
     zIndex: 3,
     transform: [{ scale: 0.8 }],
@@ -362,7 +548,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginVertical: 20,
-    top: 0,
+    top: -27,
     right: -450,
     gap: 40,
     transform: [{ scale: 0.8 }]
@@ -380,13 +566,18 @@ const styles = StyleSheet.create({
     lineHeight: 100,
     transform: [{ scale: 1.0 }]
   },
-  // Add new styles for completion state
   completionOverlay: {
-    backgroundColor: 'rgba(0, 100, 180, 0.7)', // Blue color for completion
+    backgroundColor: 'rgba(0, 100, 180, 0.7)',
   },
   completionText: {
     fontSize: 24,
     textAlign: 'center',
     padding: 10,
+  },
+  backdropContainer: {
+    top: 45,
+    right: 100,
+    marginBottom: 20,
+    position: 'relative',
   },
 });
