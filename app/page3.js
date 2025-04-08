@@ -10,25 +10,31 @@ import ContinueButton from '../components/ContinueButton';
 const VideoComponent = () => {
   if (Platform.OS === 'web') {
     return (
-      <iframe
-        src="https://sharkeye.org?wvideo=ajmwpt0hu3"
+      <video
+        src={require('../assets/videos/sharkeyevideo2.mov')}
         style={{
           width: '100%',
           height: '100%',
-          border: 'none',
+          objectFit: 'cover',
         }}
-        allow="autoplay; fullscreen"
+        autoPlay
+        muted
+        playsInline
+        controls
       />
     );
   }
 
   return (
     <WebView
-      source={{ uri: 'https://sharkeye.org?wvideo=ajmwpt0hu3' }}
+      source={{ uri: require('../assets/videos/sharkeyevideo2.mov') }}
       style={styles.video}
       javaScriptEnabled={true}
       domStorageEnabled={true}
       allowsFullscreenVideo={true}
+      mediaPlaybackRequiresUserAction={false}
+      androidHardwareAccelerationDisabled={false}
+      automaticallyAdjustContentInsets={true}
     />
   );
 };
@@ -117,7 +123,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 350,
-    zIndex: 2, // Ensure speech bubble appears above other elements
+    zIndex: 2,
     width: 400,
   },
   speechBubbleImage: {
