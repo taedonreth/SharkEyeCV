@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import MurkySharkFramingGame from '../components/MurkySharkFramingGame';
-
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -12,21 +11,25 @@ export default function Page12() {
     <View style={styles.container}>
       {/* Main Content: BackDrop, AnswerBox and Shark */}
       <View style={styles.mainContent}>
-
         {/* Added SharkFramingGame */}
         <View style={styles.gameSection}>
           <MurkySharkFramingGame />
         </View>
       </View>
 
-      {/* Footer Navigation */}
-      <View style={styles.footer}>
-        <Link href="/page11" asChild>
-          <BackButton isNavigation={true} />
-        </Link>
-        <Link href="/page13" asChild>
-          <ContinueButton isNavigation={true} />
-        </Link>
+      {/* Separated Navigation Buttons */}
+      <View style={styles.footerContainer}>
+        <View style={styles.backButtonContainer}>
+          <Link href="/page11" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+        
+        <View style={styles.continueButtonContainer}>
+          <Link href="/page13" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
       </View>
     </View>
   );
@@ -43,10 +46,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   gameSection: {
+    // Your existing game section styles
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  
+  // Container that defines layout
+  footerContainer: {
+    width: '100%',
+    position: 'relative',
     paddingVertical: 25,
   },
+  
+  // Independent containers for each button with absolute positioning
+  backButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 25,
+    zIndex: 99,
+  },
+  continueButtonContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 25,
+    zIndex: 99,
+  }
 });
