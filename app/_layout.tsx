@@ -8,6 +8,7 @@ import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ProgressProvider } from '@/components/ProgressContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,25 +33,27 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="overview" />
-          <Stack.Screen name="page3" />
-          <Stack.Screen name="page4" />
-          <Stack.Screen name="page5" />
-          <Stack.Screen name="page6" />
-          <Stack.Screen name="page7" />
-          <Stack.Screen name="page8" />
-          <Stack.Screen name="page9" />
-          <Stack.Screen name="page10" />
-          <Stack.Screen name="page11" />
-          <Stack.Screen name="page12" />
-          <Stack.Screen name="page13" />
-          <Stack.Screen name="page14" />
-          <Stack.Screen name="page15" />
-          <Stack.Screen name="page16" />
-          <Stack.Screen name="page17" />
-        </Stack>
+        <ProgressProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="overview" />
+            <Stack.Screen name="page3" />
+            <Stack.Screen name="page4" />
+            <Stack.Screen name="page5" />
+            <Stack.Screen name="page6" />
+            <Stack.Screen name="page7" />
+            <Stack.Screen name="page8" />
+            <Stack.Screen name="page9" />
+            <Stack.Screen name="page10" />
+            <Stack.Screen name="page11" />
+            <Stack.Screen name="page12" />
+            <Stack.Screen name="page13" />
+            <Stack.Screen name="page14" />
+            <Stack.Screen name="page15" />
+            <Stack.Screen name="page16" />
+            <Stack.Screen name="page17" />
+          </Stack>
+        </ProgressProvider>
         <StatusBar style="auto" />
       </SafeAreaProvider>
     </ThemeProvider>
