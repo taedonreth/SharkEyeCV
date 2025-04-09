@@ -217,7 +217,7 @@ const SeaCreaturesGame = () => {
     captureButton: {
       backgroundColor: '#4CAF50',
       paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingVertical: 15,
       borderRadius: 25,
       elevation: 2,
     },
@@ -748,6 +748,7 @@ const SeaCreaturesGame = () => {
                   <TouchableOpacity
                     style={styles.captureButton}
                     onPress={checkSelection}
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
                   >
                     <Text style={styles.captureButtonText}>Capture!</Text>
                   </TouchableOpacity>
