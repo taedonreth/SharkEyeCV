@@ -8,6 +8,8 @@ import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import { ThemedText } from '../components/ThemedText';
+import SharkWrapper from '../components/SharkWrapper';
+import TypewriterText from '../components/TypewriterText';
 
 export default function Page11() {
   // State for tracking current image and what shark says
@@ -64,15 +66,19 @@ export default function Page11() {
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble style={styles.speechBubble}>
-                <ThemedText style={styles.bubbleText}>
-                  {`Hmmm..\nI see a ${sharkSaying}!`}
-                </ThemedText>
+                <TypewriterText
+                  text={`Hmmm..\nI see a ${sharkSaying}!`}
+                  style={styles.bubbleText}
+                  typingSpeed={40}
+                />
               </SpeechBubble>
             </View>
             
             {/* Shark below the speech bubble */}
             <View>
-              <DumbShark />
+              <SharkWrapper>
+                <DumbShark />
+              </SharkWrapper>
             </View>
           </View>
 
@@ -140,20 +146,21 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: 70,
+    bottom: 130,
+    left: 10,
     zIndex: 2,
-    transform: [{ scale: 0.3 }],
+    transform: [{ scale: 0.8 }],
   },
   speechBubble: {
+    width: 350,
+    padding: 20,
   },
   bubbleText: {
-    fontSize: 90,
+    fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
-    lineHeight: 100,
-    transform: [{ scale: 1.0 }]
+    lineHeight: 40,
   },
   rightContainer: {
     flex: 1.5,

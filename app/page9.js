@@ -11,6 +11,7 @@ import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 // Component layout configuration
 const layoutConfig = {
@@ -153,7 +154,9 @@ export default function Page9() {
           marginTop: layoutConfig.sharkSection.marginTop,
           marginLeft: layoutConfig.sharkSection.marginLeft,
         }]}>
-          <DumbShark />
+          <SharkWrapper>
+            <DumbShark />
+          </SharkWrapper>
         </View>
       </View>
 

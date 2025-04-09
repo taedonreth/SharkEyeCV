@@ -7,6 +7,7 @@ import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page13() {
   const title = " ";
@@ -16,7 +17,9 @@ export default function Page13() {
       <View style={styles.mainContent}>
         <View style={styles.sharkSection}>
           <View style={styles.sharkContainer}>
-            <Shark />
+            <SharkWrapper>
+              <Shark />
+            </SharkWrapper>
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>

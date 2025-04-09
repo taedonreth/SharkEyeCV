@@ -10,12 +10,16 @@ import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import { ThemedText } from '../components/ThemedText';
+import SharkWrapper from '../components/SharkWrapper';
+import TypewriterText from '../components/TypewriterText';
 
 export default function Page15() {
   // State for tracking the game
   const [sharkSaying, setSharkSaying] = useState('');
   const [answerCorrect, setAnswerCorrect] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  // Add a textUpdateKey to force TypewriterText to re-render
+  const [textUpdateKey, setTextUpdateKey] = useState(0);
   
   // Scoreboard state
   const [score, setScore] = useState(0);
@@ -197,6 +201,8 @@ export default function Page15() {
     if (Math.random() < correctIdentificationChance) {
       // Shark correctly identifies the creature
       setSharkSaying(creature.name);
+      // Update text key when shark says something new
+      setTextUpdateKey(prev => prev + 1);
     } else {
       // Shark randomly identifies some other creature
       const options = seaCreatures
@@ -204,6 +210,8 @@ export default function Page15() {
         .filter(name => name !== creature.name);
       const randomOption = options[Math.floor(Math.random() * options.length)];
       setSharkSaying(randomOption);
+      // Update text key when shark says something new
+      setTextUpdateKey(prev => prev + 1);
     }
     
     // Enable buttons when new round starts
@@ -267,6 +275,9 @@ export default function Page15() {
           // Game completed!
           setGameCompleted(true);
           
+          // Update text key for completion message
+          setTextUpdateKey(prev => prev + 1);
+          
           // Show completion message
           setFeedback({
             visible: true,
@@ -324,17 +335,28 @@ export default function Page15() {
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble style={styles.speechBubble}>
-                <ThemedText style={styles.bubbleText}>
-                  {gameCompleted 
-                    ? "Great job! Let's continue!" 
-                    : `Hmmm..\nI see a ${sharkSaying}!`}
-                </ThemedText>
+                {gameCompleted 
+                  ? <TypewriterText 
+                      text={"Great job! Let's continue!"} 
+                      style={styles.bubbleText} 
+                      typingSpeed={40}
+                      key={`complete-${textUpdateKey}`} 
+                    />
+                  : <TypewriterText 
+                      text={`Hmmm..\nI see a ${sharkSaying}!`} 
+                      style={styles.bubbleText} 
+                      typingSpeed={40}
+                      key={`saying-${textUpdateKey}`} 
+                    />
+                }
               </SpeechBubble>
             </View>
             
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <Shark />
+              <SharkWrapper>
+                <Shark />
+              </SharkWrapper>
             </View>
           </View>
 
@@ -343,13 +365,13 @@ export default function Page15() {
             {/* Scoreboard positioned directly on top of the image */}
             <View style={styles.scoreboardContainer}>
               <View style={styles.scoreItem}>
-                <Text style={styles.scoreLabel}>Score: {score}</Text>
+                <ThemedText style={styles.scoreLabel}>Score: {score}</ThemedText>
               </View>
               <View style={styles.scoreItem}>
-                <Text style={styles.scoreLabel}>Attempts: {totalAttempts}/{maxAttempts}</Text>
+                <ThemedText style={styles.scoreLabel}>Attempts: {totalAttempts}/{maxAttempts}</ThemedText>
               </View>
               <View style={styles.scoreItem}>
-                <Text style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</Text>
+                <ThemedText style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</ThemedText>
               </View>
             </View>
             
@@ -383,12 +405,12 @@ export default function Page15() {
                   feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
                   gameCompleted ? styles.completionOverlay : null
                 ]}>
-                  <Text style={[
+                  <ThemedText style={[
                     styles.feedbackText,
                     gameCompleted ? styles.completionText : null
                   ]}>
                     {feedback.message}
-                  </Text>
+                  </ThemedText>
                 </View>
               )}
             </View>
@@ -411,7 +433,7 @@ export default function Page15() {
         <Link href="/page14" asChild>
           <BackButton isNavigation={true} />
         </Link>
-        <Link href="/page17" asChild>
+        <Link href="/page16" asChild>
           <ContinueButton isNavigation={true} disabled={!gameCompleted && !answerCorrect} />
         </Link>
       </View>
@@ -484,10 +506,21 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -250,
-    left: 150,
+    top: -200,
+    left: 0,
     zIndex: 2,
-    transform: [{ scale: 0.3 }],
+    transform: [{ scale: 0.8 }],
+  },
+  speechBubble: {
+    width: 350,
+    padding: 20,
+  },
+  bubbleText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: 40,
   },
   imageContainer: {
     position: 'relative',
@@ -557,14 +590,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
-  },
-  bubbleText: {
-    fontSize: 90,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'black',
-    lineHeight: 100,
-    transform: [{ scale: 1.0 }]
   },
   completionOverlay: {
     backgroundColor: 'rgba(0, 100, 180, 0.7)',

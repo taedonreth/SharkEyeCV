@@ -8,6 +8,7 @@ import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import { useFocusEffect } from '@react-navigation/native';
+import SharkWrapper from '../components/SharkWrapper';
 
 const VideoComponent = () => {
   if (Platform.OS === 'web') {
@@ -64,7 +65,9 @@ export default function Page17() {
               </SpeechBubble>
             </View>
             <View style={styles.sharkContainer}>
-              <Shark />
+              <SharkWrapper>
+                <Shark />
+              </SharkWrapper>
             </View>
           </View>
           <View style={styles.rightContainer}>

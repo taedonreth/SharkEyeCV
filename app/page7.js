@@ -8,6 +8,7 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
 const trainingImages = {
   good: [
@@ -101,7 +102,9 @@ export default function Page7() {
       <View style={styles.mainContent}>
         <View style={styles.leftSection}>
           <View style={styles.sharkContainer}>
-            <DumbShark />
+            <SharkWrapper>
+              <DumbShark />
+            </SharkWrapper>
           </View>
         </View>
 

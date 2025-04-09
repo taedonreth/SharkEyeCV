@@ -8,6 +8,7 @@ import DumbShark from '../components/dumbshark';
 import Overview from '../components/Overview';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function OverviewPage() {
   const title = " ";
@@ -30,7 +31,9 @@ export default function OverviewPage() {
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <DumbShark />
+              <SharkWrapper>
+                <DumbShark />
+              </SharkWrapper>
             </View>
           </View>
 

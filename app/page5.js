@@ -10,6 +10,7 @@ import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page5() {
   const title = " ";
@@ -30,7 +31,9 @@ export default function Page5() {
 
           {/* Shark and Speech Bubble positioned in the middle */}
           <View style={styles.sharkBubbleContainer}>
-            <DumbShark style={styles.shark} />
+            <SharkWrapper>
+              <DumbShark style={styles.shark} />
+            </SharkWrapper>
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={2.2}>
                 <TypewriterText

@@ -12,6 +12,7 @@ import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page6() {
   const title = " ";
@@ -22,7 +23,9 @@ export default function Page6() {
         {/* Shark with Speech Bubble */}
         <View style={styles.sharkBubbleWrapper}>
           <View style={styles.sharkPosition}>
-            <DumbShark />
+            <SharkWrapper>
+              <DumbShark />
+            </SharkWrapper>
           </View>
           <View style={styles.speechBubbleContainer}>
             <SpeechBubble scale={2.2}>
@@ -67,7 +70,7 @@ export default function Page6() {
         </View>
       </View>
 
-      {/* Footer Navigation - Now at the same level as mainContent */}
+      {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page5" asChild>
           <BackButton isNavigation={true} />

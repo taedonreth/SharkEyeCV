@@ -1,6 +1,7 @@
 import React from 'react';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
+import SharkWrapper from '../components/SharkWrapper';
 import { View, StyleSheet } from 'react-native';
 import TextBox from '../components/TextBoxPage14';
 import SpeechBubble from '../components/SpeechBubble';
@@ -26,7 +27,9 @@ export default function Page14() {
               </SpeechBubble>
             </View>
             <View style={styles.sharkContainer}>
-              <Shark />
+              <SharkWrapper>
+                <Shark />
+              </SharkWrapper>
             </View>
           </View>
 
