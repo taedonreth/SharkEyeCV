@@ -17,18 +17,19 @@ const SpeechBubble = ({
   const [bubble1Scale] = React.useState(new Animated.Value(0));
   const [bubble2Scale] = React.useState(new Animated.Value(0));
   const [bubble3Scale] = React.useState(new Animated.Value(0));
+  // New animation values for continuous effects
+  const [floatValue] = React.useState(new Animated.Value(0));
+  const [rotateValue] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
-    // Sequence the animations
+    // Initial pop-in animations
     Animated.sequence([
-      // Main bubble pops in
       Animated.spring(mainBubbleScale, {
         toValue: 1,
         tension: 50,
         friction: 7,
         useNativeDriver: true
       }),
-      // Small bubbles appear in sequence
       Animated.stagger(150, [
         Animated.spring(bubble1Scale, {
           toValue: 1,
@@ -50,13 +51,64 @@ const SpeechBubble = ({
         })
       ])
     ]).start();
+
+    // Start continuous floating animation
+    Animated.loop(
+      Animated.parallel([
+        // Vertical floating
+        Animated.sequence([
+          Animated.timing(floatValue, {
+            toValue: 1,
+            duration: 2000,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          }),
+          Animated.timing(floatValue, {
+            toValue: 0,
+            duration: 2000,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          })
+        ]),
+        // Subtle rotation
+        Animated.sequence([
+          Animated.timing(rotateValue, {
+            toValue: 1,
+            duration: 2400, // Slightly different timing for natural feel
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          }),
+          Animated.timing(rotateValue, {
+            toValue: 0,
+            duration: 2400,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          })
+        ])
+      ])
+    ).start();
   }, []);
+
+  // Interpolate animation values
+  const translateY = floatValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -8] // Subtle 8px float
+  });
+
+  const rotate = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['-1deg', '1deg'] // Subtle rotation
+  });
   
   return (
-    <View style={{ 
+    <Animated.View style={{ 
       width: scaledWidth, 
       height: scaledHeight,
-      position: 'relative'
+      position: 'relative',
+      transform: [
+        { translateY },
+        { rotate }
+      ]
     }}>
       {/* Main bubble */}
       <Animated.View style={{
@@ -78,7 +130,7 @@ const SpeechBubble = ({
         ],
       }} />
 
-      {/* Decorative bubbles for thought bubble effect */}
+      {/* Decorative bubbles */}
       <Animated.View style={{
         position: 'absolute',
         left: '15%',
@@ -89,7 +141,9 @@ const SpeechBubble = ({
         borderRadius: 15,
         borderWidth: 3,
         borderColor: '#000',
-        transform: [{ scale: bubble1Scale }]
+        transform: [
+          { scale: bubble1Scale }
+        ]
       }} />
       
       <Animated.View style={{
@@ -102,7 +156,9 @@ const SpeechBubble = ({
         borderRadius: 12,
         borderWidth: 3,
         borderColor: '#000',
-        transform: [{ scale: bubble2Scale }]
+        transform: [
+          { scale: bubble2Scale }
+        ]
       }} />
 
       <Animated.View style={{
@@ -115,7 +171,9 @@ const SpeechBubble = ({
         borderRadius: 8,
         borderWidth: 3,
         borderColor: '#000',
-        transform: [{ scale: bubble3Scale }]
+        transform: [
+          { scale: bubble3Scale }
+        ]
       }} />
 
       {/* Content container */}
@@ -128,11 +186,11 @@ const SpeechBubble = ({
         justifyContent: "center",
         alignItems: "center",
         padding: 15,
-        opacity: mainBubbleScale // Fade in content with main bubble
+        opacity: mainBubbleScale
       }}>
         {children}
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 
