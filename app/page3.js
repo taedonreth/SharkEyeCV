@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Image } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 const VideoComponent = () => {
   if (Platform.OS === 'web') {
@@ -50,15 +53,19 @@ export default function Page3() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page3bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
-              />
+              <SpeechBubble scale={1.8}>
+                <TypewriterText
+                  text="This is how computer vision is used to detect me in real life!"
+                  style={styles.speechText}
+                  typingSpeed={40}
+                />
+              </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <DumbShark />
+              <SharkWrapper>
+                <DumbShark />
+              </SharkWrapper>
             </View>
           </View>
 
@@ -91,12 +98,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   speechText: {
-    fontSize: 70,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontSize: 36,
     textAlign: 'center',
-    lineHeight: 70,
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   mainContent: {
     flex: 1,
@@ -121,10 +127,10 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 0,
-    left: 350,
+    top: 100,
+    left: 320,
     zIndex: 2,
-    width: 400,
+    width: 250,
   },
   speechBubbleImage: {
     width: '100%',
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
     marginTop: 200,
     zIndex: 1,
     marginLeft: -250,
-    transform: [{ scale: 1.5 }],
+    transform: [{ scale: 1.2 }],
   },
   videoContainer: {
     width: 600,

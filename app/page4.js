@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import ReviewProcess from '../components/ReviewProcess';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page4() {
   const title = " ";
@@ -18,16 +21,19 @@ export default function Page4() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page4bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
-              />
+              <SpeechBubble scale={1.7}>
+                <TypewriterText
+                  text="The review process is long ..."
+                  style={styles.speechText}
+                  typingSpeed={40}
+                />
+              </SpeechBubble>
             </View>
-            {/* Shark 
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
-              <DumbShark />
+              <SharkWrapper>
+                <DumbShark />
+              </SharkWrapper>
             </View>
           </View>
 
@@ -59,54 +65,48 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContent: {
-    flex: 1, // Pushes footer to the bottom
+    flex: 1,
     justifyContent: 'center',
   },
   speechText: {
-    fontSize: 90,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontSize: 36,
     textAlign: 'center',
-    lineHeight: 100,
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   sceneContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   contentRow: {
-    flexDirection: 'row', // Arrange children horizontally
+    flexDirection: 'row',
     alignItems: 'center',
   },
   leftContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align items at the bottom of container
+    justifyContent: 'flex-end',
     paddingRight: 10,
     position: 'relative',
   },
   rightContainer: {
-    flex: 1, // Takes up half the available width
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
   },
   sharkContainer: {
-    marginTop: 200, // Add space above the shark to make room for speech bubble
+    marginTop: 200,
     zIndex: 1,
     marginLeft: -340,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 80,
-    left: 210,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
-    transform: [{ scale: 0.75 }], // Increased scale to make it more visible
-  },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
+    top: 100,
+    left: 250,
+    zIndex: 2,
+    width: 250,
   },
   reviewProcessContainer: {
     transform: [{ scale: 0.75 }],

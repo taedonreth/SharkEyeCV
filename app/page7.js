@@ -6,8 +6,10 @@ import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
-// Define the training images data structure
 const trainingImages = {
   good: [
     { id: 'good1', path: require('../assets/images/training-data/good/good1.jpg'), name: 'Shark' },
@@ -15,7 +17,6 @@ const trainingImages = {
     { id: 'good3', path: require('../assets/images/training-data/good/good3.jpg'), name: 'StingRay' },
     { id: 'good4', path: require('../assets/images/training-data/good/good4.jpg'), name: 'CoralReef' },
     { id: 'good5', path: require('../assets/images/training-data/good/good5.jpg'), name: 'Surfer' },
-    // Add more good images as needed
   ],
   bad: [
     { id: 'bad1', path: require('../assets/images/training-data/bad/bad1.jpg'), name: 'Couch' },
@@ -23,12 +24,10 @@ const trainingImages = {
     { id: 'bad3', path: require('../assets/images/training-data/bad/bad3.jpg'), name: 'Dog' },
     { id: 'bad4', path: require('../assets/images/training-data/bad/bad4.jpg'), name: 'Cat' },
     { id: 'bad5', path: require('../assets/images/training-data/bad/bad5.jpg'), name: 'Sushi' },
-    // Add more bad images as needed
   ]
 };
 
 export default function Page7() {
-  // State for the game
   const [currentImage, setCurrentImage] = useState(null);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState({ visible: false, correct: false, message: '' });
@@ -37,40 +36,30 @@ export default function Page7() {
   const [yesButtonHovered, setYesButtonHovered] = useState(false);
   const [noButtonHovered, setNoButtonHovered] = useState(false);
 
-  // Function to get a random image
   const getRandomImage = () => {
-    // Randomly decide between good and bad category
     const category = Math.random() > 0.5 ? 'good' : 'bad';
-
-    // Get a random image from the selected category
     const imageArray = trainingImages[category];
     const randomIndex = Math.floor(Math.random() * imageArray.length);
-
     return {
       ...imageArray[randomIndex],
       category
     };
   };
 
-  // Initialize with a random image when component mounts
   useEffect(() => {
     setCurrentImage(getRandomImage());
   }, []);
 
-  // Handle user selection
   const handleSelection = (selection) => {
-    // Don't allow selection while feedback is showing or if game is completed
     if (feedback.visible || gameCompleted) return;
 
     const isCorrect = (selection === 'good' && currentImage.category === 'good') ||
       (selection === 'bad' && currentImage.category === 'bad');
 
-    // Update score only for correct answers
     if (isCorrect) {
       const newScore = score + 1;
       setScore(newScore);
 
-      // Check if game is completed
       if (newScore >= 5) {
         setGameCompleted(true);
         setFeedback({
@@ -82,20 +71,17 @@ export default function Page7() {
       }
     }
 
-    // Show feedback
     setFeedback({
       visible: true,
       correct: isCorrect,
       message: isCorrect ? 'Correct!' : 'Incorrect!'
     });
 
-    // Fade out current image
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 300,
       useNativeDriver: true
     }).start(() => {
-      // After fade out, set new image and fade in (only if game is not completed)
       if (!gameCompleted) {
         setTimeout(() => {
           setCurrentImage(getRandomImage());
@@ -114,31 +100,31 @@ export default function Page7() {
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
-        {/* Left section with shark and speech bubble */}
         <View style={styles.leftSection}>
           <View style={styles.sharkContainer}>
-            <DumbShark />
+            <SharkWrapper>
+              <DumbShark />
+            </SharkWrapper>
           </View>
         </View>
 
         <View style={styles.speechBubbleContainer}>
-          <Image
-            source={require('../assets/images/page7bubble.png')}
-            style={styles.speechBubbleImage}
-            resizeMode="contain"
-          />
+          <SpeechBubble scale={1.4}>
+            <TypewriterText
+              text={"Let's practice identifying good and bad data!\n Is this data good or bad?"}
+              style={styles.speechText}
+              typingSpeed={40}
+            />
+          </SpeechBubble>
         </View>
 
-        {/* Center content with image and buttons */}
         <View style={styles.centerContent}>
-          {/* Score display */}
           <View style={styles.scoreContainer}>
             <ThemedText style={styles.scoreText}>
               Score: {score}
             </ThemedText>
           </View>
 
-          {/* Image container */}
           <View style={styles.imageContainer}>
             {currentImage && (
               <Animated.View style={{ opacity: fadeAnim, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
@@ -150,7 +136,6 @@ export default function Page7() {
               </Animated.View>
             )}
 
-            {/* Feedback overlay */}
             {feedback.visible && (
               <View style={[
                 styles.feedbackOverlay,
@@ -164,7 +149,6 @@ export default function Page7() {
             )}
           </View>
 
-          {/* Buttons Row */}
           <View style={styles.buttonsRow}>
             <Pressable
               style={({ pressed }) => [
@@ -195,11 +179,9 @@ export default function Page7() {
               <Text style={styles.buttonText}>NO</Text>
             </Pressable>
           </View>
-
         </View>
       </View>
 
-      {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page6" asChild>
           <BackButton isNavigation={true} />
@@ -221,7 +203,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly', // or 'center'
+    justifyContent: 'space-evenly',
   },
   leftSection: {
     width: '30%',
@@ -229,28 +211,23 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   sharkContainer: {
-    right: 190,
-    bottom: 120,
+    right: 250,
+    bottom: 40,
     transform: [{ scale: 1 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -150,
+    top: 0,
     left: 150,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
-    transform: [{ scale: 0.7 }], // Increased scale to make it more visible
+    zIndex: 2,
+    width: 250,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
-  },
-  questionText: {
-    fontSize: 70,
-    fontWeight: 'bold',
+  speechText: {
+    fontSize: 27,
     textAlign: 'center',
     color: 'black',
-    lineHeight: 100,
+    lineHeight: 44,
+    fontWeight: '500',
   },
   centerContent: {
     flex: 1,

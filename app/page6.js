@@ -10,6 +10,9 @@ import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page6() {
   const title = " ";
@@ -20,15 +23,19 @@ export default function Page6() {
         {/* Shark with Speech Bubble */}
         <View style={styles.sharkBubbleWrapper}>
           <View style={styles.sharkPosition}>
-            <DumbShark />
+            <SharkWrapper>
+              <DumbShark />
+            </SharkWrapper>
           </View>
-            <View style={styles.speechBubbleContainer}>
-              <Image
-                source={require('../assets/images/page6bubble.png')}
-                style={styles.speechBubbleImage}
-                resizeMode="contain"
+          <View style={styles.speechBubbleContainer}>
+            <SpeechBubble scale={1.7} width={600} height={125}>
+              <TypewriterText
+                text={"Good data is clear, correct, and easy to understand - like a picture that shows the full object.\n Bad data is confusing, missing parts, or has mistakes - like a blurry photo or one that cuts off the object."}
+                style={styles.speechText}
+                typingSpeed={40}
               />
-            </View>
+            </SpeechBubble>
+          </View>
         </View>
 
         {/* Cards Section */}
@@ -63,7 +70,7 @@ export default function Page6() {
         </View>
       </View>
 
-      {/* Footer Navigation - Now at the same level as mainContent */}
+      {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page5" asChild>
           <BackButton isNavigation={true} />
@@ -88,39 +95,33 @@ const styles = StyleSheet.create({
   },
   cardsSection: {
     flexDirection: 'row',
-    justifyContent: 'center', // Changed from space-around to center
+    justifyContent: 'center',
     marginTop: 150,
     width: '100%',
     padding: 10,
-    gap: 100, // Added gap to control space between cards
+    gap: 100,
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: 20, // Increased from 10 to 20 for more rounded corners
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#a19f9f', // Very light gray border
+    borderColor: '#a19f9f',
     padding: 20,
     width: '30%',
     height: 'auto',
     minHeight: 300,
-    // Use flexbox for layout within the card
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // Shadow adjustments for a softer look
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
   },
-  goodCard: {
-    // You may change the background if needed
-  },
-  badCard: {
-    // For example, you could use a different background color here
-  },
+  goodCard: {},
+  badCard: {},
   cardImage: {
     position: 'relative',
     height: 150,
@@ -147,16 +148,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     alignItems: 'center',
-    width: '50%', // This ensures the label spans the full width of the card
-    // Optional - to ensure it sits at the bottom
-    top: 270, // This pushes the label to the bottom if you use flexbox
+    width: '50%',
+    top: 270,
   },
   labelText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 12,
   },
-  // New sharkBubbleWrapper replacing sharkSpeechSection
   sharkBubbleWrapper: {
     width: 300,
     height: 250,
@@ -164,37 +163,24 @@ const styles = StyleSheet.create({
     marginLeft: 150,
     marginTop: -200,
     zIndex: 10,
-    transform: [{ scale: 0.9 }],
-    //borderWidth: 1, 
-    //borderColor: 'red' // Uncomment for debugging
   },
-  // Styling for Shark position
   sharkPosition: {
     marginLeft: -340,
     marginTop: 250,
-    //borderWidth: 1,
-    //borderColor: 'blue'
   },
-  // Absolutely position the bubble so it can overlap the Shark
   speechBubbleContainer: {
     position: 'absolute',
-    top: 100,
-    left: 350,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
-    transform: [{ scale: 2.3 }], // Increased scale to make it more visible
+    top: 170,
+    left: 100,
+    zIndex: 2,
+    width: 500,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
-  },
-  // Keep the original styles for the text inside the bubble
-  questionText: {
-    fontSize: 60,
-    fontWeight: 'bold',
-    marginVertical: 4,
-    lineHeight: 100,
+  speechText: {
+    fontSize: 36,
+    textAlign: 'center',
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',

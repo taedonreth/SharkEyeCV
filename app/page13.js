@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
+import SpeechBubble from '../components/SpeechBubble';
+import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page13() {
   const title = " ";
@@ -13,17 +16,20 @@ export default function Page13() {
       {/* Main Content: Shark and Speech Bubble */}
       <View style={styles.mainContent}>
         <View style={styles.sharkSection}>
-          {/* Wrapper View with margins for positioning the shark */}
           <View style={styles.sharkContainer}>
-            <Shark />
+            <SharkWrapper>
+              <Shark />
+            </SharkWrapper>
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <Image
-            source={require('../assets/images/page8bubble.png')}
-            style={styles.speechBubbleImage}
-            resizeMode="contain"
-          />
+          <SpeechBubble scale={1.5}>
+            <TypewriterText
+              text="Great job! Now let's learn about how we train our model!"
+              style={styles.speechText}
+              typingSpeed={40}
+            />
+          </SpeechBubble>
         </View>
       </View>
 
@@ -47,12 +53,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   speechText: {
-    fontSize: 110,
-    fontWeight: 'bold',
-    marginVertical: 4,
+    fontSize: 36,
     textAlign: 'center',
-    lineHeight: 110,
     color: 'black',
+    lineHeight: 44,
+    fontWeight: '500',
   },
   sharkContainer: {
     marginTop: 300,
@@ -65,17 +70,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sharkSection: {
-    // Changed from marginRight to flex to give it proper space allocation
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    right: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
     left: 660,
-    bottom: 100,
-    zIndex: 2, // Ensure speech bubble appears above other elements
-    width: 400,
+    bottom: 300,
+    zIndex: 2,
+    width: 250,
   },
   speechBubbleImage: {
     width: '100%',
