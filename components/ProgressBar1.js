@@ -1,12 +1,19 @@
 import * as React from "react";
 import { View, StyleSheet, Animated, Easing } from "react-native";
+import { useProgress } from "./ProgressContext";
 
 const Progressbar1 = ({ percentage = 0 }) => {
-  const animatedWidth = React.useRef(new Animated.Value(0)).current;
-  const animatedNumber = React.useRef(new Animated.Value(0)).current;
-  const [displayedNumber, setDisplayedNumber] = React.useState(0);
+  const { lastPercentage, updatePercentage } = useProgress();
+  const initialPercentage = lastPercentage;
+
+  const animatedWidth = React.useRef(new Animated.Value(initialPercentage)).current;
+  const animatedNumber = React.useRef(new Animated.Value(initialPercentage)).current;
+  const [displayedNumber, setDisplayedNumber] = React.useState(Math.round(initialPercentage));
 
   React.useEffect(() => {
+    // Update the context with the new percentage value
+    updatePercentage(percentage);
+
     Animated.parallel([
       Animated.spring(animatedWidth, {
         toValue: percentage,
@@ -29,7 +36,7 @@ const Progressbar1 = ({ percentage = 0 }) => {
     return () => {
       animatedNumber.removeListener(listener);
     };
-  }, [percentage]);
+  }, [percentage, updatePercentage]);
 
   return (
     <View style={styles.container}>
