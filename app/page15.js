@@ -20,26 +20,26 @@ export default function Page15() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   // Add a textUpdateKey to force TypewriterText to re-render
   const [textUpdateKey, setTextUpdateKey] = useState(0);
-  
+
   // Scoreboard state
   const [score, setScore] = useState(0);
   const [correctAttempts, setCorrectAttempts] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
   const maxAttempts = 15;
-  
+
   // Track which creatures have been correctly identified
   const [foundCreatures, setFoundCreatures] = useState([]);
-  
+
   // Game completion state
   const [gameCompleted, setGameCompleted] = useState(false);
 
   // Feedback state
-  const [feedback, setFeedback] = useState({ 
-    visible: false, 
-    correct: false, 
-    message: '' 
+  const [feedback, setFeedback] = useState({
+    visible: false,
+    correct: false,
+    message: ''
   });
-  
+
   // Sea creatures data with their positions in the image
   const seaCreatures = [
     {
@@ -90,14 +90,14 @@ export default function Page15() {
   // Start a new round with a new creature and frame
   const startNewRound = () => {
     if (gameCompleted) return;
-    
+
     // Determine which creatures haven't been found yet
-    const unfoundCreatures = seaCreatures.filter(creature => 
+    const unfoundCreatures = seaCreatures.filter(creature =>
       !foundCreatures.includes(creature.id)
     );
-    
+
     let creature;
-    
+
     // If there are unfound creatures, strongly prefer those (90% chance)
     if (unfoundCreatures.length > 0 && (Math.random() < 0.9 || foundCreatures.length === 0)) {
       // Pick a random unfound creature
@@ -117,87 +117,87 @@ export default function Page15() {
       }
       creature = seaCreatures[randomIndex];
     }
-    
+
     setCurrentCreature(creature);
-    
+
     // Position the frame with variable accuracy to make the game challenging
     // Sometimes the frame will be perfectly aligned, sometimes it will be off
     const perfectFrameChance = 0.5; // 50% chance of perfect framing
-    
+
     let newFramePosition = { ...creature.position };
     let newFrameSize = { ...creature.size };
-    
+
     // If not perfectly framed, adjust the frame position and size slightly
     if (Math.random() > perfectFrameChance) {
       // Create varying degrees of misalignment
       const misalignmentLevel = Math.random();
-      
+
       // Determine offset and size adjustment ranges based on misalignment level
       const offsetRange = misalignmentLevel * 60; // Up to 60px offset
       const sizeAdjustRange = misalignmentLevel * 40; // Up to 40px size change
-      
+
       // Adjust position randomly within offset range
       newFramePosition.x += Math.floor((Math.random() - 0.5) * offsetRange);
       newFramePosition.y += Math.floor((Math.random() - 0.5) * offsetRange);
-      
+
       // Adjust size randomly within size adjust range
       newFrameSize.width += Math.floor((Math.random() - 0.5) * sizeAdjustRange);
       newFrameSize.height += Math.floor((Math.random() - 0.5) * sizeAdjustRange);
-      
+
       // Ensure minimum size
       newFrameSize.width = Math.max(newFrameSize.width, 50);
       newFrameSize.height = Math.max(newFrameSize.height, 50);
     }
-    
+
     setFramePosition(newFramePosition);
     setFrameSize(newFrameSize);
-    
+
     // Calculate the accuracy of the frame (overlap percentage and selection precision)
     const frameRight = newFramePosition.x + newFrameSize.width;
     const frameBottom = newFramePosition.y + newFrameSize.height;
-    
+
     const creatureRight = creature.position.x + creature.size.width;
     const creatureBottom = creature.position.y + creature.size.height;
-    
+
     // Calculate the overlap area
     const overlapLeft = Math.max(creature.position.x, newFramePosition.x);
     const overlapTop = Math.max(creature.position.y, newFramePosition.y);
     const overlapRight = Math.min(creatureRight, frameRight);
     const overlapBottom = Math.min(creatureBottom, frameBottom);
-    
+
     // Check if there is an actual overlap
     const hasOverlap = overlapLeft < overlapRight && overlapTop < overlapBottom;
     let overlapArea = 0;
     let overlapPercentage = 0;
     let selectionPrecision = 0;
-    
+
     if (hasOverlap) {
       const overlapWidth = overlapRight - overlapLeft;
       const overlapHeight = overlapBottom - overlapTop;
       overlapArea = overlapWidth * overlapHeight;
-      
+
       const creatureArea = creature.size.width * creature.size.height;
       overlapPercentage = (overlapArea / creatureArea) * 100;
-      
+
       // Calculate selection precision (how much of the selection is filled by the creature)
       const selectionArea = newFrameSize.width * newFrameSize.height;
       selectionPrecision = (overlapArea / selectionArea) * 100;
     }
-    
+
     // Apply similar logic to MurkySharkFramingGame
     let effectiveOverlapPercentage = overlapPercentage;
-    
+
     // Penalize imprecise selections (large boxes around small items)
     if (selectionPrecision < 30) {
       // If the selection is very large and the creature is small within it,
       // reduce the effective overlap percentage
       effectiveOverlapPercentage = overlapPercentage * (selectionPrecision / 100);
     }
-    
+
     // Randomly decide what the shark says (regardless of what's in the frame)
     // Sometimes it's correct, sometimes not
     const correctIdentificationChance = 0.7; // 70% chance to correctly identify
-    
+
     if (Math.random() < correctIdentificationChance) {
       // Shark correctly identifies the creature
       setSharkSaying(creature.name);
@@ -213,18 +213,18 @@ export default function Page15() {
       // Update text key when shark says something new
       setTextUpdateKey(prev => prev + 1);
     }
-    
+
     // Enable buttons when new round starts
     setButtonDisabled(false);
-    
+
     // Reset feedback
-    setFeedback({ 
-      visible: false, 
-      correct: false, 
-      message: '' 
+    setFeedback({
+      visible: false,
+      correct: false,
+      message: ''
     });
   };
-  
+
   // Initialize the game
   useEffect(() => {
     startNewRound();
@@ -235,76 +235,76 @@ export default function Page15() {
     // Prevent multiple rapid clicks or if game is completed
     if (buttonDisabled || gameCompleted) return;
     setButtonDisabled(true);
-    
+
     // Increment total attempts
     setTotalAttempts(prev => Math.min(prev + 1, maxAttempts));
-    
+
     // The shark's identification is correct if it says the actual creature name
     const sharkIsCorrect = sharkSaying === currentCreature.name;
-    
+
     // Check if user's answer is correct:
     // - User said "Yes" and shark is correct
     // - User said "No" and shark is incorrect
     const isCorrect = (isYes && sharkIsCorrect) || (!isYes && !sharkIsCorrect);
-    
+
     // Set feedback and update score if correct
     setAnswerCorrect(isCorrect);
-    
+
     if (isCorrect) {
       // Increment correct attempts and score
       const newCorrectAttempts = correctAttempts + 1;
       setCorrectAttempts(newCorrectAttempts);
-      
+
       // Award points
       const pointsAwarded = 100;
       setScore(prev => prev + pointsAwarded);
-      
+
       // Track if we found a new creature
       let newCreatureFound = false;
       let newFoundCreatures = [...foundCreatures];
-      
+
       // If shark was correct and this was a correct answer, we've found this creature
       // But only if we haven't already found it
       if (sharkIsCorrect && !foundCreatures.includes(currentCreature.id)) {
         newFoundCreatures = [...foundCreatures, currentCreature.id];
         setFoundCreatures(newFoundCreatures);
         newCreatureFound = true;
-        
+
         // Check if all creatures have been found
         if (newFoundCreatures.length === seaCreatures.length) {
           // Game completed!
           setGameCompleted(true);
-          
+
           // Update text key for completion message
           setTextUpdateKey(prev => prev + 1);
-          
+
           // Show completion message
           setFeedback({
             visible: true,
             correct: true,
             message: "Great job! You've found all the sea creatures! Click Continue to proceed."
           });
-          
+
           // Set answer as correct for navigation purposes
           setAnswerCorrect(true);
           return;
         }
       }
-      
+
       // If not completed, show regular success message
       let message = `Correct! The shark ${sharkIsCorrect ? 'was right' : 'was wrong'} about that ${currentCreature.name}. +${pointsAwarded}`;
-      
+
       // Add discovery info if we found a new creature
       if (newCreatureFound) {
         message += `\nYou've found ${newFoundCreatures.length} of ${seaCreatures.length} creatures!`;
       }
-      
+
       setFeedback({
         visible: true,
         correct: true,
         message: message
       });
-      
+
       // After showing feedback, move to next round
       setTimeout(() => {
         startNewRound();
@@ -316,7 +316,7 @@ export default function Page15() {
         correct: false,
         message: `Incorrect. It was ${sharkIsCorrect ? 'really' : 'not'} a ${sharkSaying}.`
       });
-      
+
       // For incorrect answers, re-enable buttons after feedback
       setTimeout(() => {
         setFeedback({ visible: false, correct: false, message: '' });
@@ -335,23 +335,23 @@ export default function Page15() {
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble style={styles.speechBubble}>
-                {gameCompleted 
-                  ? <TypewriterText 
-                      text={"Great job! Let's continue!"} 
-                      style={styles.bubbleText} 
-                      typingSpeed={40}
-                      key={`complete-${textUpdateKey}`} 
-                    />
-                  : <TypewriterText 
-                      text={`Hmmm..\nI see a ${sharkSaying}!`} 
-                      style={styles.bubbleText} 
-                      typingSpeed={40}
-                      key={`saying-${textUpdateKey}`} 
-                    />
+                {gameCompleted
+                  ? <TypewriterText
+                    text={"Great job! Let's continue!"}
+                    style={styles.bubbleText}
+                    typingSpeed={40}
+                    key={`complete-${textUpdateKey}`}
+                  />
+                  : <TypewriterText
+                    text={`Hmmm..\nI see a ${sharkSaying}!`}
+                    style={styles.bubbleText}
+                    typingSpeed={40}
+                    key={`saying-${textUpdateKey}`}
+                  />
                 }
               </SpeechBubble>
             </View>
-            
+
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
@@ -374,16 +374,16 @@ export default function Page15() {
                 <ThemedText style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</ThemedText>
               </View>
             </View>
-            
+
             {/* Image container with frame */}
             <View style={styles.backdropContainer}>
               <View style={styles.imageContainer}>
-                <Image 
+                <Image
                   source={require('../assets/images/page15-game/image1.png')}
                   style={styles.backgroundImage}
                   resizeMode="contain"
                 />
-                
+
                 {/* Selection Frame */}
                 <View
                   style={[
@@ -397,7 +397,7 @@ export default function Page15() {
                   ]}
                 />
               </View>
-              
+
               {/* Feedback overlay */}
               {feedback.visible && (
                 <View style={[
@@ -414,7 +414,7 @@ export default function Page15() {
                 </View>
               )}
             </View>
-            
+
             <View style={styles.questionContainer}>
               <Question style={styles.question} />
             </View>
@@ -500,23 +500,23 @@ const styles = StyleSheet.create({
   sharkContainer: {
     zIndex: 1,
     marginLeft: -340,
-    left: 130,
+    left: 0,
     top: 160,
-    transform: [{ scale: .90 }],
+    transform: [{ scale: 0.8 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -200,
-    left: 0,
+    left: 350,
+    bottom: 300,
     zIndex: 2,
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 1.2 }],
   },
   speechBubble: {
     width: 350,
     padding: 20,
   },
   bubbleText: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',

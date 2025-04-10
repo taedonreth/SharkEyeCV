@@ -23,7 +23,7 @@ export default function Page13() {
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={2.2}>
+          <SpeechBubble scale={1.5}>
             <TypewriterText
               text="Great job! Now let's learn about how we train our model!"
               style={styles.speechText}
@@ -73,11 +73,12 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    right: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
     left: 660,
-    bottom: 100,
+    bottom: 300,
     zIndex: 2,
     width: 250,
   },

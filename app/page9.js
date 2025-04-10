@@ -76,7 +76,7 @@ export default function Page9() {
       <View style={styles.mainContent}>
         {/* Speech Bubble */}
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={2.2}>
+          <SpeechBubble scale={1.5}>
             <TypewriterText
               text="Let's see what happens when we put our data into boxes!"
               style={styles.speechText}
@@ -231,7 +231,8 @@ const styles = StyleSheet.create({
   },
   sharkSection: {
     alignItems: 'center',
-    bottom: 100,
+    bottom: 70,
+    right: 50,
   },
   footer: {
     flexDirection: 'row',
@@ -241,8 +242,8 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 280,
-    bottom: 250,
+    left: 250,
+    bottom: 380,
     zIndex: 2,
     width: 250,
   },

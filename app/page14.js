@@ -18,7 +18,7 @@ export default function Page14() {
         <View style={styles.contentRow}>
           <View style={styles.leftContainer}>
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
+              <SpeechBubble scale={1.5}>
                 <TypewriterText
                   text="Let me explain how we train our model!"
                   style={styles.speechText}
@@ -89,13 +89,15 @@ const styles = StyleSheet.create({
     marginTop: 200,
     zIndex: 1,
     marginLeft: -340,
+    transform: [{ scale: 0.9 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 50,
-    left: 300,
+    top: 75,
+    left: 350,
     zIndex: 2,
     width: 250,
+    
   },
   speechText: {
     fontSize: 36,

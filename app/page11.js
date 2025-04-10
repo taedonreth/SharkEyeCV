@@ -75,7 +75,7 @@ export default function Page11() {
             </View>
             
             {/* Shark below the speech bubble */}
-            <View>
+            <View style={styles.sharkSection}>
               <SharkWrapper>
                 <DumbShark />
               </SharkWrapper>
@@ -146,17 +146,17 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    bottom: 130,
-    left: 10,
+    bottom: 350,
+    left: 375,
     zIndex: 2,
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 1.4 }],
   },
   speechBubble: {
     width: 350,
     padding: 20,
   },
   bubbleText: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
@@ -194,6 +194,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     color: '#333',
+  },
+  sharkSection: {
+    transform: [{ scale: 1.2 }],
+    top: 75,
+    right: 100,
   },
   footer: {
     flexDirection: 'row',

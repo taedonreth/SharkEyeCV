@@ -56,12 +56,28 @@ export default function Page17() {
         <View style={styles.contentRow}>
           <View style={styles.leftContainer}>
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
-                <TypewriterText
-                  text="Check out this video to see SharkEye in action!"
-                  style={styles.speechText}
-                  typingSpeed={40}
-                />
+              <SpeechBubble scale={1.6}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <TypewriterText
+                    text="Click "
+                    style={styles.speechText}
+                    typingSpeed={40}
+                  />
+                  <Link href="https://sharkeye.org/">
+                    <TypewriterText
+                      text="here"
+                      style={[styles.speechText, { color: '#4CC0B9' }]}
+                      typingSpeed={40}
+                      startDelay={200} // Delay to start after the first part finishes
+                    />
+                  </Link>
+                  <TypewriterText
+                    text=" for more resources!"
+                    style={styles.speechText}
+                    typingSpeed={40}
+                    startDelay={400} // Additional delay for the rest of the text
+                  />
+                </View>
               </SpeechBubble>
             </View>
             <View style={styles.sharkContainer}>
@@ -118,7 +134,7 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 230,
+    left: 260,
     bottom: 300,
     zIndex: 2,
     width: 250,
@@ -131,9 +147,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   sharkContainer: {
-    marginTop: 200,
     zIndex: 1,
-    marginLeft: -140,
+    right: 225,
+    top: 100,
+    transform: [{ scale: 0.9 }],
   },
   videoContainer: {
     width: 600,

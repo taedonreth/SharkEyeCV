@@ -22,9 +22,9 @@ export default function Page16() {
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={2.2}>
+          <SpeechBubble scale={1.8}>
             <TypewriterText
-              text="Now you know how computer vision works! Let's see it in action!"
+              text="Now you know how computer vision works!"
               style={styles.speechText}
               typingSpeed={40}
             />
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
   sharkContainer: {
     marginTop: 300,
     right: 200,
-    bottom: 50,
   },
   mainContent: {
     flex: 1,
@@ -73,11 +72,12 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    right: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
     left: 660,
-    bottom: 150,
+    bottom: 300,
     zIndex: 2,
     width: 250,
   },
