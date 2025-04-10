@@ -9,7 +9,7 @@ const SeaCreaturesGame = () => {
   const [attempts, setAttempts] = useState(0);
   const [maxAttempts, setMaxAttempts] = useState(8);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  
+
   // Debug mode - Set to true to show item boundaries (no toggle button)
   const debugMode = false;
 
@@ -48,7 +48,7 @@ const SeaCreaturesGame = () => {
     {
       id: 6,
       name: 'clownfish',
-      position: { x:190, y: 90 },
+      position: { x: 190, y: 90 },
       size: { width: 50, height: 50 }
     },
     {
@@ -217,7 +217,7 @@ const SeaCreaturesGame = () => {
     captureButton: {
       backgroundColor: '#4CAF50',
       paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingVertical: 15,
       borderRadius: 25,
       elevation: 2,
     },
@@ -526,7 +526,7 @@ const SeaCreaturesGame = () => {
     let creatureOverlapPercentage = 0;
     // Calculate how much of the frame is actually covering the creature (precision)
     let frameOverlapPercentage = 0;
-    
+
     if (overlap) {
       const overlapLeft = Math.max(creatureLeft, frameLeft);
       const overlapTop = Math.max(creatureTop, frameTop);
@@ -539,7 +539,7 @@ const SeaCreaturesGame = () => {
 
       const creatureArea = currentCreature.size.width * currentCreature.size.height;
       const frameArea = frameSize.width * frameSize.height;
-      
+
       creatureOverlapPercentage = (overlapArea / creatureArea) * 100;
       frameOverlapPercentage = (overlapArea / frameArea) * 100;
     }
@@ -550,7 +550,7 @@ const SeaCreaturesGame = () => {
 
     // Frame is too large (less than 30% of frame is the creature)
     const frameTooLarge = frameOverlapPercentage < 30;
-    
+
     if (overlap && creatureOverlapPercentage > 50) {
       if (frameTooLarge) {
         // Penalize selections that are too big
@@ -623,7 +623,7 @@ const SeaCreaturesGame = () => {
 
     return creatureTypes[currentCreature.name] || `Capture the ${currentCreature.name}`;
   };
-  
+
   return (
     <View style={styles.container}>
       {!gameStarted ? (
@@ -670,7 +670,7 @@ const SeaCreaturesGame = () => {
                   style={styles.backgroundImage}
                   resizeMode="cover"
                 />
-                
+
                 {/* Debug mode visualization */}
                 {debugMode && seaCreatures.map(creature => (
                   <View
@@ -694,7 +694,7 @@ const SeaCreaturesGame = () => {
                     </Text>
                   </View>
                 ))}
-                
+
                 {/* Highlight found creatures */}
                 {foundCreatures.map(id => {
                   const creature = seaCreatures.find(c => c.id === id);
@@ -748,6 +748,7 @@ const SeaCreaturesGame = () => {
                   <TouchableOpacity
                     style={styles.captureButton}
                     onPress={checkSelection}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   >
                     <Text style={styles.captureButtonText}>Capture!</Text>
                   </TouchableOpacity>
