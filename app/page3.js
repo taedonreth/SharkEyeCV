@@ -53,9 +53,9 @@ export default function Page3() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
+              <SpeechBubble scale={1.8}>
                 <TypewriterText
-                  text="Let me show you how SharkEye works!"
+                  text="This is how computer vision is used to detect me in real life!"
                   style={styles.speechText}
                   typingSpeed={40}
                 />
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 0,
-    left: 350,
+    top: 100,
+    left: 320,
     zIndex: 2,
     width: 250,
   },
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     marginTop: 200,
     zIndex: 1,
     marginLeft: -250,
-    transform: [{ scale: 1.5 }],
+    transform: [{ scale: 1.2 }],
   },
   videoContainer: {
     width: 600,

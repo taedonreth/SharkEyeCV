@@ -28,9 +28,9 @@ export default function Page6() {
             </SharkWrapper>
           </View>
           <View style={styles.speechBubbleContainer}>
-            <SpeechBubble scale={2.2}>
+            <SpeechBubble scale={1.7} width={600} height={125}>
               <TypewriterText
-                text="Let's look at some examples of good and bad data!"
+                text={"Good data is clear, correct, and easy to understand - like a picture that shows the full object.\n Bad data is confusing, missing parts, or has mistakes - like a blurry photo or one that cuts off the object."}
                 style={styles.speechText}
                 typingSpeed={40}
               />
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     marginLeft: 150,
     marginTop: -200,
     zIndex: 10,
-    transform: [{ scale: 0.9 }],
   },
   sharkPosition: {
     marginLeft: -340,
@@ -171,10 +170,10 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 100,
-    left: 350,
+    top: 170,
+    left: 100,
     zIndex: 2,
-    width: 250,
+    width: 500,
   },
   speechText: {
     fontSize: 36,

@@ -10,7 +10,6 @@ import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page8() {
-  const title = " ";
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
@@ -22,7 +21,7 @@ export default function Page8() {
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={2.2}>
+          <SpeechBubble scale={2}>
             <TypewriterText
               text="Now that we have good data, we can train our model to recognize sharks!"
               style={styles.speechText}
@@ -66,11 +65,12 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    right: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 580,
-    bottom: 180,
+    right: 570,
+    bottom: 300,
     zIndex: 2,
     width: 250,
   },

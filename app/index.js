@@ -24,7 +24,7 @@ export default function Index() {
           <View style={styles.speechBubbleContainer}>
             <SpeechBubble scale={2.2}>
               <TypewriterText
-                text="Welcome to SharkEye! Click continue to learn about computer vision!"
+                text={`Welcome!\n My name is Sharkbot.\n Ready to learn about\n computer vision?...`}
                 style={styles.speechText}
                 typingSpeed={40}
               />
@@ -64,17 +64,17 @@ const styles = StyleSheet.create({
     width: 300,
     height: 250,
     position: 'relative',
-    transform: [{ scale: 0.8 }],
+    marginTop: 90,
   },
   sharkPosition: {
     marginLeft: -400,
     marginTop: 25,
-    transform: [{ scale: 1.5 }],
+    transform: [{ scale: 2 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
     top: -120,
-    right: -200,
+    right: 0,
     width: 250,
     zIndex: 2,
   },

@@ -21,9 +21,9 @@ export default function OverviewPage() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
+              <SpeechBubble scale={1.5}>
                 <TypewriterText
-                  text="Hi! I'm BotShark, ready to learn about computer vision?"
+                  text={"So... what is\n computer vision?"}
                   style={styles.speechText}
                   typingSpeed={40}
                 />
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 80,
+    top: 120,
     left: 210,
     zIndex: 2,
     width: 250,

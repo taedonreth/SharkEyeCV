@@ -21,9 +21,9 @@ export default function Page4() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
+              <SpeechBubble scale={1.7}>
                 <TypewriterText
-                  text="Let me show you how we review data!"
+                  text="The review process is long ..."
                   style={styles.speechText}
                   typingSpeed={40}
                 />
@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 80,
-    left: 210,
+    top: 100,
+    left: 250,
     zIndex: 2,
     width: 250,
   },

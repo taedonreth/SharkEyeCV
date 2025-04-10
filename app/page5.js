@@ -35,7 +35,7 @@ export default function Page5() {
               <DumbShark style={styles.shark} />
             </SharkWrapper>
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={2.2}>
+              <SpeechBubble scale={1.5}>
                 <TypewriterText
                   text="AI can help us review data much faster!"
                   style={styles.speechText}
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   },
   shark: {
     transform: [{ scale: 1.5 }],
-    bottom: 100,
+    bottom: 30,
     left: 50,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -100,
+    top: 0,
     left: 500,
     zIndex: 2,
     width: 250,

@@ -109,9 +109,9 @@ export default function Page7() {
         </View>
 
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={2.2}>
+          <SpeechBubble scale={1.4}>
             <TypewriterText
-              text="Let's practice identifying good and bad data!"
+              text={"Let's practice identifying good and bad data!\n Is this data good or bad?"}
               style={styles.speechText}
               typingSpeed={40}
             />
@@ -211,19 +211,19 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   sharkContainer: {
-    right: 190,
-    bottom: 120,
+    right: 250,
+    bottom: 40,
     transform: [{ scale: 1 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: -150,
+    top: 0,
     left: 150,
     zIndex: 2,
     width: 250,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 27,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
