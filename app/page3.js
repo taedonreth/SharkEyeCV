@@ -57,8 +57,8 @@ export default function Page3() {
                 <TypewriterText
                   text="This is how computer vision is used to detect me in real life!"
                   style={styles.speechText}
-                  typingSpeed={40}
-                />
+                  typingSpeed={250}
+                  />
               </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}

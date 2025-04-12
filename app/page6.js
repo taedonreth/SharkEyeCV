@@ -32,7 +32,7 @@ export default function Page6() {
               <TypewriterText
                 text={"Good data is clear, correct, and easy to understand - like a picture that shows the full object.\n Bad data is confusing, missing parts, or has mistakes - like a blurry photo or one that cuts off the object."}
                 style={styles.speechText}
-                typingSpeed={40}
+                typingSpeed={250}
               />
             </SpeechBubble>
           </View>

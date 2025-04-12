@@ -345,7 +345,7 @@ export default function Page15() {
                   : <TypewriterText
                     text={`Hmmm..\nI see a ${sharkSaying}!`}
                     style={styles.bubbleText}
-                    typingSpeed={40}
+                    typingSpeed={250}
                     key={`saying-${textUpdateKey}`}
                   />
                 }

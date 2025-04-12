@@ -22,8 +22,8 @@ export default function Page14() {
                 <TypewriterText
                   text="Let me explain how we train our model!"
                   style={styles.speechText}
-                  typingSpeed={40}
-                />
+                  typingSpeed={250}
+                  />
               </SpeechBubble>
             </View>
             <View style={styles.sharkContainer}>

@@ -39,8 +39,8 @@ export default function Page5() {
                 <TypewriterText
                   text="AI can help us review data much faster!"
                   style={styles.speechText}
-                  typingSpeed={40}
-                />
+                  typingSpeed={250}
+                  />
               </SpeechBubble>
             </View>
           </View>

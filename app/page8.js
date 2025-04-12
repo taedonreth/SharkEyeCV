@@ -25,8 +25,8 @@ export default function Page8() {
             <TypewriterText
               text="Now that we have good data, we can train our model to recognize sharks!"
               style={styles.speechText}
-              typingSpeed={40}
-            />
+              typingSpeed={250}
+              />
           </SpeechBubble>
         </View>
       </View>

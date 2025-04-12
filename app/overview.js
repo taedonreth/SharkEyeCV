@@ -25,8 +25,8 @@ export default function OverviewPage() {
                 <TypewriterText
                   text={"So... what is\n computer vision?"}
                   style={styles.speechText}
-                  typingSpeed={40}
-                />
+                  typingSpeed={250}
+                  />
               </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}

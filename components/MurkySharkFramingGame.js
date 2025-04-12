@@ -325,55 +325,64 @@ const UnderwaterClassificationGame = () => {
       let pointsEarned = 0;
       let message = '';
 
-      // Apply much stricter precision requirements
-      let effectiveOverlapPercentage = highestOverlapPercentage;
+      // Consider good captures at 90% coverage or higher
+      const goodCoverage = highestOverlapPercentage >= 90;
+      console.log(`Coverage is ${highestOverlapPercentage.toFixed(2)}%, good coverage: ${goodCoverage}`);
 
-      // Heavily penalize imprecise selections (large boxes around small items)
-      if (bestSelectionPrecision < 30) {
-        // If the selection is very large and the item is small within it,
-        // drastically reduce the effective overlap percentage
-        effectiveOverlapPercentage = highestOverlapPercentage * (bestSelectionPrecision / 100);
-      }
-
-      if (effectiveOverlapPercentage > 60) { // Much higher threshold for a good match
+      if (goodCoverage) {
+        // Item is at least 90% in the box - differentiate based on precision
         if (labelCorrect) {
-          if (effectiveOverlapPercentage > 80) {
+          if (bestSelectionPrecision > 90) {
             pointsEarned = 150;
-            message = `Perfect match! You found a ${bestMatch.name}! +150`;
+            message = `Perfect match! Your box fits the ${bestMatch.name} perfectly! +150`;
+            // Mark this item as found
+            setFoundItems(prev => [...prev, bestMatch.id]);
+          } else if (bestSelectionPrecision > 70) {
+            pointsEarned = 100;
+            message = `Great match! Box is a bit larger than needed for this ${bestMatch.name}. +100`;
+            // Mark this item as found
+            setFoundItems(prev => [...prev, bestMatch.id]);
+          } else if (bestSelectionPrecision > 50) {
+            pointsEarned = 75;
+            message = `Good match! Box includes unnecessary space around this ${bestMatch.name}. +75`;
             // Mark this item as found
             setFoundItems(prev => [...prev, bestMatch.id]);
           } else {
-            pointsEarned = 100;
-            message = `Good match! You found a ${bestMatch.name}! +100`;
-            // Mark this item as found
+            pointsEarned = 25;
+            message = `Your selection is too large for this ${bestMatch.name}! Try to be more precise. +25`;
+            // Still mark as found but with lower points
             setFoundItems(prev => [...prev, bestMatch.id]);
           }
         } else {
-          pointsEarned = 25;
-          message = `Good selection, but that's not a ${selectionType}. It's a ${bestMatch.name}! +25`;
-        }
-      } else if (effectiveOverlapPercentage > 30) { // Partial match
-        if (labelCorrect) {
-          pointsEarned = 50;
-          message = `Decent selection and correct label. It's a ${bestMatch.name}! +50`;
-          // Only mark found if label is correct and overlap is decent
-          setFoundItems(prev => [...prev, bestMatch.id]);
-        } else {
+          // Correct framing but wrong label
           pointsEarned = 10;
-          message = `Partial selection but wrong label. It's a ${bestMatch.name}, not a ${selectionType}! +10`;
+          message = `Good framing, but that's not a ${selectionType}. It's a ${bestMatch.name}! +10`;
+          // Still mark as found since framing was good
+          setFoundItems(prev => [...prev, bestMatch.id]);
+        }
+      } else if (highestOverlapPercentage > 50) {
+        // Part of the item is outside the box
+        const missingPercentage = 100 - highestOverlapPercentage;
+        if (labelCorrect) {
+          pointsEarned = 10;
+          message = `Missed ${missingPercentage.toFixed(0)}% of the ${bestMatch.name}! Try to include more of it. +10`;
+        } else {
+          pointsEarned = 5;
+          message = `Incorrect label and missed part of the item. It's a ${bestMatch.name}, not a ${selectionType}! +5`;
         }
       } else {
         // Poor selection
-        message = `Bad selection! You need to be more precise. Try again. +0`;
-        pointsEarned = 0;
+        message = `Bad selection! You need to include more of the item in your box. Try again. +0`;
       }
 
       setScore(prev => prev + pointsEarned);
       setFeedbackState({ message, visible: true });
     } else {
       // No match found
-      const message = 'Missed! Try selecting a different area. +0';
-      setFeedbackState({ message, visible: true });
+      setFeedbackState({
+        message: 'Missed! Try selecting a different area.',
+        visible: true
+      });
     }
 
     // Reset selection and prepare for next round
