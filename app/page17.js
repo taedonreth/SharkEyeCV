@@ -1,98 +1,63 @@
-import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React from 'react';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import BackButton from '../components/BackButton';
-import { useFocusEffect } from '@react-navigation/native';
 import SharkWrapper from '../components/SharkWrapper';
-
-const VideoComponent = () => {
-  if (Platform.OS === 'web') {
-    return (
-      <iframe
-        src="https://sharkeye.org?wvideo=ajmwpt0hu3"
-        style={{
-          width: '100%',
-          height: '100%',
-          border: 'none',
-        }}
-        allow="autoplay; fullscreen"
-      />
-    );
-  }
-
-  return (
-    <WebView
-      source={{ uri: 'https://sharkeye.org?wvideo=ajmwpt0hu3' }}
-      style={styles.video}
-      javaScriptEnabled={true}
-      domStorageEnabled={true}
-      allowsFullscreenVideo={true}
-    />
-  );
-};
 
 export default function Page17() {
   const title = ' ';
+  const router = useRouter();
 
-  const [showVideo, setShowVideo] = useState(true);
-
-  useFocusEffect(
-    useCallback(() => {
-      setShowVideo(true);
-      return () => {
-        setShowVideo(false);
-      };
-    }, [])
-  );
+  // Function to handle navigation to the home page
+  const handlePlayAgain = () => {
+    router.replace('/');
+  };
 
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
-        <View style={styles.contentRow}>
-          <View style={styles.leftContainer}>
+        {/* Left side content */}
+        <View style={styles.leftContent}>
+          <View style={styles.sharkSection}>
+            {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={1.6}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <TypewriterText
-                    text="Click "
-                    style={styles.speechText}
-                    typingSpeed={40}
-                  />
-                  <Link href="https://sharkeye.org/">
-                    <TypewriterText
-                      text="here"
-                      style={[styles.speechText, { color: '#4CC0B9' }]}
-                      typingSpeed={40}
-                      startDelay={200} // Delay to start after the first part finishes
-                    />
-                  </Link>
-                  <TypewriterText
-                    text=" for more resources!"
-                    style={styles.speechText}
-                    typingSpeed={40}
-                    startDelay={400} // Additional delay for the rest of the text
-                  />
-                </View>
+              <SpeechBubble scale={2}>
+                <TypewriterText
+                  text="Congratulations on completing the AI Computer Vision game! Click to play again!"
+                  style={styles.speechText}
+                  typingSpeed={250}
+                />
               </SpeechBubble>
             </View>
+
+            {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
                 <Shark />
               </SharkWrapper>
             </View>
           </View>
-          <View style={styles.rightContainer}>
-            <View style={styles.videoContainer}>
-              {showVideo && <VideoComponent />}
-            </View>
-          </View>
+        </View>
+
+        {/* Right side button */}
+        <View style={styles.rightContent}>
+          <Pressable
+            onPress={handlePlayAgain}
+            style={({ pressed }) => [
+              styles.playAgainButton,
+              pressed && styles.playAgainButtonPressed
+            ]}
+          >
+            <Text style={styles.playAgainText}>PLAY AGAIN</Text>
+          </Pressable>
         </View>
       </View>
+
+      {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
         <Link href="/page16" asChild>
           <BackButton isNavigation={true} />
@@ -110,34 +75,32 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row', // Horizontal layout
+    alignItems: 'center',
+  },
+  leftContent: {
+    flex: 3, // Takes up more space
     alignItems: 'center',
     justifyContent: 'center',
   },
-  contentRow: {
-    flexDirection: 'row',
+  rightContent: {
+    flex: 1, // Takes up less space
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 40, // Add some padding from the right edge
   },
-  leftContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingRight: 10,
+  sharkSection: {
     position: 'relative',
-  },
-  rightContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 10,
-    marginRight: -100,
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 260,
-    bottom: 300,
+    top: -60,
     zIndex: 2,
-    width: 250,
+    left: 300,
+    width: 600,
+    transform: [{ scale: 0.9 }],
   },
   speechText: {
     fontSize: 36,
@@ -148,19 +111,40 @@ const styles = StyleSheet.create({
   },
   sharkContainer: {
     zIndex: 1,
-    right: 225,
-    top: 100,
     transform: [{ scale: 0.9 }],
+    right: 200,
+    top: 100,
   },
-  videoContainer: {
-    width: 600,
-    height: 500,
-    backgroundColor: '#E6EBEA',
+  playAgainButton: {
+    backgroundColor: '#4CC0B9',
+    paddingVertical: 50,
+    paddingHorizontal: 40,
     borderRadius: 30,
-    overflow: 'hidden',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    borderWidth: 3,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 200,
+    cursor: 'pointer',
+    transform: [{ scale: 1.5 }],
+    transition: 'transform 0.2s',
+    right: 50,
   },
-  video: {
-    flex: 1,
+  playAgainButtonPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.95 }],
+  },
+  playAgainText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    letterSpacing: 1,
   },
   footerContainer: {
     flexDirection: 'row',

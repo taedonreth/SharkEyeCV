@@ -26,7 +26,7 @@ export default function Index() {
               <TypewriterText
                 text={`Welcome!\n My name is Sharkbot.\n Ready to learn about\n computer vision?...`}
                 style={styles.speechText}
-                typingSpeed={40}
+                typingSpeed={250}
               />
             </SpeechBubble>
           </View>

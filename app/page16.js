@@ -26,8 +26,8 @@ export default function Page16() {
             <TypewriterText
               text="Now you know how computer vision works!"
               style={styles.speechText}
-              typingSpeed={40}
-            />
+              typingSpeed={250}
+              />
           </SpeechBubble>
         </View>
       </View>

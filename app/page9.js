@@ -80,8 +80,8 @@ export default function Page9() {
             <TypewriterText
               text="Let's see what happens when we put our data into boxes!"
               style={styles.speechText}
-              typingSpeed={40}
-            />
+              typingSpeed={250}
+              />
           </SpeechBubble>
         </View>
 

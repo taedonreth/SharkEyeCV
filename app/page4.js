@@ -25,8 +25,8 @@ export default function Page4() {
                 <TypewriterText
                   text="The review process is long ..."
                   style={styles.speechText}
-                  typingSpeed={40}
-                />
+                  typingSpeed={250}
+                  />
               </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}

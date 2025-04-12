@@ -111,9 +111,9 @@ export default function Page7() {
         <View style={styles.speechBubbleContainer}>
           <SpeechBubble scale={1.4}>
             <TypewriterText
-              text={"Let's practice identifying good and bad data!\n Is this data good or bad?"}
+              text={"Is this image useful for training our shark detection AI?"}
               style={styles.speechText}
-              typingSpeed={40}
+              typingSpeed={250}
             />
           </SpeechBubble>
         </View>

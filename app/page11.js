@@ -15,10 +15,10 @@ export default function Page11() {
   // State for tracking current image and what shark says
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [sharkSaying, setSharkSaying] = useState('');
-  
+
   // Images array
   const images = ['fish.jpg', 'shark1.jpg', 'shark2.jpg', 'turtle.jpg', 'whale.jpg'];
-  
+
   // Pre-load all images to reduce lag
   const imageRefs = {
     'fish.jpg': require('../assets/images/page15-game/fish.jpg'),
@@ -36,26 +36,26 @@ export default function Page11() {
     }
     return baseName;
   };
-  
+
   // Effect to update the image periodically
   useEffect(() => {
     // Pick a random image only once when component mounts
     const randomIndex = Math.floor(Math.random() * images.length);
     setCurrentImageIndex(randomIndex);
-    
+
     // No interval or timeout needed, just set once
   }, []); // Empty dependency array means this runs once on mount
-  
+
   // Effect to make shark say something wrong whenever image changes
   useEffect(() => {
     const actualImageName = getImageDisplayName(images[currentImageIndex]);
-    
+
     // Always make wrong guesses
-    const options = ['fish', 'shark', 'turtle', 'whale'].filter(name => name !== actualImageName);
+    const options = ['shark', 'turtle', 'whale'].filter(name => name !== actualImageName);
     const randomOption = options[Math.floor(Math.random() * options.length)];
     setSharkSaying(randomOption);
   }, [currentImageIndex]);
-  
+
   const description = (
     <View style={styles.container}>
       {/* Main scene content */}
@@ -73,7 +73,7 @@ export default function Page11() {
                 />
               </SpeechBubble>
             </View>
-            
+
             {/* Shark below the speech bubble */}
             <View style={styles.sharkSection}>
               <SharkWrapper>
@@ -84,16 +84,16 @@ export default function Page11() {
 
           {/* Right side container for BackDrop and Question */}
           <View style={styles.rightContainer}>
-            
+
             {/* Image container */}
             <View style={styles.backdropContainer}>
-              <BackDrop 
-                style={styles.backdrop} 
+              <BackDrop
+                style={styles.backdrop}
                 currentImage={images[currentImageIndex]}
                 imageRefs={imageRefs}
               />
             </View>
-            
+
 
             {/* Explanatory text about model needing training */}
             <View style={styles.explanationContainer}>

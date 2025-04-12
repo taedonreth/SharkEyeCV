@@ -27,8 +27,8 @@ export default function Page13() {
             <TypewriterText
               text="Great job! Now let's learn about how we train our model!"
               style={styles.speechText}
-              typingSpeed={40}
-            />
+              typingSpeed={250}
+              />
           </SpeechBubble>
         </View>
       </View>

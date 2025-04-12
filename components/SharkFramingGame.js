@@ -548,36 +548,42 @@ const SeaCreaturesGame = () => {
     let pointsEarned = 0;
     let message = '';
 
-    // Frame is too large (less than 30% of frame is the creature)
-    const frameTooLarge = frameOverlapPercentage < 30;
+    // Consider captures with at least 90% coverage for good/great/perfect ratings
+    const goodCoverage = creatureOverlapPercentage >= 90;
 
-    if (overlap && creatureOverlapPercentage > 50) {
-      if (frameTooLarge) {
-        // Penalize selections that are too big
-        pointsEarned = 20;
-        message = 'Your selection is too large! +20';
-      }
-      else if (creatureOverlapPercentage > 90 && frameOverlapPercentage > 70) {
+    if (goodCoverage) {
+      // Good coverage - differentiate based on precision
+      if (frameOverlapPercentage > 90) {
         pointsEarned = 150;
-        message = 'Perfect capture! +150';
+        message = 'Perfect capture! Your box fits the creature perfectly! +150';
         // Mark this creature as found
         setFoundCreatures(prev => [...prev, currentCreature.id]);
-      } else if (creatureOverlapPercentage > 75 && frameOverlapPercentage > 50) {
+      } else if (frameOverlapPercentage > 70) {
         pointsEarned = 100;
-        message = 'Great capture! +100';
+        message = 'Great capture! Box is a bit larger than needed. +100';
+        // Mark this creature as found
+        setFoundCreatures(prev => [...prev, currentCreature.id]);
+      } else if (frameOverlapPercentage > 50) {
+        pointsEarned = 75;
+        message = 'Good capture! Box includes unnecessary space. +75';
         // Mark this creature as found
         setFoundCreatures(prev => [...prev, currentCreature.id]);
       } else {
-        pointsEarned = 75;
-        message = 'Good capture! +75';
-        // Mark this creature as found
+        pointsEarned = 25;
+        message = 'Your selection is too large! Try to be more precise. +25';
+        // Still mark as found
         setFoundCreatures(prev => [...prev, currentCreature.id]);
       }
+    } else if (creatureOverlapPercentage > 50) {
+      // Partial capture
+      pointsEarned = 10;
+      message = `You only captured ${Math.round(creatureOverlapPercentage)}% of the creature. Try to include more of it! +10`;
     } else if (overlap) {
-      pointsEarned = 25;
-      message = 'Partial capture. Try to select more of the creature! +25';
+      // Poor overlap
+      pointsEarned = 5;
+      message = 'Poor selection! Try to include more of the creature. +5';
     } else {
-      message = 'Missed the creature! +0';
+      message = 'Missed the creature completely! +0';
     }
 
     setScore(prev => prev + pointsEarned);
