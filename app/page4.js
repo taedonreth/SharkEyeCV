@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import DumbShark from '../components/dumbshark';
+import TeacherShark from '../components/TeacherShark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
@@ -32,7 +32,7 @@ export default function Page4() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <DumbShark />
+                <TeacherShark />
               </SharkWrapper>
             </View>
           </View>
@@ -42,25 +42,29 @@ export default function Page4() {
             <View style={styles.gridContainer}>
               <View style={styles.row}>
                 <FlipCard 
-                  frontContent="1. Image Collection"
+                  frontContent="1. What is Data Collection?"
+                  backTitle="Image Collection"
                   backContent="We use drones, helicopters, or satellites to capture views of the ocean from way up high."
                   frontImage={require('../assets/icons/image.png')}
                 />
                 <FlipCard 
-                  frontContent="2. Initial Scanning"
+                  frontContent="2. What is Initial Scanning?"
+                  backTitle="Initial Scanning"
                   backContent="Researchers look through the videos to see if any sharks show up."
                   frontImage={require('../assets/icons/scanning.png')}
                 />
               </View>
               <View style={styles.row}>
                 <FlipCard 
-                  frontContent="3. Detection & Flagging"
-                  backContent="If they think they see a shark, they flag that image or video segment to take a closer look later!"
+                  frontContent="3. What is Detection?"
+                  backTitle="Detection"
+                  backContent="If they think they see a shark, they mark that image or video segment to take a closer look later!"
                   frontImage={require('../assets/icons/detection.png')}
                 />
                 <FlipCard 
-                  frontContent="4. Verification"
-                  backContent="Ocean experts look closely at the marked videos to see if it’s really a shark—or just a dolphin, surfer, or even a shadow."
+                  frontContent="4. What is Verification?"
+                  backTitle="Verification"
+                  backContent="Ocean experts look closely at the marked videos to see if it's really a shark—or just a dolphin, surfer, or even a shadow."
                   frontImage={require('../assets/icons/verification.png')}
                 />
               </View>

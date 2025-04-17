@@ -3,12 +3,12 @@ import BasePage from './BasePage';
 import Shark from '../components/Shark';
 import SharkWrapper from '../components/SharkWrapper';
 import { View, StyleSheet } from 'react-native';
-import TextBox from '../components/TextBoxPage14';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
+import ProgressiveCards from '../components/ProgressiveCards';
 
 export default function Page14() {
   const description = (
@@ -34,8 +34,8 @@ export default function Page14() {
           </View>
 
           <View style={styles.rightContainer}>
-            <View style={styles.textBoxContainer}>
-              <TextBox />
+            <View style={styles.cardsContainer}>
+              <ProgressiveCards />
             </View>
           </View>
         </View>
@@ -64,10 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  sceneContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -85,6 +81,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10,
   },
+  cardsContainer: {
+    position: 'absolute',
+    right: 50,
+    top: -290,
+  },
   sharkContainer: {
     marginTop: 200,
     zIndex: 1,
@@ -97,7 +98,6 @@ const styles = StyleSheet.create({
     left: 350,
     zIndex: 2,
     width: 250,
-    
   },
   speechText: {
     fontSize: 36,
@@ -105,11 +105,6 @@ const styles = StyleSheet.create({
     color: 'black',
     lineHeight: 44,
     fontWeight: '500',
-  },
-  textBoxContainer: {
-    transform: [{ scale: 0.75 }],
-    right: 160,
-    top: 5,
   },
   footer: {
     flexDirection: 'row',

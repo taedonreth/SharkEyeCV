@@ -83,7 +83,7 @@ export default function Page3() {
         <Link href="/overview" asChild>
           <BackButton isNavigation={true} />
         </Link>
-        <Link href="/page4" asChild>
+        <Link href="/page5" asChild>
           <ContinueButton isNavigation={true} />
         </Link>
       </View>

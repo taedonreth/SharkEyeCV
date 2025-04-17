@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Image } from 'react-native';
 
-export default function FlipCard({ frontContent, backContent, frontImage }) {
+export default function FlipCard({ frontContent, backContent, backTitle, frontImage }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [flipAnim] = useState(new Animated.Value(0));
@@ -73,7 +73,14 @@ export default function FlipCard({ frontContent, backContent, frontImage }) {
           isHovered && styles.cardHovered
         ]}
       >
-        <Text style={styles.text}>{backContent}</Text>
+        <View style={styles.backContentContainer}>
+          {backTitle && (
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>{backTitle}</Text>
+            </View>
+          )}
+          <Text style={styles.backText}>{backContent}</Text>
+        </View>
       </Animated.View>
     </TouchableOpacity>
   );
@@ -109,15 +116,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
   },
+  backContentContainer: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+  },
+  titleContainer: {
+    width: '100%',
+    paddingBottom: 10,
+    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: 'rgba(30, 61, 89, 0.3)',
+  },
+  titleText: {
+    color: '#1E3D59',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   frontCard: {
     backgroundColor: '#1E3D59',
   },
   backCard: {
-    backgroundColor: '#4CC0B9',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#1E3D59',
+    borderWidth: 5,
   },
   text: {
     color: 'white',
     fontSize: 23,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  backText: {
+    color: '#1E3D59',
+    fontSize: 20,
     textAlign: 'center',
     fontWeight: '600',
   },
@@ -133,8 +166,8 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     marginBottom: 10,
   },
 });

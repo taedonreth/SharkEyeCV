@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import DumbShark from '../components/dumbshark';
+import TeacherShark from '../components/TeacherShark';
 import Arrow from '../components/Arrow';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
@@ -24,7 +24,7 @@ export default function Page5() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.7}>
                 <TypewriterText
-                  text="AI can help us review data much faster!"
+                  text="Here's what the review process is like!"
                   style={styles.speechText}
                   typingSpeed={250}
                   />
@@ -33,7 +33,7 @@ export default function Page5() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <DumbShark />
+                <TeacherShark />
               </SharkWrapper>
             </View>
           </View>
@@ -41,36 +41,38 @@ export default function Page5() {
           {/* Right side container for Flip Cards Grid */}
           <View style={styles.rightContainer}>
             {/* Arrow pointing to the cards */}
-            <View style={styles.arrowContainer}>
-              <Arrow />
-            </View>
             <View style={styles.gridContainer}>
               <View style={[styles.row, styles.firstRow]}>
                 <FlipCard 
-                  frontContent="1. Image Collection"
-                  backContent="Aerial images or videos are captured."
+                  frontContent="1. What is Data Collection?"
+                  backTitle="Data Collection"
+                  backContent="We gather lots of pictures and videos—like homework for the computer!"
                   frontImage={require('../assets/icons/image.png')}
                 />
                 <FlipCard 
-                  frontContent="2. Initial Scanning with AI"
-                  backContent="The AI quickly scans through all the videos looking for anything that might be a shark."
+                  frontContent="2. What is Annotation?"
+                  backTitle="Annotation"
+                  backContent="We label the pictures to show the computer what’s what—like saying, “This is a shark!”"
                   frontImage={require('../assets/icons/scanning.png')}
                 />
               </View>
               <View style={[styles.row, styles.threeCardRow]}>
                 <FlipCard 
-                  frontContent="3. Detection & Flagging with AI"
-                  backContent="The AI flags pictures or videos that might have sharks, filtering out the irrelevant data."
+                  frontContent="3. What is Training?"
+                  backTitle="Training"
+                  backContent="The computer studies the pictures and tries to learn how to spot things on its own."
                   frontImage={require('../assets/icons/detection.png')}
                 />
                 <FlipCard 
-                  frontContent="4. Verification"
-                  backContent="Now the experts only need to look at the videos that probably have sharks!"
+                  frontContent="4. Verification?"
+                  backTitle="Verification"
+                  backContent="We test the computer with new pictures to see if it learned the right stuff—like a little quiz!"
                   frontImage={require('../assets/icons/verification.png')}
                 />
                 <FlipCard 
-                  frontContent="5. Model Training"
-                  backContent=" Each verified detection is fed back into the system to improve the AI's accuracy."
+                  frontContent="5. What is Deployment?"
+                  backTitle="Deployment"
+                  backContent="Now it’s ready to help in real life—like in an app that knows what it’s looking at!"
                   frontImage={require('../assets/icons/modeltraining.png')}
                 />
               </View>
@@ -81,7 +83,7 @@ export default function Page5() {
 
       {/* Navigation Footer */}
       <View style={styles.footerContainer}>
-        <Link href="/page4" asChild>
+        <Link href="/page3" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page6" asChild>

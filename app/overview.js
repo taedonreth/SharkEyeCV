@@ -4,7 +4,7 @@ import { Link } from 'expo-router';
 import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import DumbShark from '../components/dumbshark';
+import TeacherShark from '../components/TeacherShark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
@@ -32,7 +32,7 @@ export default function OverviewPage() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <DumbShark />
+                <TeacherShark />
               </SharkWrapper>
             </View>
           </View>
@@ -42,26 +42,26 @@ export default function OverviewPage() {
             <View style={styles.gridContainer}>
               <View style={styles.row}>
                 <FlipCard 
-                  frontContent="1. Data Collection"
-                  backContent="You're showing the computer lots of pictures so it can learn!"
-                  frontImage={require('../assets/icons/data.png')}
+                  frontContent="What is Computer Vision?"
+                  backTitle="Computer Vision"
+                  backContent="Computer vision is when computers learn to “see” and understand/ recognize pictures or videos—just like people do."
                 />
                 <FlipCard 
-                  frontContent="2. Model Training"
-                  backContent="It's like a game—show the computer pictures, and it learns to tell what's what!"
-                  frontImage={require('../assets/icons/modeltraining.png')}
+                  frontContent="How Does It Work?"
+                  backTitle="How does it work?"
+                  backContent="The computer looks at lots of pictures, learns what things are (like a shark or a dog), and gets better at spotting them on its own."
                 />
               </View>
               <View style={styles.row}>
                 <FlipCard 
-                  frontContent="3. Model Testing"
-                  backContent="Once the computer learns, you test it with new pictures to see if it gets them right!"
-                  frontImage={require('../assets/icons/modeltesting.png')}
+                  frontContent="3. Why Is It Useful?"
+                  backTitle="Why is it useful?"
+                  backContent="It helps us find things quickly, stay safe, or learn new things—without having to look through every picture ourselves."
                 />
                 <FlipCard 
-                  frontContent="4. Deployment"
-                  backContent="When the computer gets smart, you can use it for real—like a phone app that knows dog breeds!"
-                  frontImage={require('../assets/icons/deployment.png')}
+                  frontContent="An Example!"
+                  backTitle="Example"
+                  backContent="It can be used to find sharks in ocean videos or tell you what kind of dog is in a photo!"
                 />
               </View>
             </View>
