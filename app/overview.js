@@ -5,10 +5,10 @@ import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import DumbShark from '../components/dumbshark';
-import Overview from '../components/Overview';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
+import FlipCard from '../components/FlipCard';
 
 export default function OverviewPage() {
   const title = " ";
@@ -37,10 +37,33 @@ export default function OverviewPage() {
             </View>
           </View>
 
-          {/* Right side container for Overview */}
+          {/* Right side container for Flip Cards Grid */}
           <View style={styles.rightContainer}>
-            <View style={styles.overviewContainer}>
-              <Overview />
+            <View style={styles.gridContainer}>
+              <View style={styles.row}>
+                <FlipCard 
+                  frontContent="1. Data Collection"
+                  backContent="You're showing the computer lots of pictures so it can learn!"
+                  frontImage={require('../assets/icons/data.png')}
+                />
+                <FlipCard 
+                  frontContent="2. Model Training"
+                  backContent="It's like a game—show the computer pictures, and it learns to tell what's what!"
+                  frontImage={require('../assets/icons/modeltraining.png')}
+                />
+              </View>
+              <View style={styles.row}>
+                <FlipCard 
+                  frontContent="3. Model Testing"
+                  backContent="Once the computer learns, you test it with new pictures to see if it gets them right!"
+                  frontImage={require('../assets/icons/modeltesting.png')}
+                />
+                <FlipCard 
+                  frontContent="4. Deployment"
+                  backContent="When the computer gets smart, you can use it for real—like a phone app that knows dog breeds!"
+                  frontImage={require('../assets/icons/deployment.png')}
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -99,6 +122,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10,
   },
+  gridContainer: {
+    width: '100%',
+    position: 'absolute',
+    right: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
   speechBubbleContainer: {
     position: 'absolute',
     top: 120,
@@ -106,21 +142,11 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: 250,
   },
-  speechBubbleImage: {
-    width: '100%',
-    height: 400,
-  },
   sharkContainer: {
     marginTop: 200,
     zIndex: 1,
     marginLeft: -340,
     transform: [{ scale: 1.1 }],
-  },
-  overviewContainer: {
-    width: '100%',
-    position: 'absolute',
-    right: 160,
-    transform: [{ scale: 0.9 }],
   },
   footerContainer: {
     flexDirection: 'row',

@@ -2,13 +2,13 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
-import ReviewProcess from '../components/ReviewProcess';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
+import FlipCard from '../components/FlipCard';
 
 export default function Page4() {
   const title = " ";
@@ -37,14 +37,38 @@ export default function Page4() {
             </View>
           </View>
 
-          {/* Right side container for Overview */}
+          {/* Right side container for Flip Cards Grid */}
           <View style={styles.rightContainer}>
-            <View style={styles.reviewProcessContainer}>
-              <ReviewProcess />
+            <View style={styles.gridContainer}>
+              <View style={styles.row}>
+                <FlipCard 
+                  frontContent="1. Image Collection"
+                  backContent="We use drones, helicopters, or satellites to capture views of the ocean from way up high."
+                  frontImage={require('../assets/icons/image.png')}
+                />
+                <FlipCard 
+                  frontContent="2. Initial Scanning"
+                  backContent="Researchers look through the videos to see if any sharks show up."
+                  frontImage={require('../assets/icons/scanning.png')}
+                />
+              </View>
+              <View style={styles.row}>
+                <FlipCard 
+                  frontContent="3. Detection & Flagging"
+                  backContent="If they think they see a shark, they flag that image or video segment to take a closer look later!"
+                  frontImage={require('../assets/icons/detection.png')}
+                />
+                <FlipCard 
+                  frontContent="4. Verification"
+                  backContent="Ocean experts look closely at the marked videos to see if it’s really a shark—or just a dolphin, surfer, or even a shadow."
+                  frontImage={require('../assets/icons/verification.png')}
+                />
+              </View>
             </View>
           </View>
         </View>
       </View>
+
       {/* Navigation Footer */}
       <View style={styles.footerContainer}>
         <Link href="/page3" asChild>
@@ -75,10 +99,6 @@ const styles = StyleSheet.create({
     lineHeight: 44,
     fontWeight: '500',
   },
-  sceneContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -96,10 +116,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10,
   },
-  sharkContainer: {
-    marginTop: 200,
-    zIndex: 1,
-    marginLeft: -340,
+  gridContainer: {
+    width: '100%',
+    position: 'absolute',
+    right: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
   },
   speechBubbleContainer: {
     position: 'absolute',
@@ -108,10 +136,10 @@ const styles = StyleSheet.create({
     zIndex: 2,
     width: 250,
   },
-  reviewProcessContainer: {
-    transform: [{ scale: 0.75 }],
-    right: 260,
-    top: 5,
+  sharkContainer: {
+    marginTop: 200,
+    zIndex: 1,
+    marginLeft: -340,
   },
   footerContainer: {
     flexDirection: 'row',
