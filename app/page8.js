@@ -10,6 +10,9 @@ import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page8() {
+  // Add a meaningful title for the navigation bar
+  const title = "Training the Model";
+  
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
@@ -30,7 +33,7 @@ export default function Page8() {
           </SpeechBubble>
         </View>
       </View>
-
+      
       {/* Footer Navigation */}
       <View style={styles.footer}>
         <Link href="/page7" asChild>
@@ -42,8 +45,8 @@ export default function Page8() {
       </View>
     </View>
   );
-
-  return <BasePage pageNumber={8} title=" " description={description} />;
+  
+  return <BasePage pageNumber={8} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({

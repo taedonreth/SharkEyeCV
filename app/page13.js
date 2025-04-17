@@ -45,7 +45,7 @@ export default function Page13() {
     </View>
   );
 
-  return <BasePage pageNumber={13} title=" " description={description} />;
+  return <BasePage pageNumber={13} title="Feedback" description={description} />;
 }
 
 const styles = StyleSheet.create({

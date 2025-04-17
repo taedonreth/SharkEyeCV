@@ -13,7 +13,7 @@ import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page5() {
-  const title = " ";
+  const title = "AI Implementation";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}

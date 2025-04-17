@@ -9,7 +9,7 @@ import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Index() {
-  const title = " ";
+  const title = "Welcome";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}

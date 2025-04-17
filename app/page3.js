@@ -43,7 +43,7 @@ const VideoComponent = () => {
 };
 
 export default function Page3() {
-  const title = " ";
+  const title = "Video";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}

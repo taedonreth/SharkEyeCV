@@ -440,7 +440,7 @@ export default function Page15() {
     </View>
   );
 
-  return <BasePage pageNumber={15} title=" " description={description} />;
+  return <BasePage pageNumber={15} title="Model Testing Game" description={description} />;
 }
 
 // Update styles to include frame styling

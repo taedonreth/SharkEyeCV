@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import GoodSharkIcon from '../components/GoodSharkIcon';
 import BadSharkIcon from '../components/BadSharkIcon';
@@ -66,7 +66,23 @@ const layoutConfig = {
 };
 
 export default function Page9() {
-  const title = " ";
+  // Define an array of messages to cycle through
+  const messages = [
+    "As the scientist, it's your job to show the computer which objects in the picture to pay attention to!",
+    "You can do this by drawing a box around the object.",
+    "Try it out in the game on the next page!"
+  ];
+  
+  // State to track the current message index
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+  // Function to handle speech bubble click
+  const handleSpeechBubbleClick = () => {
+    // Move to the next message in the array, or loop back to the first message
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+  };
+
+  const title = "Capturing the object ";
 
   const description = (
     <View style={[styles.container, {
@@ -74,16 +90,21 @@ export default function Page9() {
       paddingVertical: layoutConfig.container.paddingVertical,
     }]}>
       <View style={styles.mainContent}>
-        {/* Speech Bubble */}
-        <View style={styles.speechBubbleContainer}>
+        {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
+        <TouchableOpacity 
+          style={styles.speechBubbleContainer}
+          onPress={handleSpeechBubbleClick}
+          activeOpacity={0.8} // Slight opacity change when pressed
+        >
           <SpeechBubble scale={1.5}>
             <TypewriterText
-              text="Let's see what happens when we put our data into boxes!"
+              key={currentMessageIndex} // Key changes force re-render of component
+              text={messages[currentMessageIndex]}
               style={styles.speechText}
               typingSpeed={250}
-              />
+            />
           </SpeechBubble>
-        </View>
+        </TouchableOpacity>
 
         {/* Box Section with Good and Bad Boxes */}
         <View style={[styles.boxSection, {
@@ -172,7 +193,7 @@ export default function Page9() {
     </View>
   );
 
-  return <BasePage pageNumber={9} title=" " description={description} />;
+  return <BasePage pageNumber={9} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -248,7 +269,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 23,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,

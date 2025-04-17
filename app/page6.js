@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SharkIcon from '../components/SharkIcon';
@@ -15,7 +15,23 @@ import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page6() {
-  const title = " ";
+  // Define an array of messages to cycle through
+  const messages = [
+    "Good data is clear, correct, and easy to understand! For example when training a shark species detection model, poor data includes blurry/incomplete images or pictures of surfers - since a surfer isn't a shark.",
+    "The quality of your training data directly affects how well your AI model will perform. Clear, well-labeled examples help the model learn accurately.",
+    "When selecting training data, focus on images that represent what the model will encounter in real-world situations."
+  ];
+  
+  // State to track the current message index
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+  // Function to handle speech bubble click
+  const handleSpeechBubbleClick = () => {
+    // Move to the next message in the array, or loop back to the first message
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+  };
+
+  const title = "Good and Bad Data";
   const description = (
     <View style={styles.container}>
       {/* Main Content */}
@@ -27,15 +43,21 @@ export default function Page6() {
               <DumbShark />
             </SharkWrapper>
           </View>
-          <View style={styles.speechBubbleContainer}>
+          {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
+          <TouchableOpacity 
+            style={styles.speechBubbleContainer}
+            onPress={handleSpeechBubbleClick}
+            activeOpacity={0.8} // Slight opacity change when pressed
+          >
             <SpeechBubble scale={1.7} width={600} height={125}>
               <TypewriterText
-                text={"Good data is clear, correct, and easy to understand - like a picture that shows the full object.\n Bad data is confusing, missing parts, or has mistakes - like a blurry photo or one that cuts off the object."}
+                key={currentMessageIndex} // Key changes force re-render of component
+                text={messages[currentMessageIndex]}
                 style={styles.speechText}
                 typingSpeed={250}
               />
             </SpeechBubble>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Cards Section */}
@@ -176,7 +198,7 @@ const styles = StyleSheet.create({
     width: 500,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 28,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,

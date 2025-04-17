@@ -11,7 +11,7 @@ import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page4() {
-  const title = " ";
+  const title = "Review Process";
   const description = (
     <View style={styles.container}>
       {/* Main scene content */}

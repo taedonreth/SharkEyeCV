@@ -122,7 +122,7 @@ export default function Page11() {
     </View>
   );
 
-  return <BasePage pageNumber={11} title=" " description={description} />;
+  return <BasePage pageNumber={11} title="Learning from Mistakes" description={description} />;
 }
 
 // Update styles to include completion styling

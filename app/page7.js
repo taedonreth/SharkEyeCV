@@ -96,7 +96,7 @@ export default function Page7() {
     });
   };
 
-  const title = "Training Data Classification";
+  const title = "Training Data Game";
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
