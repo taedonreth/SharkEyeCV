@@ -48,7 +48,7 @@ export default function OverviewPage() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/" asChild>
+        <Link href="/page2" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page3" asChild>

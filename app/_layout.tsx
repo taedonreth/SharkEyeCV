@@ -36,6 +36,7 @@ export default function RootLayout() {
         <ProgressProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
+            <Stack.Screen name="page2" />
             <Stack.Screen name="overview" />
             <Stack.Screen name="page3" />
             <Stack.Screen name="page4" />

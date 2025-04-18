@@ -35,7 +35,7 @@ export default function Index() {
 
       {/* Footer with the Continue button */}
       <View style={styles.footerContainer}>
-        <Link href="/overview" asChild>
+        <Link href="/page2" asChild>
           <ContinueButton isNavigation={false} />
         </Link>
       </View>
