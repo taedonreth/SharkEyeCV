@@ -29,7 +29,7 @@ export default function Page17() {
                 <TypewriterText
                   text="Congratulations on completing the AI Computer Vision game! Click to play again!"
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100}
                 />
               </SpeechBubble>
             </View>

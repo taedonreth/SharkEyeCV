@@ -26,9 +26,9 @@ export default function Page8() {
         <View style={styles.speechBubbleContainer}>
           <SpeechBubble scale={2}>
             <TypewriterText
-              text="Now that we have good data, we can train our model to recognize sharks!"
+              text="Now that we have good data, we can train the goggles to recognize sharks!"
               style={styles.speechText}
-              typingSpeed={250}
+              typingSpeed={70}
               />
           </SpeechBubble>
         </View>

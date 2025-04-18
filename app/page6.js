@@ -92,7 +92,7 @@ export default function Page6() {
           <View style={styles.sharkPosition}>
             <SharkWrapper>
               <View style={styles.gogglesContainer}>
-                <Goggles />
+                <DumbShark />
               </View>
             </SharkWrapper>
           </View>
@@ -107,7 +107,7 @@ export default function Page6() {
                 key={currentMessageIndex} // Key changes force re-render of component
                 text={messages[currentMessageIndex]}
                 style={styles.speechText}
-                typingSpeed={130}
+                typingSpeed={70}
               />
             </SpeechBubble>
           </TouchableOpacity>
@@ -250,8 +250,8 @@ const styles = StyleSheet.create({
     top: 80,  // Adjust this value to move goggles up/down
     left: -0, // Adjust this value to move goggles left/right
     transform: [
-      { scaleX: -1 }, // This flips the goggles horizontally
-      { scale: 0.7 }  // This makes the goggles 70% of their original size
+      { scaleX: 1 }, // This flips the goggles horizontally
+      { scale: 1.2 }  // This makes the goggles 70% of their original size
     ],
   },
   speechBubbleContainer: {

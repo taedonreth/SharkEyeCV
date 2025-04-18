@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
@@ -10,7 +10,6 @@ import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function Page2() {
-  const router = useRouter();
   const title = "Help Improve Frankie The Shark's Vision!";
   const [message, setMessage] = useState("Help me find something to improve my vision!");
   const [messageKey, setMessageKey] = useState('initial');
@@ -54,180 +53,168 @@ export default function Page2() {
     setClickedItems(prev => ({...prev, [item]: true}));
   };
 
-  // Custom rendering function for description
-  const renderDescription = () => {
-    return (
-      <View style={styles.container}>
-        {/* Main content area - Game */}
-        <View style={styles.mainContent}>
-          {/* Game items */}
-          <View style={styles.gameArea}>
-            {/* Goggles */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 250, left: 950 },
-                clickedItems['goggles'] && styles.correctItem
-              ]}
-              onPress={() => handleItemClick('goggles')}
-              activeOpacity={0.7}
-              disabled={clickedItems['goggles']}
-            >
-              <Image 
-                source={require('../assets/images/goggles.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            
-            {/* Sunscreen */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 400, left: 800 },
-                clickedItems['sunscreen'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
-              ]}
-              onPress={() => handleItemClick('sunscreen')}
-              activeOpacity={0.7}
-              disabled={clickedItems['sunscreen']}
-            >
-              <Image 
-                source={require('../assets/images/page2-game/suncreen.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            
-            {/* Umbrella */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 450, left: 600 },
-                clickedItems['umbrella'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
-              ]}
-              onPress={() => handleItemClick('umbrella')}
-              activeOpacity={0.7}
-              disabled={clickedItems['umbrella']}
-            >
-              <Image 
-                source={require('../assets/images/page2-game/umbrella.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            
-            {/* Trash can */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 400, left: 350 },
-                clickedItems['trashcan'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
-              ]}
-              onPress={() => handleItemClick('trashcan')}
-              activeOpacity={0.7}
-              disabled={clickedItems['trashcan']}
-            >
-              <Image 
-                source={require('../assets/images/page2-game/trashcan.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            
-            {/* Swim trunks */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 250, left: 550 },
-                clickedItems['swimtrunks'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
-              ]}
-              onPress={() => handleItemClick('swimtrunks')}
-              activeOpacity={0.7}
-              disabled={clickedItems['swimtrunks']}
-            >
-              <Image 
-                source={require('../assets/images/page2-game/swimtrunks.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            
-            {/* Surfboard */}
-            <TouchableOpacity 
-              style={[
-                styles.itemContainer, 
-                { top: 300, left: 1200 },
-                clickedItems['surfboard'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
-              ]}
-              onPress={() => handleItemClick('surfboard')}
-              activeOpacity={0.7}
-              disabled={clickedItems['surfboard']}
-            >
-              <Image 
-                source={require('../assets/images/page2-game/surfboard.png')} 
-                style={styles.item}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-
-          {/* Shark with speech bubble */}
-          <View style={styles.sharkContainer}>
-            <SharkWrapper>
-              <DumbShark />
-            </SharkWrapper>
-          </View>
+  const description = (
+    <View style={styles.container}>
+      {/* Main content area - Game */}
+      <View style={styles.mainContent}>
+        {/* Game items */}
+        <View style={styles.gameArea}>
+          {/* Goggles */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 400, left:1000 },
+              clickedItems['goggles'] && styles.correctItem
+            ]}
+            onPress={() => handleItemClick('goggles')}
+            activeOpacity={0.7}
+            disabled={clickedItems['goggles']}
+          >
+            <Image 
+              source={require('../assets/images/goggles.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
           
-          <View style={styles.speechBubbleContainer}>
-            <SpeechBubble scale={1.5}>
-              <TypewriterText
-                key={messageKey}
-                text={message}
-                style={styles.speechText}
-                typingSpeed={50}
-              />
-            </SpeechBubble>
-          </View>
+          {/* Sunscreen */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 400, left: 800 },
+              clickedItems['sunscreen'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
+            ]}
+            onPress={() => handleItemClick('sunscreen')}
+            activeOpacity={0.7}
+            disabled={clickedItems['sunscreen']}
+          >
+            <Image 
+              source={require('../assets/images/page2-game/suncreen.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          
+          {/* Umbrella */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 450, left: 600 },
+              clickedItems['umbrella'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
+            ]}
+            onPress={() => handleItemClick('umbrella')}
+            activeOpacity={0.7}
+            disabled={clickedItems['umbrella']}
+          >
+            <Image 
+              source={require('../assets/images/page2-game/umbrella.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          
+          {/* Trash can */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 400, left: 350 },
+              clickedItems['trashcan'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
+            ]}
+            onPress={() => handleItemClick('trashcan')}
+            activeOpacity={0.7}
+            disabled={clickedItems['trashcan']}
+          >
+            <Image 
+              source={require('../assets/images/page2-game/trashcan.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          
+          {/* Swim trunks */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 250, left: 550 },
+              clickedItems['swimtrunks'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
+            ]}
+            onPress={() => handleItemClick('swimtrunks')}
+            activeOpacity={0.7}
+            disabled={clickedItems['swimtrunks']}
+          >
+            <Image 
+              source={require('../assets/images/page2-game/swimtrunks.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          
+          {/* Surfboard */}
+          <TouchableOpacity 
+            style={[
+              styles.itemContainer, 
+              { top: 300, left: 1200 },
+              clickedItems['surfboard'] && (foundSolution ? styles.wrongItem : styles.wrongItem)
+            ]}
+            onPress={() => handleItemClick('surfboard')}
+            activeOpacity={0.7}
+            disabled={clickedItems['surfboard']}
+          >
+            <Image 
+              source={require('../assets/images/page2-game/surfboard.png')} 
+              style={styles.item}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Shark with speech bubble */}
+        <View style={styles.sharkContainer}>
+          <SharkWrapper>
+            <DumbShark />
+          </SharkWrapper>
+        </View>
+        
+        <View style={styles.speechBubbleContainer}>
+          <SpeechBubble scale={1.5}>
+            <TypewriterText
+              key={messageKey}
+              text={message}
+              style={styles.speechText}
+              typingSpeed={50}
+            />
+          </SpeechBubble>
         </View>
       </View>
-    );
-  };
 
-  // Standalone navigation functions
-  const goBack = () => router.push('/');
-  const goForward = () => router.push('/overview');
+      {/* Footer container with separated navigation buttons */}
+      <View style={styles.footerContainer}>
+        <View style={styles.backButtonContainer}>
+          <Link href="/" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+        <View style={styles.continueButtonContainer}>
+          <Link href="/overview" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
+      </View>
+    </View>
+  );
 
   return (
-    <>
-      <BasePage
-        pageNumber={1.5}
-        title={title}
-        description={renderDescription()}
-      />
-      
-      {/* Completely separate back button outside the BasePage */}
-      <TouchableOpacity 
-        style={styles.backButtonPosition}
-        onPress={goBack}
-      >
-        <BackButton isNavigation={true} />
-      </TouchableOpacity>
-      
-      {/* Completely separate continue button outside the BasePage */}
-      <TouchableOpacity 
-        style={styles.continueButtonPosition}
-        onPress={goForward}
-      >
-        <ContinueButton isNavigation={true} />
-      </TouchableOpacity>
-    </>
+    <BasePage
+      pageNumber={1.5}
+      title={title}
+      description={description}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
   },
   mainContent: {
     flex: 1,
@@ -284,18 +271,27 @@ const styles = StyleSheet.create({
     borderColor: '#F44336', // Red
     backgroundColor: 'rgba(244, 67, 54, 0.2)',
   },
-  // Position for back button
-  backButtonPosition: {
-    position: 'absolute',
-    bottom: 25,
-    left: 25,
-    zIndex: 20,
+  
+  // Footer styles - exactly matching Page10
+  footerContainer: {
+    width: '100%',
+    marginTop: 60,
+    position: 'relative',
+    height: 80, // Give enough height for the buttons
+    pointerEvents: 'none', // This makes the container not capture any touch events
   },
-  // Position for continue button
-  continueButtonPosition: {
+  backButtonContainer: {
     position: 'absolute',
+    left: 0,
     bottom: 25,
-    right: 25,
-    zIndex: 20,
-  }
+    zIndex: 99,
+    pointerEvents: 'auto', // This allows the button to receive touch events
+  },
+  continueButtonContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 25,
+    zIndex: 99,
+    pointerEvents: 'auto', // This allows the button to receive touch events
+  },
 });

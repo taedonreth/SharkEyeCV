@@ -68,7 +68,7 @@ const layoutConfig = {
 export default function Page9() {
   // Define an array of messages to cycle through
   const messages = [
-    "As the scientist, it's your job to show the computer which objects in the picture to pay attention to!",
+    "It's your job to show the goggles which objects in the picture to pay attention to!",
     "You can do this by drawing a box around the object.",
     "Try it out in the game on the next page!"
   ];

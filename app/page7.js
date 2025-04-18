@@ -111,9 +111,9 @@ export default function Page7() {
         <View style={styles.speechBubbleContainer}>
           <SpeechBubble scale={1.4}>
             <TypewriterText
-              text={"Is this image useful for training our shark detection AI?"}
+              text={"Is this image useful for training our goggles to detect where my shark family is?"}
               style={styles.speechText}
-              typingSpeed={250}
+              typingSpeed={70}
             />
           </SpeechBubble>
         </View>
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   speechText: {
-    fontSize: 27,
+    fontSize: 23,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,

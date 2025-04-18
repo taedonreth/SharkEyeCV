@@ -23,7 +23,7 @@ export default function OverviewPage() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.5}>
                 <TypewriterText
-                  text={"Oh no! I can't see very well...\nI need these special goggles\nto find my family!"}
+                  text={"Great! With these goggles! \n I will be able to find my family in no time!"}
                   style={styles.speechText}
                   typingSpeed={100} // Slowed down as discussed
                   />

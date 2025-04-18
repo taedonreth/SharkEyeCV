@@ -12,6 +12,7 @@ import ContinueButton from '../components/ContinueButton';
 import { ThemedText } from '../components/ThemedText';
 import SharkWrapper from '../components/SharkWrapper';
 import TypewriterText from '../components/TypewriterText';
+import Goggles from '../components/goggles';
 
 export default function Page15() {
   // State for tracking the game
@@ -355,7 +356,9 @@ export default function Page15() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-               <DumbShark />
+                <View style={styles.gogglesContainer}>
+                  <Goggles />
+                </View>
               </SharkWrapper>
             </View>
           </View>
@@ -504,10 +507,20 @@ const styles = StyleSheet.create({
     top: 160,
     transform: [{ scale: 0.8 }],
   },
+  gogglesContainer: {
+    position: 'absolute',
+    zIndex: 3,
+    top: -200,  // Adjust this value to move goggles up/down
+    left: -350, // Adjust this value to move goggles left/right
+    transform: [
+      { scaleX: -1 }, // This flips the goggles horizontally
+      { scale: 0.7 }  // This makes the goggles 70% of their original size
+    ],
+  },
   speechBubbleContainer: {
     position: 'absolute',
     left: 350,
-    bottom: 300,
+    bottom: -100,
     zIndex: 2,
     transform: [{ scale: 1.2 }],
   },

@@ -13,9 +13,9 @@ import ModelTestingCard from '../components/ModelTestingCard';
 export default function Page14() {
   // Define messages for the speech bubble
   const sharkMessages = [
-    "Let me explain how we test our model!",
-    "Testing is important to make sure our model works!",
-    "We need to check if the model can find sharks correctly!",
+    "Let me explain how we test our goggles!",
+    "Testing is important to make sure our goggle's detection works!",
+    "We need to check if the goggles can find sharks correctly!",
     "Click through the card to learn how testing works!"
   ];
   
@@ -60,7 +60,7 @@ export default function Page14() {
     // Set new timer - messages advance every 3.5 seconds
     timerRef.current = setInterval(() => {
       setCurrentMessageIndex(prevIndex => (prevIndex + 1) % sharkMessages.length);
-    }, 3500); // 3.5 seconds
+    }, 6500); // 3.5 seconds
   };
   
   // Function to handle speech bubble click
@@ -95,7 +95,7 @@ export default function Page14() {
                   key={currentMessageIndex}
                   text={sharkMessages[currentMessageIndex]}
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={70}
                 />
               </SpeechBubble>
             </TouchableOpacity>

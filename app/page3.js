@@ -57,9 +57,9 @@ export default function Page3() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.8}>
                 <TypewriterText
-                  text="This is how computer vision is used to detect me in real life!"
+                  text="This is how I can be used to detect Frankie's friend's and family in real life!"
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100}
                   />
               </SpeechBubble>
             </View>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 28,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
