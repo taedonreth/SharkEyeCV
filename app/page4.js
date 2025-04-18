@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
-import ReviewProcess from '../components/ReviewProcess';
+import FlipCardReviewProcess from '../components/FlipCardReviewProcess';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
@@ -21,13 +21,13 @@ export default function Page4() {
           <View style={styles.leftContainer}>
             {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
-              <SpeechBubble scale={1.7}>
-                <TypewriterText
-                  text="The review process is long ..."
-                  style={styles.speechText}
-                  typingSpeed={250}
-                  />
-              </SpeechBubble>
+            <SpeechBubble scale={1.7}>
+              <TypewriterText
+                text="My goggles need to learn what sharks look like! Can you help me teach them?"
+                style={styles.speechText}
+                typingSpeed={100} // Slowed down as discussed
+                />
+            </SpeechBubble> 
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
@@ -37,10 +37,10 @@ export default function Page4() {
             </View>
           </View>
 
-          {/* Right side container for Overview */}
+          {/* Right side container for Review Process */}
           <View style={styles.rightContainer}>
             <View style={styles.reviewProcessContainer}>
-              <ReviewProcess />
+              <FlipCardReviewProcess />
             </View>
           </View>
         </View>
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     width: 250,
   },
   reviewProcessContainer: {
-    transform: [{ scale: 0.75 }],
-    right: 260,
+    transform: [{ scale: 0.78 }],
+    right: 60,
     top: 5,
   },
   footerContainer: {
