@@ -69,7 +69,7 @@ export default function Page11() {
                 <TypewriterText
                   text={`Hmmm..\nI see a ${sharkSaying}!`}
                   style={styles.bubbleText}
-                  typingSpeed={40}
+                  typingSpeed={150}
                 />
               </SpeechBubble>
             </View>
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   speechBubbleContainer: {
     position: 'absolute',
     bottom: 350,
-    left: 375,
+    left: 340,
     zIndex: 2,
     transform: [{ scale: 1.4 }],
   },
