@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import GoodSharkIcon from '../components/GoodSharkIcon';
@@ -76,10 +76,60 @@ export default function Page9() {
   // State to track the current message index
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   
+  // Timer ref to track and clear the interval
+  const timerRef = useRef(null);
+  
+  // Flag to track if user manually interacted
+  const [userInteracted, setUserInteracted] = useState(false);
+  
+  // Setup and clear interval on component mount/unmount
+  useEffect(() => {
+    // Start the timer for auto-advancing messages
+    startAutoAdvanceTimer();
+    
+    // Cleanup function to clear the timer when component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this runs once on mount
+  
+  // Reset the timer whenever the message changes due to user interaction
+  useEffect(() => {
+    // If user manually interacted, restart the timer
+    if (userInteracted) {
+      startAutoAdvanceTimer();
+      setUserInteracted(false); // Reset the flag
+    }
+  }, [currentMessageIndex]);
+  
+  // Function to start the auto-advance timer
+  const startAutoAdvanceTimer = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Set new timer - messages advance every 3.5 seconds
+    timerRef.current = setInterval(() => {
+      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
+    }, 5500); // 3.5 seconds
+  };
+  
   // Function to handle speech bubble click
   const handleSpeechBubbleClick = () => {
     // Move to the next message in the array, or loop back to the first message
     setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    
+    // Mark as user interaction
+    setUserInteracted(true);
+    
+    // Reset the timer when user clicks
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    startAutoAdvanceTimer();
   };
 
   const title = "Capturing the object ";
@@ -101,7 +151,7 @@ export default function Page9() {
               key={currentMessageIndex} // Key changes force re-render of component
               text={messages[currentMessageIndex]}
               style={styles.speechText}
-              typingSpeed={250}
+              typingSpeed={150}
             />
           </SpeechBubble>
         </TouchableOpacity>

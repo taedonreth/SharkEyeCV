@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link, useRouter } from 'expo-router';
@@ -37,7 +37,7 @@ export default function Page17() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <Shark />
+                <DumbShark />
               </SharkWrapper>
             </View>
           </View>

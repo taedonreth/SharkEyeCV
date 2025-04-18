@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import YesButton from '../components/YesButton';
 import NoButton from '../components/NoButton';
@@ -355,7 +355,7 @@ export default function Page15() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <Shark />
+               <DumbShark />
               </SharkWrapper>
             </View>
           </View>

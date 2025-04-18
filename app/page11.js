@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   speechBubbleContainer: {
     position: 'absolute',
     bottom: 350,
-    left: 375,
+    left: 340,
     zIndex: 2,
     transform: [{ scale: 1.4 }],
   },

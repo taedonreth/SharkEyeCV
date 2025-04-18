@@ -23,9 +23,9 @@ export default function Page5() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.7}>
                 <TypewriterText
-                  text="Here's how we teach computers to see like we do!"
+                  text="Here's how we teach the goggle to see like we do!"
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100}
                   />
               </SpeechBubble>
             </View>
@@ -94,15 +94,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   sharkContainer: {
-    marginTop: 200,
+    marginTop: 155,
     zIndex: 1,
-    marginLeft: -340,
+    marginLeft: -550,
     transform: [{ scale: 1.1 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
     top: 120,
-    left: 210,
+    left: 150,
     zIndex: 2,
     width: 250,
   },

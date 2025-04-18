@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 25,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
