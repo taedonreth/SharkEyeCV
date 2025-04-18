@@ -15,21 +15,21 @@ export default function Index() {
     "My name is Frankie the Shark! \n I lost my family while chasing some squid!",
     "I need your help to\n find my shark family!\n \n Will you join my adventure?"
   ];
-  
+
   // State to track the current message index
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  
+
   // Timer ref to track and clear the interval
   const timerRef = useRef(null);
-  
+
   // Flag to track if user manually interacted
   const [userInteracted, setUserInteracted] = useState(false);
-  
+
   // Setup and clear interval on component mount/unmount
   useEffect(() => {
     // Start the timer for auto-advancing messages
     startAutoAdvanceTimer();
-    
+
     // Cleanup function to clear the timer when component unmounts
     return () => {
       if (timerRef.current) {
@@ -37,7 +37,7 @@ export default function Index() {
       }
     };
   }, []); // Empty dependency array means this runs once on mount
-  
+
   // Reset the timer whenever the message changes due to user interaction
   useEffect(() => {
     // If user manually interacted, restart the timer
@@ -46,28 +46,42 @@ export default function Index() {
       setUserInteracted(false); // Reset the flag
     }
   }, [currentMessageIndex]);
-  
+
   // Function to start the auto-advance timer
   const startAutoAdvanceTimer = () => {
     // Clear any existing timer first
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    
-    // Set new timer - messages advance every 3.5 seconds
+
+    // Set new timer - messages advance but stop at the end
     timerRef.current = setInterval(() => {
-      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
-    }, 6000); // 3.5 seconds
+      setCurrentMessageIndex(prevIndex => {
+        // Only advance if not at the last message
+        if (prevIndex < messages.length - 1) {
+          return prevIndex + 1;
+        }
+        // If at the last message, clear the interval and stay there
+        clearInterval(timerRef.current);
+        return prevIndex;
+      });
+    }, 3000);
   };
-  
+
   // Function to handle speech bubble click
   const handleSpeechBubbleClick = () => {
-    // Move to the next message in the array, or loop back to the first message
-    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    
+    // If at the last message, go back to the first
+    // Otherwise, move to the next message
+    setCurrentMessageIndex((prevIndex) => {
+      if (prevIndex >= messages.length - 1) {
+        return 0;
+      }
+      return prevIndex + 1;
+    });
+
     // Mark as user interaction
     setUserInteracted(true);
-    
+
     // Reset the timer when user clicks
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -88,7 +102,7 @@ export default function Index() {
           </SharkWrapper>
 
           {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.speechBubbleContainer}
             onPress={handleSpeechBubbleClick}
             activeOpacity={0.8} // Slight opacity change when pressed
