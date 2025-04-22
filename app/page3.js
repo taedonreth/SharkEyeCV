@@ -84,10 +84,10 @@ export default function Page3() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/page2" asChild>
+        <Link href="/review" asChild>
           <BackButton isNavigation={true} />
         </Link>
-        <Link href="/page4" asChild>
+        <Link href="/page17" asChild>
           <ContinueButton isNavigation={true} />
         </Link>
       </View>

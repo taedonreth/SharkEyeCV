@@ -18,9 +18,9 @@ import Goggles from '../components/goggles';
 export default function Page6() {
   // Define an array of messages to cycle through
   const messages = [
-    "Good data is clear, correct, and easy to understand! For example when training a shark species detection model, poor data includes blurry/incomplete images or pictures of surfers - since a surfer isn't a shark.",
-    "The quality of your training data directly affects how well your AI model will perform. Clear, well-labeled examples help the model learn accurately.",
-    "When selecting training data, focus on images that represent what the model will encounter in real-world situations."
+    "In order to find your friends and family, I need to understand what a shark looks like. Can you help me pick some examples?",
+    "Clear, well-labeled examples helps me learn accurately.",
+    "When selecting examples, focus on images that represent what the I will encounter in the ocean!"
   ];
   
   // State to track the current message index
@@ -92,7 +92,7 @@ export default function Page6() {
           <View style={styles.sharkPosition}>
             <SharkWrapper>
               <View style={styles.gogglesContainer}>
-                <DumbShark />
+                <Goggles />
               </View>
             </SharkWrapper>
           </View>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     left: -0, // Adjust this value to move goggles left/right
     transform: [
       { scaleX: 1 }, // This flips the goggles horizontally
-      { scale: 1.2 }  // This makes the goggles 70% of their original size
+      { scale: 0.7 }  // This makes the goggles 70% of their original size
     ],
   },
   speechBubbleContainer: {

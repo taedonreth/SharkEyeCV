@@ -136,7 +136,7 @@ export default function Page16() {
         <Link href="/page15" asChild>
           <BackButton isNavigation={true} />
         </Link>
-        <Link href="/page17" asChild>
+        <Link href="/review" asChild>
           <ContinueButton isNavigation={true} />
         </Link>
       </View>
