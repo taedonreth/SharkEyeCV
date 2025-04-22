@@ -59,7 +59,7 @@ export default function Page17() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/page16" asChild>
+        <Link href="/page3" asChild>
           <BackButton isNavigation={true} />
         </Link>
       </View>

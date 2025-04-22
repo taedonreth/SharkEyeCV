@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Animated, Pressable, Text } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
+import Goggles  from '../components/goggles';
 import { ThemedText } from '../components/ThemedText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
@@ -35,6 +36,9 @@ export default function Page7() {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [yesButtonHovered, setYesButtonHovered] = useState(false);
   const [noButtonHovered, setNoButtonHovered] = useState(false);
+  const [speechBubbleText, setSpeechBubbleText] = useState(
+    "Is this image useful for training me to detect where our shark family is?"
+  );
 
   const getRandomImage = () => {
     const category = Math.random() > 0.5 ? 'good' : 'bad';
@@ -50,11 +54,26 @@ export default function Page7() {
     setCurrentImage(getRandomImage());
   }, []);
 
+  const getFeedbackMessage = (selection, category) => {
+    if (selection === 'good' && category === 'good') {
+      return "Yes! This image shows marine life that we might encounter in the ocean. It will help me recognize similar creatures!";
+    } else if (selection === 'bad' && category === 'good') {
+      return "Actually, this is a good image! It shows marine life that we need to recognize. I need examples like this to learn!";
+    } else if (selection === 'good' && category === 'bad') {
+      return "Hmm, this image won't help. It doesn't show anything from the ocean environment that I need to recognize.";
+    } else {
+      return "Correct! This image isn't useful because it doesn't show any marine life or ocean scenes that I need to identify.";
+    }
+  };
+
   const handleSelection = (selection) => {
     if (feedback.visible || gameCompleted) return;
 
     const isCorrect = (selection === 'good' && currentImage.category === 'good') ||
       (selection === 'bad' && currentImage.category === 'bad');
+
+    const feedbackMessage = getFeedbackMessage(selection, currentImage.category);
+    setSpeechBubbleText(feedbackMessage);
 
     if (isCorrect) {
       const newScore = score + 1;
@@ -67,6 +86,7 @@ export default function Page7() {
           correct: true,
           message: 'Great job! You reached a score of 5! Press Continue to move to the next page!'
         });
+        setSpeechBubbleText("Fantastic work! You've really helped me understand what images to use for training!");
         return;
       }
     }
@@ -79,19 +99,20 @@ export default function Page7() {
 
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 300,
+      duration: 1000,
       useNativeDriver: true
     }).start(() => {
       if (!gameCompleted) {
         setTimeout(() => {
           setCurrentImage(getRandomImage());
           setFeedback({ visible: false, correct: false, message: '' });
+          setSpeechBubbleText("Is this image useful for training our goggles to detect where my shark family is?");
           Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 300,
+            duration: 1000,
             useNativeDriver: true
           }).start();
-        }, 1000);
+        }, 3000);
       }
     });
   };
@@ -103,15 +124,16 @@ export default function Page7() {
         <View style={styles.leftSection}>
           <View style={styles.sharkContainer}>
             <SharkWrapper>
-              <DumbShark />
+              <Goggles />
             </SharkWrapper>
           </View>
         </View>
 
         <View style={styles.speechBubbleContainer}>
-          <SpeechBubble scale={1.4}>
+          <SpeechBubble scale={1.5}>
             <TypewriterText
-              text={"Is this image useful for training our goggles to detect where my shark family is?"}
+              key={speechBubbleText}
+              text={speechBubbleText}
               style={styles.speechText}
               typingSpeed={70}
             />
@@ -211,9 +233,9 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   sharkContainer: {
-    right: 250,
+    right: 150,
     bottom: 40,
-    transform: [{ scale: 1 }],
+    transform: [{ scale: 0.7 }],
   },
   speechBubbleContainer: {
     position: 'absolute',

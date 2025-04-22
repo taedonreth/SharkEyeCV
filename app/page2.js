@@ -195,7 +195,7 @@ export default function Page2() {
           </Link>
         </View>
         <View style={styles.continueButtonContainer}>
-          <Link href="/overview" asChild>
+          <Link href="/page6" asChild>
             <ContinueButton isNavigation={true} />
           </Link>
         </View>

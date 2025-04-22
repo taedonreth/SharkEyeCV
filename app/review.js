@@ -23,7 +23,7 @@ export default function OverviewPage() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.5}>
                 <TypewriterText
-                  text={"Great! With these goggles! \n I will be able to find my family in no time!"}
+                  text={"Lets review how these goggles helped me find my family!"}
                   style={styles.speechText}
                   typingSpeed={100} // Slowed down as discussed
                   />
@@ -48,7 +48,7 @@ export default function OverviewPage() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/page2" asChild>
+        <Link href="/page16" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page3" asChild>

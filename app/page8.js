@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
+import Goggles from '../components/goggles';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
@@ -19,14 +20,14 @@ export default function Page8() {
         <View style={styles.sharkSection}>
           <View style={styles.sharkContainer}>
             <SharkWrapper>
-              <DumbShark />
+              <Goggles />
             </SharkWrapper>
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
           <SpeechBubble scale={2}>
             <TypewriterText
-              text="Now that we have good data, we can train the goggles to recognize sharks!"
+              text="Now that I know what a shark looks like, we should also learn what everything else in the ocean looks like, so I don't get confused! "
               style={styles.speechText}
               typingSpeed={70}
               />
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   sharkContainer: {
     marginTop: 200,
     left: -200,
-    transform: [{ scale: 1.3 }],
+    transform: [{ scale: 0.7 }],
   },
   mainContent: {
     flex: 1,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 30,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
