@@ -1,26 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
-import YesButton from '../components/YesButton';
-import NoButton from '../components/NoButton';
-import Question from '../components/QuestionPage15';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import { ThemedText } from '../components/ThemedText';
 import SharkWrapper from '../components/SharkWrapper';
 import TypewriterText from '../components/TypewriterText';
-import Goggles from '../components/goggles';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Page15() {
-  // State for tracking the game
-  const [sharkSaying, setSharkSaying] = useState('');
-  const [answerCorrect, setAnswerCorrect] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  // Add a textUpdateKey to force TypewriterText to re-render
-  const [textUpdateKey, setTextUpdateKey] = useState(0);
+  // Define messages for the speech bubble
+  const sharkMessages = [
+    "Look at these beautiful underwater scenes!",
+    "Explore the ocean depths with me!",
+    "So many amazing creatures live here!",
+    "The underwater world is full of wonders!"
+  ];
+  
+  // State to track current message index
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+  // Timer ref to track and clear the interval
+  const timerRef = useRef(null);
+  
+  // Flag to track if user manually interacted
+  const [userInteracted, setUserInteracted] = useState(false);
+  
+  // State for navigation
+  const [answerCorrect, setAnswerCorrect] = useState(true);
+  
+  // Background cycling state
+  const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
+  const [nextBackgroundIndex, setNextBackgroundIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [slideDirection, setSlideDirection] = useState('next'); // 'next' or 'prev'
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const backgrounds = [
+    require('../assets/images/page15-game/backgrounds/bg1.png'),
+    require('../assets/images/page15-game/backgrounds/bg2.png'),
+    require('../assets/images/page15-game/backgrounds/bg3.png'),
+    require('../assets/images/page15-game/backgrounds/bg4.png')
+  ];
 
   // Scoreboard state
   const [score, setScore] = useState(0);
@@ -90,7 +113,11 @@ export default function Page15() {
 
   // Start a new round with a new creature and frame
   const startNewRound = () => {
-    if (gameCompleted) return;
+    console.log('Starting new round');
+    if (gameCompleted) {
+      console.log('Game completed, not starting new round');
+      return;
+    }
 
     // Determine which creatures haven't been found yet
     const unfoundCreatures = seaCreatures.filter(creature =>
@@ -226,15 +253,121 @@ export default function Page15() {
     });
   };
 
-  // Initialize the game
+  // Setup and clear interval on component mount/unmount
   useEffect(() => {
-    startNewRound();
-  }, []);
+    // Start the timer for auto-advancing messages
+    startAutoAdvanceTimer();
+    
+    // Cleanup function to clear the timer when component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this runs once on mount
+  
+  // Reset the timer whenever the message changes due to user interaction
+  useEffect(() => {
+    // If user manually interacted, restart the timer
+    if (userInteracted) {
+      startAutoAdvanceTimer();
+      setUserInteracted(false); // Reset the flag
+    }
+  }, [currentMessageIndex]);
+  
+  // Function to start the auto-advance timer
+  const startAutoAdvanceTimer = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Set new timer - messages advance every 6.5 seconds
+    timerRef.current = setInterval(() => {
+      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % sharkMessages.length);
+    }, 6500);
+  };
+  
+  // Function to handle speech bubble click
+  const handleSpeechBubbleClick = () => {
+    // Move to the next message in the array, or loop back to the first message
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % sharkMessages.length);
+    
+    // Mark as user interaction
+    setUserInteracted(true);
+    
+    // Reset the timer when user clicks
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    startAutoAdvanceTimer();
+  };
+  
+  // Function to cycle to the next background with sliding animation
+  const nextBackground = () => {
+    if (isAnimating) return; // Prevent multiple animations
+    setIsAnimating(true);
+    setSlideDirection('next');
+    
+    // Calculate the next background index
+    const nextIndex = (currentBackgroundIndex + 1) % backgrounds.length;
+    setNextBackgroundIndex(nextIndex);
+    
+    // Reset animation value
+    slideAnim.setValue(0);
+    
+    // Slide to the left (negative value)
+    Animated.timing(slideAnim, {
+      toValue: -600, // Full width of the container
+      duration: 400,
+      useNativeDriver: true,
+    }).start(() => {
+      // Update current index to the next one
+      setCurrentBackgroundIndex(nextIndex);
+      // Reset animation value
+      slideAnim.setValue(0);
+      setIsAnimating(false);
+    });
+  };
+  
+  // Function to cycle to the previous background with sliding animation
+  const prevBackground = () => {
+    if (isAnimating) return; // Prevent multiple animations
+    setIsAnimating(true);
+    setSlideDirection('prev');
+    
+    // Calculate the previous background index
+    const prevIndex = currentBackgroundIndex === 0 ? backgrounds.length - 1 : currentBackgroundIndex - 1;
+    setNextBackgroundIndex(prevIndex);
+    
+    // Reset animation value
+    slideAnim.setValue(0);
+    
+    // Slide to the right (positive value)
+    Animated.timing(slideAnim, {
+      toValue: 600, // Full width of the container
+      duration: 400,
+      useNativeDriver: true,
+    }).start(() => {
+      // Update current index to the previous one
+      setCurrentBackgroundIndex(prevIndex);
+      // Reset animation value
+      slideAnim.setValue(0);
+      setIsAnimating(false);
+    });
+  };
 
   // Process the answer
   const processAnswer = (isYes) => {
+    console.log('Processing answer:', isYes);
+    console.log('Current creature:', currentCreature);
+    console.log('Shark saying:', sharkSaying);
+    
     // Prevent multiple rapid clicks or if game is completed
-    if (buttonDisabled || gameCompleted) return;
+    if (buttonDisabled || gameCompleted) {
+      console.log('Button disabled or game completed, returning');
+      return;
+    }
     setButtonDisabled(true);
 
     // Increment total attempts
@@ -330,114 +463,109 @@ export default function Page15() {
     <View style={styles.container}>
       {/* Main scene content */}
       <View style={styles.mainContent}>
-        <View style={styles.contentRow}>
-          {/* Left side container for Shark and Speech Bubble */}
-          <View style={styles.leftContainer}>
-            {/* Speech bubble positioned above the shark */}
-            <View style={styles.speechBubbleContainer}>
-              <SpeechBubble style={styles.speechBubble}>
-                {gameCompleted
-                  ? <TypewriterText
-                    text={"Great job! Let's continue!"}
-                    style={styles.bubbleText}
-                    typingSpeed={40}
-                    key={`complete-${textUpdateKey}`}
-                  />
-                  : <TypewriterText
-                    text={`Hmmm..\nI see a ${sharkSaying}!`}
-                    style={styles.bubbleText}
-                    typingSpeed={250}
-                    key={`saying-${textUpdateKey}`}
-                  />
-                }
-              </SpeechBubble>
-            </View>
-
-            {/* Shark below the speech bubble */}
-            <View style={styles.sharkContainer}>
-              <SharkWrapper>
-                <View style={styles.gogglesContainer}>
-                  <Goggles />
-                </View>
-              </SharkWrapper>
-            </View>
-          </View>
-
-          {/* Right side container for Image and Question */}
-          <View style={styles.rightContainer}>
-            {/* Scoreboard positioned directly on top of the image */}
-            <View style={styles.scoreboardContainer}>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Score: {score}</ThemedText>
-              </View>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Attempts: {totalAttempts}/{maxAttempts}</ThemedText>
-              </View>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</ThemedText>
-              </View>
-            </View>
-
-            {/* Image container with frame */}
-            <View style={styles.backdropContainer}>
-              <View style={styles.imageContainer}>
+        {/* Background image container at the bottom layer */}
+        <View style={styles.backdropContainer}>
+          <View style={styles.imageContainer}>
+            {/* Container for both current and next images */}
+            <View style={styles.slidingContainer}>
+              {/* Current background */}
+              <Animated.View 
+                style={[styles.animatedContainer, {
+                  transform: [{ translateX: slideAnim }]
+                }]}
+              >
                 <Image
-                  source={require('../assets/images/page15-game/image1.png')}
+                  source={backgrounds[currentBackgroundIndex]}
                   style={styles.backgroundImage}
                   resizeMode="contain"
                 />
-
-                {/* Selection Frame */}
-                <View
-                  style={[
-                    styles.frame,
-                    {
-                      left: framePosition.x,
-                      top: framePosition.y,
-                      width: frameSize.width,
-                      height: frameSize.height
-                    }
-                  ]}
-                />
-              </View>
-
-              {/* Feedback overlay */}
-              {feedback.visible && (
-                <View style={[
-                  styles.feedbackOverlay,
-                  feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
-                  gameCompleted ? styles.completionOverlay : null
-                ]}>
-                  <ThemedText style={[
-                    styles.feedbackText,
-                    gameCompleted ? styles.completionText : null
-                  ]}>
-                    {feedback.message}
-                  </ThemedText>
-                </View>
+              </Animated.View>
+              
+              {/* Next/Previous background (positioned based on slide direction) */}
+              {isAnimating && (
+                <Animated.View 
+                  style={[styles.animatedContainer, styles.nextImageContainer, {
+                    transform: [{ 
+                      translateX: slideAnim.interpolate({
+                        inputRange: [-600, 0, 600],
+                        outputRange: [0, slideDirection === 'next' ? 600 : -600, 0]
+                      }) 
+                    }]
+                  }]}
+                >
+                  <Image
+                    source={backgrounds[nextBackgroundIndex]}
+                    style={styles.backgroundImage}
+                    resizeMode="contain"
+                  />
+                </Animated.View>
               )}
             </View>
-
-            <View style={styles.questionContainer}>
-              <Question style={styles.question} />
-            </View>
+            
+            {/* Background navigation buttons */}
+            <TouchableOpacity 
+              style={[styles.backgroundNavButton, styles.leftNavButton]}
+              onPress={prevBackground}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="chevron-back" size={20} color="#ffffff" />
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.backgroundNavButton, styles.rightNavButton]}
+              onPress={nextBackground}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="chevron-forward" size={20} color="#ffffff" />
+            </TouchableOpacity>
           </View>
+
+          {/* Selection Frame - removed */}
+
+          {/* Feedback overlay */}
+          {feedback.visible && (
+            <View style={[
+              styles.feedbackOverlay,
+              feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
+              gameCompleted ? styles.completionOverlay : null
+            ]}>
+              <ThemedText style={[
+                styles.feedbackText,
+                gameCompleted ? styles.completionText : null
+              ]}>
+                {feedback.message}
+              </ThemedText>
+            </View>
+          )}
         </View>
 
-        {/* Bottom section: Yes and No buttons */}
-        <View style={styles.buttonsRow}>
-          <YesButton onPress={() => processAnswer(true)} />
-          <NoButton onPress={() => processAnswer(false)} />
-        </View>
+        {/* Speech bubble positioned above the background */}
+        <TouchableOpacity 
+          style={styles.speechBubbleContainer}
+          onPress={handleSpeechBubbleClick}
+          activeOpacity={0.8}
+        >
+          <SpeechBubble scale={1.5}>
+            <TypewriterText
+              key={currentMessageIndex}
+              text={sharkMessages[currentMessageIndex]}
+              style={styles.speechText}
+              typingSpeed={70}
+            />
+          </SpeechBubble>
+        </TouchableOpacity>
+
       </View>
+
+      {/* Bottom section: Buttons removed */}
 
       {/* Footer navigation */}
       <View style={styles.footerContainer}>
-        <Link href="/page13" asChild>
+        <Link href="/page14" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page16" asChild>
-          <ContinueButton isNavigation={true} disabled={!gameCompleted && !answerCorrect} />
+          <ContinueButton isNavigation={true} disabled={!answerCorrect} />
         </Link>
       </View>
     </View>
@@ -450,10 +578,12 @@ export default function Page15() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    pointerEvents: 'box-none', // Allow touch events to pass through to children
   },
   mainContent: {
     flex: 1,
     justifyContent: 'center',
+    pointerEvents: 'box-none', // Allow touch events to pass through to children
   },
   contentRow: {
     flexDirection: 'row',
@@ -473,33 +603,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     position: 'relative',
   },
-  scoreboardContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#4A4A4A',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    width: 600,
-    justifyContent: 'space-between',
-    position: 'absolute',
-    right: 162,
-    top: 10,
-    zIndex: 10,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  scoreItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  scoreLabel: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  // Scoreboard styles removed
   sharkContainer: {
     zIndex: 1,
     marginLeft: -340,
@@ -507,55 +611,70 @@ const styles = StyleSheet.create({
     top: 160,
     transform: [{ scale: 0.8 }],
   },
-  gogglesContainer: {
-    position: 'absolute',
-    zIndex: 3,
-    top: -200,  // Adjust this value to move goggles up/down
-    left: -350, // Adjust this value to move goggles left/right
-    transform: [
-      { scaleX: -1 }, // This flips the goggles horizontally
-      { scale: 0.7 }  // This makes the goggles 70% of their original size
-    ],
-  },
+  /* goggles removed */
   speechBubbleContainer: {
     position: 'absolute',
-    left: 350,
-    bottom: -100,
-    zIndex: 2,
-    transform: [{ scale: 1.2 }],
+    left: 10,
+    bottom: 30,
+    zIndex: 150,
+    transform: [{ scale: .82 }],
+    width: 250,
   },
-  speechBubble: {
-    width: 350,
-    padding: 20,
-  },
-  bubbleText: {
-    fontSize: 25,
-    fontWeight: 'bold',
+  speechText: {
+    fontSize: 36,
     textAlign: 'center',
     color: 'black',
-    lineHeight: 40,
+    lineHeight: 44,
+    fontWeight: '500',
   },
   imageContainer: {
     position: 'relative',
     width: 600,
     height: 403.5,
     overflow: 'hidden',
-    borderWidth: 5,
-    borderColor: '#000',
-    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: '#1a9999',
+    borderRadius: 0,
+  },
+  backgroundNavButton: {
+    position: 'absolute',
+    zIndex: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '50%',
+    marginTop: -15,
+  },
+  leftNavButton: {
+    left: 10,
+  },
+  rightNavButton: {
+    right: 10,
+  },
+  slidingContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  animatedContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  nextImageContainer: {
+    zIndex: -1,
   },
   backgroundImage: {
     width: '100%',
     height: '100%',
   },
-  // Frame style for highlighting creatures
-  frame: {
-    position: 'absolute',
-    borderWidth: 4,
-    borderColor: '#ffcc00',
-    backgroundColor: 'rgba(255, 204, 0, 0.2)',
-    zIndex: 5,
-  },
+  // Frame style removed
   feedbackOverlay: {
     position: 'absolute',
     top: 0,
@@ -583,26 +702,14 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
     textAlign: 'center',
   },
-  questionContainer: {
-    position: 'absolute',
-    top: 450,
-    right: 400,
-    zIndex: 3,
-    transform: [{ scale: 0.8 }],
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 20,
-    top: -27,
-    right: -450,
-    gap: 40,
-    transform: [{ scale: 0.8 }]
-  },
+  /* question container removed */
+  /* buttons row removed */
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
+    zIndex: 10, // Lower z-index than buttons
+    position: 'relative'
   },
   completionOverlay: {
     backgroundColor: 'rgba(0, 100, 180, 0.7)',
@@ -613,9 +720,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   backdropContainer: {
-    top: 45,
-    right: 100,
+    position: 'absolute',
+    top: 90,
+    right: -900,
     marginBottom: 20,
-    position: 'relative',
+    transform: [{ scaleX: 2.5 }, { scaleY: 1.63 },{scale: .95}],
+    width: '100%',
+    zIndex: 1,
   },
 });
