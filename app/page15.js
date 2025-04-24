@@ -721,10 +721,10 @@ const styles = StyleSheet.create({
   },
   backdropContainer: {
     position: 'absolute',
-    top: 110,
-    right: -1090,
+    top: 90,
+    right: -900,
     marginBottom: 20,
-    transform: [{ scaleX: 2.5 }, { scaleY: 1.63 }],
+    transform: [{ scaleX: 2.5 }, { scaleY: 1.63 },{scale: .95}],
     width: '100%',
     zIndex: 1,
   },
