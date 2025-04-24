@@ -205,7 +205,7 @@ export default function Page2() {
 
   return (
     <BasePage
-      pageNumber={1.5}
+      pageNumber={2}
       title={title}
       description={description}
     />
