@@ -1,5 +1,12 @@
-import React from 'react';
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  Animated,
+  Easing,
+} from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
@@ -7,23 +14,62 @@ import TypewriterText from '../components/TypewriterText';
 import { Link, useRouter } from 'expo-router';
 import BackButton from '../components/BackButton';
 import SharkWrapper from '../components/SharkWrapper';
+import GoggleShark from '../components/GoggleShark';
+import Goggles from '../components/goggles'; // Component, not image
 
 export default function Page17() {
-  const title = ' ';
   const router = useRouter();
 
-  // Function to handle navigation to the home page
+  const [playAgainTriggered, setPlayAgainTriggered] = useState(false);
+  const fallAnim = useRef(new Animated.Value(0)).current;
+  const swayAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (playAgainTriggered) {
+      // Fall down animation
+      Animated.timing(fallAnim, {
+        toValue: 600,
+        duration: 2500,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad),
+      }).start(() => {
+        router.replace('/');
+      });
+
+      // Sway left and right repeatedly
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(swayAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+            easing: Easing.inOut(Easing.sin),
+          }),
+          Animated.timing(swayAnim, {
+            toValue: -1,
+            duration: 1000,
+            useNativeDriver: true,
+            easing: Easing.inOut(Easing.sin),
+          }),
+        ])
+      ).start();
+    }
+  }, [playAgainTriggered]);
+
   const handlePlayAgain = () => {
-    router.replace('/');
+    setPlayAgainTriggered(true);
   };
+
+  const swayInterpolation = swayAnim.interpolate({
+    inputRange: [-1, 1],
+    outputRange: [-200, 200], // Dramatic sway
+  });
 
   const description = (
     <View style={styles.container}>
       <View style={styles.mainContent}>
-        {/* Left side content */}
         <View style={styles.leftContent}>
           <View style={styles.sharkSection}>
-            {/* Speech bubble positioned above the shark */}
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={2}>
                 <TypewriterText
@@ -34,22 +80,39 @@ export default function Page17() {
               </SpeechBubble>
             </View>
 
-            {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <DumbShark />
+                {playAgainTriggered ? <DumbShark /> : <GoggleShark />}
               </SharkWrapper>
             </View>
+
+            {/* Falling goggles with sway and small size */}
+            {playAgainTriggered && (
+              <Animated.View
+                style={[
+                  styles.goggles,
+                  {
+                    transform: [
+                      { translateY: fallAnim },
+                      { translateX: swayInterpolation },
+                      { scale: 0.4 }, // smaller goggles
+                    ],
+                  },
+                ]}
+              >
+                <Goggles />
+              </Animated.View>
+            )}
           </View>
         </View>
 
-        {/* Right side button */}
+        {/* Right side Play Again button */}
         <View style={styles.rightContent}>
           <Pressable
             onPress={handlePlayAgain}
             style={({ pressed }) => [
               styles.playAgainButton,
-              pressed && styles.playAgainButtonPressed
+              pressed && styles.playAgainButtonPressed,
             ]}
           >
             <Text style={styles.playAgainText}>PLAY AGAIN</Text>
@@ -57,7 +120,6 @@ export default function Page17() {
         </View>
       </View>
 
-      {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
         <Link href="/page16" asChild>
           <BackButton isNavigation={true} />
@@ -75,19 +137,19 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    flexDirection: 'row', // Horizontal layout
+    flexDirection: 'row',
     alignItems: 'center',
   },
   leftContent: {
-    flex: 3, // Takes up more space
+    flex: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
   rightContent: {
-    flex: 1, // Takes up less space
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingRight: 40, // Add some padding from the right edge
+    paddingRight: 40,
   },
   sharkSection: {
     position: 'relative',
@@ -115,6 +177,12 @@ const styles = StyleSheet.create({
     right: 200,
     top: 100,
   },
+  goggles: {
+    position: 'absolute',
+    top: 100,
+    right: 250,
+    zIndex: 3,
+  },
   playAgainButton: {
     backgroundColor: '#4CC0B9',
     paddingVertical: 50,
@@ -130,10 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 200,
-    cursor: 'pointer',
     transform: [{ scale: 1.5 }],
-    transition: 'transform 0.2s',
-    right: 50,
   },
   playAgainButtonPressed: {
     opacity: 0.8,
