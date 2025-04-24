@@ -7,7 +7,7 @@ const SeaCreaturesGame = () => {
   const [gameComplete, setGameComplete] = useState(false);
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
-  const [maxAttempts, setMaxAttempts] = useState(8);
+  const [maxAttempts, setMaxAttempts] = useState(6); 
   const [showSubmitButton, setShowSubmitButton] = useState(false);
 
   // Debug mode - Set to true to show item boundaries (no toggle button)
@@ -79,6 +79,8 @@ const SeaCreaturesGame = () => {
   // Track creatures that have already been prompted
   const [promptedCreatures, setPromptedCreatures] = useState([]);
 
+
+
   // Hide feedback after a set duration
   useEffect(() => {
     let feedbackTimer = null;
@@ -86,7 +88,7 @@ const SeaCreaturesGame = () => {
     if (feedbackState.visible) {
       feedbackTimer = setTimeout(() => {
         setFeedbackState(prev => ({ ...prev, visible: false }));
-      }, 3000);
+      }, 3000); // Increased from 3000 to 5000 ms
     }
 
     return () => {
@@ -257,16 +259,16 @@ const SeaCreaturesGame = () => {
     },
     completeScreen: {
       position: 'absolute',
-      top: -100,
+      top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(173, 216, 230, 1)',
+      backgroundColor: 'rgba(0, 100, 150, 0.9)',
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 70,
       width: '100%',
-      height: '700%',
+      height: '100%',
       padding: 20,
     },
     completeText: {
@@ -301,10 +303,13 @@ const SeaCreaturesGame = () => {
       fontWeight: 'bold',
     },
     foundItemHighlight: {
-      borderColor: 'rgba(0, 255, 0, 0.5)',
-      backgroundColor: 'rgba(0, 255, 0, 0.1)',
+      position: 'absolute',
+      borderWidth: 3,
+      borderColor: 'rgba(0, 255, 0, 0.8)',
+      backgroundColor: 'rgba(0, 255, 0, 0.2)',
       zIndex: 2,
     },
+
   });
 
 
@@ -472,8 +477,8 @@ const SeaCreaturesGame = () => {
       setFramePosition({ x: left, y: top });
       setFrameSize({ width, height });
 
-      // Add a submit button if the selection is valid
-      if (width > 10 && height > 10) {
+      // Add a submit button if the selection is valid (more lenient minimum size)
+      if (width > 5 && height > 5) { // Reduced from 10 to 5
         // Show a submit button instead of auto-checking
         setShowSubmitButton(true);
       }
@@ -548,51 +553,61 @@ const SeaCreaturesGame = () => {
       frameOverlapPercentage = (overlapArea / frameArea) * 100;
     }
 
-    // Calculate score - now accounting for both coverage and precision
+    // Calculate score - now with more lenient thresholds
     let pointsEarned = 0;
     let message = '';
+    let foundStatus = false;
 
-    // Consider captures with at least 90% coverage for good/great/perfect ratings
-    const goodCoverage = creatureOverlapPercentage >= 85;
+    // More lenient coverage thresholds
+    const goodCoverage = creatureOverlapPercentage >= 70; // Reduced from 85% to 70%
 
     if (goodCoverage) {
       // Good coverage - differentiate based on precision
-      if (frameOverlapPercentage > 85) {
-        pointsEarned = 150;
-        message = 'Perfect capture! Your box fits the creature perfectly! +150';
-        // Mark this creature as found
-        setFoundCreatures(prev => [...prev, currentCreature.id]);
-      } else if (frameOverlapPercentage > 70) {
-        pointsEarned = 100;
-        message = 'Great capture! Box is a bit larger than needed. +100';
-        // Mark this creature as found
-        setFoundCreatures(prev => [...prev, currentCreature.id]);
-      } else if (frameOverlapPercentage > 50) {
-        pointsEarned = 75;
-        message = 'Good capture! Box includes unnecessary space. +75';
-        // Mark this creature as found
-        setFoundCreatures(prev => [...prev, currentCreature.id]);
+      if (frameOverlapPercentage > 75) { // Reduced from 85% to 75%
+        pointsEarned = 200; // Increased from 150 to 200
+        message = 'Perfect capture! Your box fits the creature perfectly! +200';
+        foundStatus = true;
+      } else if (frameOverlapPercentage > 60) { // Reduced from 70% to 60%
+        pointsEarned = 150; // Increased from 100 to 150
+        message = 'Great capture! Box is a bit larger than needed. +150';
+        foundStatus = true;
+      } else if (frameOverlapPercentage > 40) { // Reduced from 50% to 40%
+        pointsEarned = 100; // Increased from 75 to 100
+        message = 'Good capture! Box includes unnecessary space. +100';
+        foundStatus = true;
       } else {
-        pointsEarned = 25;
-        message = 'Your selection is too large! Try to be more precise. +25';
-        // Still mark as found
-        setFoundCreatures(prev => [...prev, currentCreature.id]);
+        pointsEarned = 50; // Increased from 25 to 50
+        message = 'Your selection is a bit large, but you found it! +50';
+        foundStatus = true;
       }
-    } else if (creatureOverlapPercentage > 50) {
+    } else if (creatureOverlapPercentage > 40) { // Reduced from 50% to 40%
       // Partial capture
-      pointsEarned = 10;
-      message = `You only captured ${Math.round(creatureOverlapPercentage)}% of the creature. Try to include more of it! +10`;
+      pointsEarned = 25; // Increased from 10 to 25
+      message = `You captured ${Math.round(creatureOverlapPercentage)}% of the creature. Try to include more of it! +25`;
+      // Mark as found for partial captures too
+      foundStatus = true;
     } else if (overlap) {
       // Poor overlap
-      pointsEarned = 5;
-      message = 'Poor selection! Try to include more of the creature. +5';
+      pointsEarned = 10; // Increased from 5 to 10
+      message = 'You found part of the creature! Keep trying for a better capture. +10';
     } else {
-      message = 'Missed the creature completely! +0';
+      message = 'Missed the creature completely! Try again. +0';
     }
     console.log('Overlap percentages - Creature:', creatureOverlapPercentage, 'Frame:', frameOverlapPercentage);
 
+    // If found, add to foundCreatures
+    if (foundStatus) {
+      setFoundCreatures(prev => {
+        if (!prev.includes(currentCreature.id)) {
+          return [...prev, currentCreature.id];
+        }
+        return prev;
+      });
+    }
 
     setScore(prev => prev + pointsEarned);
+    
+    // Update feedback state
     setFeedbackState({ message, visible: true });
 
     // Reset frame size
@@ -611,6 +626,7 @@ const SeaCreaturesGame = () => {
     setAttempts(0);
     setFoundCreatures([]);
     setPromptedCreatures([]);
+
   };
 
   // Get current creature prompt
@@ -646,7 +662,10 @@ const SeaCreaturesGame = () => {
             After selecting, click the "Capture!" button to submit.{'\n'}
             You can readjust your selection before capturing.{'\n\n'}
             Better captures earn more points!{'\n'}
-            Perfect capture = 150 points
+            Perfect capture = 200 points{'\n'}
+            Great capture = 150 points{'\n'}
+            Good capture = 100 points{'\n'}
+            Even partial captures count!
           </Text>
           <TouchableOpacity style={styles.startButton} onPress={startGame}>
             <Text style={styles.startButtonText}>Start Game</Text>
@@ -707,7 +726,7 @@ const SeaCreaturesGame = () => {
                   </View>
                 ))}
 
-                {/* Highlight found creatures */}
+                {/* Highlight found creatures more visibly */}
                 {foundCreatures.map(id => {
                   const creature = seaCreatures.find(c => c.id === id);
                   return creature ? (
@@ -719,9 +738,9 @@ const SeaCreaturesGame = () => {
                         top: creature.position.y,
                         width: creature.size.width,
                         height: creature.size.height,
-                        borderWidth: 2,
-                        borderColor: 'rgba(0, 255, 0, 0.5)',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        borderWidth: 3,
+                        borderColor: 'rgba(0, 255, 0, 0.8)',
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)',
                         zIndex: 2
                       }}
                     />
@@ -747,6 +766,9 @@ const SeaCreaturesGame = () => {
                     <Text style={styles.feedbackText}>{feedbackState.message}</Text>
                   </View>
                 )}
+                
+                {/* Last Capture Result - Persistent display */}
+
               </View>
 
               {/* Current target */}

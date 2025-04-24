@@ -433,7 +433,7 @@ export default function Page15() {
 
       {/* Footer navigation */}
       <View style={styles.footerContainer}>
-        <Link href="/page14" asChild>
+        <Link href="/page13" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page16" asChild>
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bubbleText: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
