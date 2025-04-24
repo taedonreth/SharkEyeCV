@@ -1,249 +1,341 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated } from 'react-native';
 import BasePage from './BasePage';
-import GoodSharkIcon from '../components/GoodSharkIcon';
-import BadSharkIcon from '../components/BadSharkIcon';
-import CorrectButton from '../components/CorrectButton';
-import FalseButton from '../components/FalseButton';
-import DumbShark from '../components/dumbshark';
+import SharkIcon from '../components/SharkIcon'; // Using SharkIcon as requested
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
-import SharkWrapper from '../components/SharkWrapper';
+import SharkFramingGame from '../components/SharkFramingGame';
+import Goggles from '../components/goggles';
 
-// Component layout configuration
-const layoutConfig = {
-  // Container spacing and layout configuration
-  container: {
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
-
-  // Box section layout
-  boxSection: {
-    marginBottom: 0,     // Removed large bottom margin
-    marginTop: 40,       // Added top margin to push content down
-    padding: 10,         // reduced internal padding
-    gap: 15,             // gap between boxes
-    width: '50%',
-    marginLeft: 50,     // control the overall width
-  },
-
-  // Individual box properties
-  goodBox: {
-    flex: 1,             // flex ratio (relative sizing)
-    marginRight: 10,     // right margin
-    width: '35%',        // reduced width percentage
-    scale: 0.75,         // reduced scale factor
-  },
-  badBox: {
-    flex: 1,             // flex ratio (relative sizing)
-    marginLeft: 10,      // left margin
-    width: '35%',        // reduced width percentage
-    scale: 0.75,         // reduced scale factor
-  },
-
-  // Shark section
-  sharkSection: {
-    marginTop: -400,    // Adjusted top margin to be closer to boxes
-    marginLeft: -1000,  // negative margin to adjust position
-  },
-
-  // Text and label customization
-  labelText: {
-    fontSize: 30,        // font size
-    fontWeight: 'bold',  // font weight
-  },
-
-  // Box label positioning
-  boxLabel: {
-    marginTop: 80,       // Add space above the label to push it down
-    paddingVertical: 8,  // Slightly more vertical padding
-    width: '90%',        // Keep the width
-  },
-};
-
-export default function Page9() {
-  // Define an array of messages to cycle through
-  const messages = [
-    "It's your job to show the goggles which objects in the picture to pay attention to!",
-    "You can do this by drawing a box around the object.",
-    "Try it out in the game on the next page!"
+export default function CombinedPage() {
+  // States for the component
+  const [showGame, setShowGame] = useState(false);
+  const [demoStage, setDemoStage] = useState(0);
+  const [gogglesFlipped, setGogglesFlipped] = useState(false);
+  const [showText, setShowText] = useState(true); // New state for controlling speech bubble text visibility
+  
+  // Auto-start the demo when component mounts
+  useEffect(() => {
+    // Short delay before showing the box
+    const timer = setTimeout(() => {
+      handleDemoStage();
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Animation values
+  const zoomAnim = useRef(new Animated.Value(1)).current;
+  const boxOpacity = useRef(new Animated.Value(0)).current;
+  const boxSize = useRef(new Animated.Value(60)).current; // Increased box size from 30 to 60
+  const viewportVisible = useRef(new Animated.Value(1)).current;
+  const boxAreaVisible = useRef(new Animated.Value(0)).current; // New animated value for box area
+  
+  // Box position and clipping area - adjust these to position the box on the fin
+  const boxPositionRight = 50; // The right position of the box
+  const boxPositionTop = 70;   // The top position of the box
+  
+  // Original shark position - we need these to calculate the zoomed view offsets
+  const sharkPositionLeft = 100;
+  const sharkPositionTop = 70;
+  
+  // Messages for each demo stage
+  const demoMessages = [
+    "Let me try to identify the shark...", // Initial message
+    "I can't identify anything with this....", // After box appears
+    "Help me capture the whole creature so I can see better! \n Click to try the game." // Final message
   ];
   
-  // State to track the current message index
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  
-  // Timer ref to track and clear the interval
-  const timerRef = useRef(null);
-  
-  // Flag to track if user manually interacted
-  const [userInteracted, setUserInteracted] = useState(false);
-  
-  // Setup and clear interval on component mount/unmount
-  useEffect(() => {
-    // Start the timer for auto-advancing messages
-    startAutoAdvanceTimer();
-    
-    // Cleanup function to clear the timer when component unmounts
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []); // Empty dependency array means this runs once on mount
-  
-  // Reset the timer whenever the message changes due to user interaction
-  useEffect(() => {
-    // If user manually interacted, restart the timer
-    if (userInteracted) {
-      startAutoAdvanceTimer();
-      setUserInteracted(false); // Reset the flag
-    }
-  }, [currentMessageIndex]);
-  
-  // Function to start the auto-advance timer
-  const startAutoAdvanceTimer = () => {
-    // Clear any existing timer first
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    
-    // Set new timer - messages advance every 3.5 seconds
-    timerRef.current = setInterval(() => {
-      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
-    }, 5500); // 3.5 seconds
+  // Function to toggle goggles orientation
+  const toggleGogglesOrientation = () => {
+    setGogglesFlipped(!gogglesFlipped);
   };
   
-  // Function to handle speech bubble click
-  const handleSpeechBubbleClick = () => {
-    // Move to the next message in the array, or loop back to the first message
-    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    
-    // Mark as user interaction
-    setUserInteracted(true);
-    
-    // Reset the timer when user clicks
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    startAutoAdvanceTimer();
+  // Function to reset animations
+  const resetAnimations = () => {
+    zoomAnim.setValue(1);
+    boxOpacity.setValue(0);
+    boxAreaVisible.setValue(0); // Reset box area visibility
+    boxSize.setValue(60); // Updated box size value to match initial value
+    viewportVisible.setValue(1);
+    setDemoStage(0);
+    setShowText(true); // Make sure text is visible when resetting
   };
-
-  const title = "Capturing the object ";
-
-  const description = (
-    <View style={[styles.container, {
-      paddingHorizontal: layoutConfig.container.paddingHorizontal,
-      paddingVertical: layoutConfig.container.paddingVertical,
-    }]}>
+  
+  // Handle start demo button click - just shows first message
+  const handleStartDemo = () => {
+    resetAnimations();
+    setDemoStage(0);
+  };
+  
+  // Handle starting the game
+  const handleStartGame = () => {
+    setShowGame(true);
+  };
+  
+  // Handle returning from game to demo
+  const handleBackToDemo = () => {
+    setShowGame(false);
+    resetAnimations();
+  };
+  
+  // Function to handle the different stages of the demo
+  const handleDemoStage = () => {
+    // What happens depends on current demo stage
+    switch(demoStage) {
+      case 0:
+        // First stage - Show the targeting box on the fin and zoom in
+        Animated.timing(boxOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: false
+        }).start(() => {
+          // Start zoom animation immediately
+          Animated.parallel([
+            // Zoom in on the targeting box
+            Animated.timing(zoomAnim, {
+              toValue: 8, // Medium zoom level for first stage
+              duration: 1500, // Slower zoom for first transition
+              useNativeDriver: true
+            }),
+            // Slightly fade in the box area
+            Animated.timing(boxAreaVisible, {
+              toValue: 0.5, // Partially visible
+              duration: 800,
+              useNativeDriver: false
+            }),
+            // Slightly fade out the viewport
+            Animated.timing(viewportVisible, {
+              toValue: 0.9, // Still mostly visible
+              duration: 800,
+              useNativeDriver: false
+            })
+          ]).start();
+          
+          // First hide the current text
+          setShowText(false);
+          
+          // Wait a moment before showing new text and advancing stage
+          setTimeout(() => {
+            setDemoStage(1);
+            // Show text after slight delay to ensure smooth transition
+            setTimeout(() => {
+              setShowText(true);
+            }, 300);
+          }, 1000); // 1.5 second delay before showing new text
+        });
+        break;
+        
+      case 1:
+        // Second stage - No additional zoom, just text change
+        // First hide the current text
+        setShowText(false);
+        
+        // Wait a moment before showing new text and advancing stage
+        setTimeout(() => {
+          setDemoStage(2);
+          // Show text after slight delay to ensure smooth transition
+          setTimeout(() => {
+            setShowText(true);
+          }, 300);
+        }, 1000); // 1.5 second delay before showing new text
+        break;
+        
+      case 2:
+        // Final stage - Reset the animation and go to game
+        handleStartGame();
+        break;
+        
+      default:
+        resetAnimations();
+        break;
+    }
+  };
+  
+  // Render the demo view (Page 9)
+  const renderDemoContent = () => (
+    <View style={styles.container}>
       <View style={styles.mainContent}>
-        {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
+        {/* Speech Bubble - Make it clickable to progress through the demo */}
         <TouchableOpacity 
           style={styles.speechBubbleContainer}
-          onPress={handleSpeechBubbleClick}
-          activeOpacity={0.8} // Slight opacity change when pressed
+          onPress={handleDemoStage}
+          activeOpacity={0.8}
         >
           <SpeechBubble scale={1.5}>
-            <TypewriterText
-              key={currentMessageIndex} // Key changes force re-render of component
-              text={messages[currentMessageIndex]}
-              style={styles.speechText}
-              typingSpeed={150}
-            />
+            {showText && (
+              <TypewriterText
+                key={demoStage} // Force re-render when stage changes
+                text={demoMessages[demoStage]}
+                style={styles.speechText}
+                typingSpeed={70}
+              />
+            )}
           </SpeechBubble>
         </TouchableOpacity>
-
-        {/* Box Section with Good and Bad Boxes */}
-        <View style={[styles.boxSection, {
-          marginBottom: layoutConfig.boxSection.marginBottom,
-          marginTop: layoutConfig.boxSection.marginTop,
-          padding: layoutConfig.boxSection.padding,
-          gap: layoutConfig.boxSection.gap,
-          width: layoutConfig.boxSection.width,
-          marginLeft: layoutConfig.boxSection.marginLeft
-        }]}>
-          {/* Good Box */}
-          <View style={[styles.box, {
-            flex: layoutConfig.goodBox.flex,
-            marginRight: layoutConfig.goodBox.marginRight,
-            width: layoutConfig.goodBox.width,
-            transform: [{ scale: layoutConfig.goodBox.scale }]
-          }]}>
-            <View style={styles.iconContainer}>
-              <View style={styles.sharkicon}>
-                <GoodSharkIcon />
-              </View>
-              <View style={styles.correctButton}>
-                <CorrectButton />
-              </View>
-            </View>
-            <View style={[styles.boxLabel, {
-              width: layoutConfig.boxLabel.width,
-              marginTop: layoutConfig.boxLabel.marginTop,
-              paddingVertical: layoutConfig.boxLabel.paddingVertical,
-            }]}>
-              <Text style={[styles.labelText, {
-                fontSize: layoutConfig.labelText.fontSize,
-                fontWeight: layoutConfig.labelText.fontWeight
-              }]}>Good box!</Text>
-            </View>
-          </View>
-
-          {/* Bad Box */}
-          <View style={[styles.box, {
-            flex: layoutConfig.badBox.flex,
-            marginLeft: layoutConfig.badBox.marginLeft,
-            width: layoutConfig.badBox.width,
-            transform: [{ scale: layoutConfig.badBox.scale }]
-          }]}>
-            <View style={styles.iconContainer}>
-              <View style={styles.sharkicon}>
-                <BadSharkIcon />
-              </View>
-              <View style={styles.falseButton}>
-                <FalseButton />
-              </View>
-            </View>
-            <View style={[styles.boxLabel, {
-              width: layoutConfig.boxLabel.width,
-              marginTop: layoutConfig.boxLabel.marginTop,
-              paddingVertical: layoutConfig.boxLabel.paddingVertical,
-            }]}>
-              <Text style={[styles.labelText, {
-                fontSize: layoutConfig.labelText.fontSize,
-                fontWeight: layoutConfig.labelText.fontWeight
-              }]}>Bad box.</Text>
-            </View>
+        
+        {/* Goggles (Positioned above the shark) - no longer clickable */}
+        <View style={styles.gogglesContainer}>
+          <View style={[
+            styles.gogglesWrapper, 
+            { transform: [{ scaleX: -1 }, { scale: 0.8 }] }
+          ]}>
+            <Goggles />
           </View>
         </View>
-
-        {/* Shark Component */}
-        <View style={[styles.sharkSection, {
-          marginTop: layoutConfig.sharkSection.marginTop,
-          marginLeft: layoutConfig.sharkSection.marginLeft,
-        }]}>
-          <SharkWrapper>
-            <DumbShark />
-          </SharkWrapper>
+        
+        {/* Whole Shark Container - will be zoomed and then partially hidden */}
+        <Animated.View
+          style={[
+            styles.viewportContainer,
+            {
+              opacity: viewportVisible, // This will fade out the whole shark but not completely
+              transform: [
+                { scale: zoomAnim }, // This will zoom in
+              ]
+            }
+          ]}
+        >
+          {/* SharkIcon in its own container */}
+          <View style={styles.sharkIconContainer}>
+            <SharkIcon />
+          </View>
+          
+          {/* Small targeting box on the fin that will remain visible */}
+          <Animated.View 
+            style={[
+              styles.targetBox,
+              {
+                opacity: boxOpacity,
+                width: boxSize,
+                height: boxSize,
+                borderColor: '#FF0000',
+                // Position the box on the fin of the shark
+                top: boxPositionTop,
+                right: boxPositionRight,
+                zIndex: 5
+              }
+            ]}
+          />
+        </Animated.View>
+        
+        {/* Box Area Only - This will become visible as shark fades out */}
+        <Animated.View
+          style={[
+            styles.boxAreaContainer,
+            {
+              opacity: boxAreaVisible, // Use the new animated value for box area
+              transform: [
+                { scale: zoomAnim }, // Keep same zoom level as shark
+              ]
+            }
+          ]}
+        >
+          {/* This is a clipped version of the shark that only shows the fin area */}
+          <View style={styles.boxAreaContent}>
+            {/* SharkIcon positioned to show only the fin in the zoomed view */}
+            <View style={[
+              styles.finCloseupContainer,
+              {
+                // Position shark to align exactly with the main shark view
+                left: sharkPositionLeft,
+                top: sharkPositionTop,
+                transform: [
+                  // No additional transform needed - we'll let the container's zoom handle it
+                  // This ensures the shark stays in exactly the same position in both views
+                ]
+              }
+            ]}>
+              <SharkIcon />
+            </View>
+            
+            {/* Keep the targeting box visible in exactly the same position */}
+            <View 
+              style={[
+                styles.targetBox,
+                {
+                  width: boxSize.__getValue(),
+                  height: boxSize.__getValue(),
+                  borderColor: '#FF0000',
+                  position: 'absolute',
+                  top: boxPositionTop,
+                  right: boxPositionRight,
+                  zIndex: 5
+                }
+              ]}
+            />
+          </View>
+        </Animated.View>
+        
+        {/* Action Buttons - Now empty since we removed the Start Demo button */}
+        <View style={styles.buttonContainer}>
+          {/* Button removed */}
         </View>
       </View>
-
-      {/* Footer Navigation */}
-      <View style={styles.footer}>
-        <Link href="/page8" asChild>
-          <BackButton isNavigation={true} />
-        </Link>
-        <Link href="/page10" asChild>
-          <ContinueButton isNavigation={true} />
-        </Link>
+      
+      {/* Footer with Navigation Buttons */}
+      <View style={styles.footerContainer}>
+        <View style={styles.backButtonContainer}>
+          <Link href="/page8" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+        <View style={styles.continueButtonContainer}>
+          <Link href="/page11" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
       </View>
     </View>
   );
 
-  return <BasePage pageNumber={9} title={title} description={description} />;
+  // Render the game view (Page 10)
+  const renderGameContent = () => (
+    <View style={styles.container}>
+      {/* Game Component */}
+      <View style={styles.gameSection}>
+        <SharkFramingGame />
+      </View>
+      
+      {/* Back to Demo Button */}
+      <View style={styles.backToDemoContainer}>
+        <TouchableOpacity
+          style={styles.backToDemoButton}
+          onPress={handleBackToDemo}
+        >
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Footer with Navigation Buttons */}
+      <View style={styles.footerContainer}>
+        <View style={styles.backButtonContainer}>
+          <Link href="/page8" asChild>
+            <BackButton isNavigation={true} />
+          </Link>
+        </View>
+        <View style={styles.continueButtonContainer}>
+          <Link href="/page11" asChild>
+            <ContinueButton isNavigation={true} />
+          </Link>
+        </View>
+      </View>
+    </View>
+  );
+
+  // Determine title based on current view
+  const title = showGame ? "Capturing Game" : "Capturing the object";
+
+  return (
+    <BasePage 
+      pageNumber={showGame ? 10 : 9} 
+      title={title} 
+      description={showGame ? renderGameContent() : renderDemoContent()} 
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -254,69 +346,51 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  boxSection: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  box: {
-    alignItems: 'center',
-  },
-  iconContainer: {
     position: 'relative',
-    marginBottom: -50,
-    height: 400,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sharkicon: {
-    transform: [{ scale: 1.4 }],
-  },
-  correctButton: {
-    position: 'absolute',
-    bottom: -30,
-    right: 0,
-    transform: [{ scale: 0.8 }],
-  },
-  falseButton: {
-    position: 'absolute',
-    bottom: -30,
-    right: 0,
-    transform: [{ scale: 0.8 }],
-  },
-  boxLabel: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 6,
-    padding: 6,
-    alignItems: 'center',
-    width: '90%',
-  },
-  labelText: {
-    color: 'black',
-    textAlign: 'center',
-    fontSize: 12,
-  },
-  sharkSection: {
-    alignItems: 'center',
-    bottom: 70,
-    right: 50,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 25,
-    width: '100%',
   },
   speechBubbleContainer: {
     position: 'absolute',
     left: 250,
-    bottom: 380,
-    zIndex: 2,
+    top: 60,
+    zIndex: 10,
     width: 250,
+  },
+  viewportContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 100,
+  },
+  boxAreaContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 100,
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden', // Ensure content stays within container
+  },
+  boxAreaContent: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    // Make sure the zoomed view is properly centered on the box
+    transform: [
+      { translateX: -180 }, // Adjust to position the fin in center of screen when zoomed
+      { translateY: -100 }  // Adjust to position the fin in center of screen when zoomed
+    ]
+  },
+  finCloseupContainer: {
+    // This positions the shark icon to show only the fin in the zoomed view
+    position: 'absolute',
+    zIndex: 1,
+    // Transform will be applied to position it correctly
+  },
+  sharkIconContainer: {
+    // Add positioning properties here to move the shark
+    position: 'relative',
+    left: 80, // Adjust to move left/right
+    top: 70, // Adjust to move up/down
   },
   speechText: {
     fontSize: 23,
@@ -325,4 +399,101 @@ const styles = StyleSheet.create({
     lineHeight: 44,
     fontWeight: '500',
   },
+  gogglesContainer: {
+    position: 'absolute',
+    top: 180,
+    left: 270,
+    zIndex: 5,
+  },
+  gogglesWrapper: {
+    // This allows us to apply transforms to the goggles
+    width: 200, // Set appropriate width
+    height: 100, // Set appropriate height
+  },
+  targetBox: {
+    position: 'absolute',
+    borderWidth: 2,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    left:90
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 80,
+    alignItems: 'center',
+  },
+  startButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 25,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  gameButton: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 25,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  gameSection: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10
+  },
+  backToDemoContainer: {
+    position: 'absolute',
+    bottom: 80,
+    alignItems: 'center',
+    width: '100%',
+  },
+  backToDemoButton: {
+    backgroundColor: '#FF9800',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 25,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    left:270,
+    top:65
+  },
+  footerContainer: {
+    width: '100%',
+    position: 'relative',
+    height: 80,
+    pointerEvents: 'none',
+  },
+  backButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 25,
+    zIndex: 99,
+    pointerEvents: 'auto',
+  },
+  continueButtonContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 25,
+    zIndex: 99,
+    pointerEvents: 'auto',
+  }
 });
