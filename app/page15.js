@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
@@ -90,7 +90,11 @@ export default function Page15() {
 
   // Start a new round with a new creature and frame
   const startNewRound = () => {
-    if (gameCompleted) return;
+    console.log('Starting new round');
+    if (gameCompleted) {
+      console.log('Game completed, not starting new round');
+      return;
+    }
 
     // Determine which creatures haven't been found yet
     const unfoundCreatures = seaCreatures.filter(creature =>
@@ -228,13 +232,24 @@ export default function Page15() {
 
   // Initialize the game
   useEffect(() => {
-    startNewRound();
+    console.log('Initializing game...');
+    // Set a small delay to ensure all state is properly initialized
+    setTimeout(() => {
+      startNewRound();
+    }, 100);
   }, []);
 
   // Process the answer
   const processAnswer = (isYes) => {
+    console.log('Processing answer:', isYes);
+    console.log('Current creature:', currentCreature);
+    console.log('Shark saying:', sharkSaying);
+    
     // Prevent multiple rapid clicks or if game is completed
-    if (buttonDisabled || gameCompleted) return;
+    if (buttonDisabled || gameCompleted) {
+      console.log('Button disabled or game completed, returning');
+      return;
+    }
     setButtonDisabled(true);
 
     // Increment total attempts
@@ -330,114 +345,109 @@ export default function Page15() {
     <View style={styles.container}>
       {/* Main scene content */}
       <View style={styles.mainContent}>
-        <View style={styles.contentRow}>
-          {/* Left side container for Shark and Speech Bubble */}
-          <View style={styles.leftContainer}>
-            {/* Speech bubble positioned above the shark */}
-            <View style={styles.speechBubbleContainer}>
-              <SpeechBubble style={styles.speechBubble}>
-                {gameCompleted
-                  ? <TypewriterText
-                    text={"Great job! Let's continue!"}
-                    style={styles.bubbleText}
-                    typingSpeed={40}
-                    key={`complete-${textUpdateKey}`}
-                  />
-                  : <TypewriterText
-                    text={`Hmmm..\nI see a ${sharkSaying}!`}
-                    style={styles.bubbleText}
-                    typingSpeed={250}
-                    key={`saying-${textUpdateKey}`}
-                  />
-                }
-              </SpeechBubble>
-            </View>
-
-            {/* Shark below the speech bubble */}
-            <View style={styles.sharkContainer}>
-              <SharkWrapper>
-                <View style={styles.gogglesContainer}>
-                  <Goggles />
-                </View>
-              </SharkWrapper>
-            </View>
+        {/* Background image container at the bottom layer */}
+        <View style={styles.backdropContainer}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../assets/images/page15-game/background2.png')}
+              style={styles.backgroundImage}
+              resizeMode="contain"
+            />
           </View>
 
-          {/* Right side container for Image and Question */}
-          <View style={styles.rightContainer}>
-            {/* Scoreboard positioned directly on top of the image */}
-            <View style={styles.scoreboardContainer}>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Score: {score}</ThemedText>
-              </View>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Attempts: {totalAttempts}/{maxAttempts}</ThemedText>
-              </View>
-              <View style={styles.scoreItem}>
-                <ThemedText style={styles.scoreLabel}>Found: {foundCreatures.length}/{seaCreatures.length}</ThemedText>
-              </View>
+          {/* Selection Frame */}
+          <View
+            style={[
+              styles.frame,
+              {
+                left: framePosition.x,
+                top: framePosition.y,
+                width: frameSize.width,
+                height: frameSize.height
+              }
+            ]}
+          />
+
+          {/* Feedback overlay */}
+          {feedback.visible && (
+            <View style={[
+              styles.feedbackOverlay,
+              feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
+              gameCompleted ? styles.completionOverlay : null
+            ]}>
+              <ThemedText style={[
+                styles.feedbackText,
+                gameCompleted ? styles.completionText : null
+              ]}>
+                {feedback.message}
+              </ThemedText>
             </View>
-
-            {/* Image container with frame */}
-            <View style={styles.backdropContainer}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={require('../assets/images/page15-game/image1.png')}
-                  style={styles.backgroundImage}
-                  resizeMode="contain"
-                />
-
-                {/* Selection Frame */}
-                <View
-                  style={[
-                    styles.frame,
-                    {
-                      left: framePosition.x,
-                      top: framePosition.y,
-                      width: frameSize.width,
-                      height: frameSize.height
-                    }
-                  ]}
-                />
-              </View>
-
-              {/* Feedback overlay */}
-              {feedback.visible && (
-                <View style={[
-                  styles.feedbackOverlay,
-                  feedback.correct ? styles.correctOverlay : styles.incorrectOverlay,
-                  gameCompleted ? styles.completionOverlay : null
-                ]}>
-                  <ThemedText style={[
-                    styles.feedbackText,
-                    gameCompleted ? styles.completionText : null
-                  ]}>
-                    {feedback.message}
-                  </ThemedText>
-                </View>
-              )}
-            </View>
-
-            <View style={styles.questionContainer}>
-              <Question style={styles.question} />
-            </View>
-          </View>
+          )}
         </View>
 
-        {/* Bottom section: Yes and No buttons */}
-        <View style={styles.buttonsRow}>
-          <YesButton onPress={() => processAnswer(true)} />
-          <NoButton onPress={() => processAnswer(false)} />
+        {/* Question container - above the background */}
+        <View style={styles.questionContainer}>
+          <Question style={styles.question} />
         </View>
+
+        {/* Speech bubble positioned above the background */}
+        <View style={styles.speechBubbleContainer}>
+          <SpeechBubble style={styles.speechBubble}>
+            {gameCompleted
+              ? <TypewriterText
+                text={"Great job! Let's continue!"}
+                style={styles.bubbleText}
+                typingSpeed={40}
+                key={`complete-${textUpdateKey}`}
+              />
+              : <TypewriterText
+                text={`Hmmm..\nI see a ${sharkSaying}!`}
+                style={styles.bubbleText}
+                typingSpeed={250}
+                key={`saying-${textUpdateKey}`}
+              />
+            }
+          </SpeechBubble>
+        </View>
+
+        {/* Goggles positioned above the background */}
+        <View style={styles.gogglesContainer}>
+          <Goggles />
+        </View>
+
+      </View>
+
+      {/* Bottom section: Yes and No buttons - moved outside other containers for better touch handling */}
+      <View style={styles.buttonsRow} pointerEvents="auto">
+        <TouchableOpacity 
+          onPress={() => {
+            console.log('Yes button pressed');
+            processAnswer(true);
+          }} 
+          activeOpacity={0.7} 
+          hitSlop={{top: 20, bottom: 85, left: 20, right: 20}}
+        >
+          <YesButton />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          onPress={() => {
+            console.log('No button pressed');
+            processAnswer(false);
+          }} 
+          activeOpacity={0.7} 
+          hitSlop={{top: 20, bottom: 85, left: 20, right: 20}}
+        >
+          <NoButton />
+        </TouchableOpacity>
       </View>
 
       {/* Footer navigation */}
       <View style={styles.footerContainer}>
-        <Link href="/page13" asChild>
+        <Link href="/page14" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page16" asChild>
-          <ContinueButton isNavigation={true} disabled={!gameCompleted && !answerCorrect} />
+          <ContinueButton isNavigation={true} disabled={!answerCorrect} />
         </Link>
       </View>
     </View>
@@ -450,10 +460,12 @@ export default function Page15() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    pointerEvents: 'box-none', // Allow touch events to pass through to children
   },
   mainContent: {
     flex: 1,
     justifyContent: 'center',
+    pointerEvents: 'box-none', // Allow touch events to pass through to children
   },
   contentRow: {
     flexDirection: 'row',
@@ -473,33 +485,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     position: 'relative',
   },
-  scoreboardContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#4A4A4A',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    width: 600,
-    justifyContent: 'space-between',
-    position: 'absolute',
-    right: 162,
-    top: 10,
-    zIndex: 10,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  scoreItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  scoreLabel: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  // Scoreboard styles removed
   sharkContainer: {
     zIndex: 1,
     marginLeft: -340,
@@ -509,27 +495,24 @@ const styles = StyleSheet.create({
   },
   gogglesContainer: {
     position: 'absolute',
-    zIndex: 3,
-    top: -200,  // Adjust this value to move goggles up/down
-    left: -350, // Adjust this value to move goggles left/right
-    transform: [
-      { scaleX: -1 }, // This flips the goggles horizontally
-      { scale: 0.7 }  // This makes the goggles 70% of their original size
-    ],
+    zIndex: 100,
+    bottom: -200,
+    left: -260,
+    transform: [{ scale: 0.4 }],
   },
   speechBubbleContainer: {
     position: 'absolute',
-    left: 350,
-    bottom: -100,
-    zIndex: 2,
-    transform: [{ scale: 1.2 }],
+    left: 50,
+    bottom: 100,
+    zIndex: 150,
+    transform: [{ scale: 0.8 }],
   },
   speechBubble: {
     width: 350,
     padding: 20,
   },
   bubbleText: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
@@ -540,10 +523,9 @@ const styles = StyleSheet.create({
     width: 600,
     height: 403.5,
     overflow: 'hidden',
-    borderWidth: 5,
-    borderColor: '#000',
-    borderRadius: 10,
-  },
+    borderWidth: 0,
+    borderColor: '#1a9999',
+    borderRadius: 0,  },
   backgroundImage: {
     width: '100%',
     height: '100%',
@@ -585,24 +567,30 @@ const styles = StyleSheet.create({
   },
   questionContainer: {
     position: 'absolute',
-    top: 450,
-    right: 400,
-    zIndex: 3,
+    bottom: -85,
+    alignSelf: 'center',
+    zIndex: 100,
     transform: [{ scale: 0.8 }],
+    left: '28%',
   },
   buttonsRow: {
+    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 20,
-    top: -27,
-    right: -450,
-    gap: 40,
-    transform: [{ scale: 0.8 }]
+    bottom: 25, // Positioned above the footer
+    left: '57%',
+    gap: 20,
+    transform: [{ scale: 0.8 }, { translateX: -75 }],
+    zIndex: 999, // Much higher z-index to ensure buttons are on top
+    elevation: 5, // For Android
+    pointerEvents: 'box-none'
   },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 25,
+    zIndex: 10, // Lower z-index than buttons
+    position: 'relative'
   },
   completionOverlay: {
     backgroundColor: 'rgba(0, 100, 180, 0.7)',
@@ -613,9 +601,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   backdropContainer: {
-    top: 45,
-    right: 100,
+    position: 'absolute',
+    top: 110,
+    right: -1090,
     marginBottom: 20,
-    position: 'relative',
+    transform: [{ scaleX: 2.5 }, { scaleY: 1.63 }],
+    width: '100%',
+    zIndex: 1,
   },
 });
