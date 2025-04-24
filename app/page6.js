@@ -147,7 +147,7 @@ export default function Page6() {
 
       {/* Footer Navigation */}
       <View style={styles.footer}>
-        <Link href="/page5" asChild>
+        <Link href="/page2" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page7" asChild>
@@ -157,7 +157,7 @@ export default function Page6() {
     </View>
   );
 
-  return <BasePage pageNumber={6} title={title} description={description} />;
+  return <BasePage pageNumber={3} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({

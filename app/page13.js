@@ -357,7 +357,7 @@ export default function Page13() {
     </View>
   );
 
-  return <BasePage pageNumber={13} title="Learning from Mistakes - Part 2" description={description} />;
+  return <BasePage pageNumber={9} title="Learning from Mistakes - Part 2" description={description} />;
 }
 
 const styles = StyleSheet.create({

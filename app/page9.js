@@ -331,7 +331,7 @@ export default function CombinedPage() {
 
   return (
     <BasePage 
-      pageNumber={showGame ? 10 : 9} 
+      pageNumber={showGame ? 10 : 6} 
       title={title} 
       description={showGame ? renderGameContent() : renderDemoContent()} 
     />

@@ -215,7 +215,7 @@ export default function Page7() {
     </View>
   );
 
-  return <BasePage pageNumber={7} title={title} description={description} />;
+  return <BasePage pageNumber={4} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({

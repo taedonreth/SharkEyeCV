@@ -7,7 +7,7 @@ import Wave from '../components/Wave';
 
 export default function BasePage({ pageNumber, title, description }) {
   // Calculate progress percentage based on current page
-  const totalPages = 17;
+  const totalPages = 14;
   const progressPercentage = ((pageNumber - 1) / (totalPages - 1)) * 100;
   
   // Determine the page title to display
