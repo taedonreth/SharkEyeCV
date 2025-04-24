@@ -34,7 +34,7 @@ export default function Page10() {
       </View>
     </View>
   );
-  return <BasePage pageNumber={10} title=" " description={description} />;
+  return <BasePage pageNumber={10} title="Capturing Game" description={description} />;
 }
 
 const styles = StyleSheet.create({

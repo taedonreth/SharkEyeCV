@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link } from 'expo-router';
@@ -18,14 +18,14 @@ export default function Page13() {
         <View style={styles.sharkSection}>
           <View style={styles.sharkContainer}>
             <SharkWrapper>
-              <Shark />
+              <DumbShark />
             </SharkWrapper>
           </View>
         </View>
         <View style={styles.speechBubbleContainer}>
           <SpeechBubble scale={1.5}>
             <TypewriterText
-              text="Great job! Now let's learn about how we train our model!"
+              text="Great job! Now let's learn about how we train our goggles!"
               style={styles.speechText}
               typingSpeed={250}
               />
@@ -45,7 +45,7 @@ export default function Page13() {
     </View>
   );
 
-  return <BasePage pageNumber={13} title=" " description={description} />;
+  return <BasePage pageNumber={13} title="Feedback" description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   sharkContainer: {
-    marginTop: 300,
-    right: 200,
+    marginTop: 100,
+    right: 100,
   },
   mainContent: {
     flex: 1,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import BasePage from './BasePage';
-import Shark from '../components/Shark';
+import DumbShark from '../components/dumbshark';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import { Link, useRouter } from 'expo-router';
@@ -29,7 +29,7 @@ export default function Page17() {
                 <TypewriterText
                   text="Congratulations on completing the AI Computer Vision game! Click to play again!"
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100}
                 />
               </SpeechBubble>
             </View>
@@ -37,7 +37,7 @@ export default function Page17() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <Shark />
+                <DumbShark />
               </SharkWrapper>
             </View>
           </View>
@@ -59,14 +59,14 @@ export default function Page17() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/page16" asChild>
+        <Link href="/page3" asChild>
           <BackButton isNavigation={true} />
         </Link>
       </View>
     </View>
   );
 
-  return <BasePage pageNumber={17} title={title} description={description} />;
+  return <BasePage pageNumber={17} title="Play Again" description={description} />;
 }
 
 const styles = StyleSheet.create({

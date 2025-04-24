@@ -35,7 +35,7 @@ export default function Page12() {
       </View>
     </View>
   );
-  return <BasePage pageNumber={12} title=" " description={description} />;
+  return <BasePage pageNumber={12} title="Murky Capturing Game" description={description} />;
 }
 
 const styles = StyleSheet.create({

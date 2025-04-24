@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import GoodSharkIcon from '../components/GoodSharkIcon';
 import BadSharkIcon from '../components/BadSharkIcon';
@@ -66,7 +66,73 @@ const layoutConfig = {
 };
 
 export default function Page9() {
-  const title = " ";
+  // Define an array of messages to cycle through
+  const messages = [
+    "It's your job to show the goggles which objects in the picture to pay attention to!",
+    "You can do this by drawing a box around the object.",
+    "Try it out in the game on the next page!"
+  ];
+  
+  // State to track the current message index
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+  // Timer ref to track and clear the interval
+  const timerRef = useRef(null);
+  
+  // Flag to track if user manually interacted
+  const [userInteracted, setUserInteracted] = useState(false);
+  
+  // Setup and clear interval on component mount/unmount
+  useEffect(() => {
+    // Start the timer for auto-advancing messages
+    startAutoAdvanceTimer();
+    
+    // Cleanup function to clear the timer when component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this runs once on mount
+  
+  // Reset the timer whenever the message changes due to user interaction
+  useEffect(() => {
+    // If user manually interacted, restart the timer
+    if (userInteracted) {
+      startAutoAdvanceTimer();
+      setUserInteracted(false); // Reset the flag
+    }
+  }, [currentMessageIndex]);
+  
+  // Function to start the auto-advance timer
+  const startAutoAdvanceTimer = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Set new timer - messages advance every 3.5 seconds
+    timerRef.current = setInterval(() => {
+      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
+    }, 5500); // 3.5 seconds
+  };
+  
+  // Function to handle speech bubble click
+  const handleSpeechBubbleClick = () => {
+    // Move to the next message in the array, or loop back to the first message
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    
+    // Mark as user interaction
+    setUserInteracted(true);
+    
+    // Reset the timer when user clicks
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    startAutoAdvanceTimer();
+  };
+
+  const title = "Capturing the object ";
 
   const description = (
     <View style={[styles.container, {
@@ -74,16 +140,21 @@ export default function Page9() {
       paddingVertical: layoutConfig.container.paddingVertical,
     }]}>
       <View style={styles.mainContent}>
-        {/* Speech Bubble */}
-        <View style={styles.speechBubbleContainer}>
+        {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
+        <TouchableOpacity 
+          style={styles.speechBubbleContainer}
+          onPress={handleSpeechBubbleClick}
+          activeOpacity={0.8} // Slight opacity change when pressed
+        >
           <SpeechBubble scale={1.5}>
             <TypewriterText
-              text="Let's see what happens when we put our data into boxes!"
+              key={currentMessageIndex} // Key changes force re-render of component
+              text={messages[currentMessageIndex]}
               style={styles.speechText}
-              typingSpeed={250}
-              />
+              typingSpeed={150}
+            />
           </SpeechBubble>
-        </View>
+        </TouchableOpacity>
 
         {/* Box Section with Good and Bad Boxes */}
         <View style={[styles.boxSection, {
@@ -172,7 +243,7 @@ export default function Page9() {
     </View>
   );
 
-  return <BasePage pageNumber={9} title=" " description={description} />;
+  return <BasePage pageNumber={9} title={title} description={description} />;
 }
 
 const styles = StyleSheet.create({
@@ -248,7 +319,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 23,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,

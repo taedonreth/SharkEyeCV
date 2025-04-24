@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import BasePage from './BasePage';
 import DumbShark from '../components/dumbshark';
 import SharkIcon from '../components/SharkIcon';
@@ -13,9 +13,76 @@ import ContinueButton from '../components/ContinueButton';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
+import Goggles from '../components/goggles';
 
 export default function Page6() {
-  const title = " ";
+  // Define an array of messages to cycle through
+  const messages = [
+    "In order to find your friends and family, I need to understand what a shark looks like. Can you help me pick some examples?",
+    "Clear, well-labeled examples helps me learn accurately.",
+    "When selecting examples, focus on images that represent what the I will encounter in the ocean!"
+  ];
+  
+  // State to track the current message index
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+  // Timer ref to track and clear the interval
+  const timerRef = useRef(null);
+  
+  // Flag to track if user manually interacted
+  const [userInteracted, setUserInteracted] = useState(false);
+  
+  // Setup and clear interval on component mount/unmount
+  useEffect(() => {
+    // Start the timer for auto-advancing messages
+    startAutoAdvanceTimer();
+    
+    // Cleanup function to clear the timer when component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this runs once on mount
+  
+  // Reset the timer whenever the message changes due to user interaction
+  useEffect(() => {
+    // If user manually interacted, restart the timer
+    if (userInteracted) {
+      startAutoAdvanceTimer();
+      setUserInteracted(false); // Reset the flag
+    }
+  }, [currentMessageIndex]);
+  
+  // Function to start the auto-advance timer
+  const startAutoAdvanceTimer = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Set new timer - messages advance every 3.5 seconds
+    timerRef.current = setInterval(() => {
+      setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
+    }, 6200); // 3.5 seconds
+  };
+  
+  // Function to handle speech bubble click
+  const handleSpeechBubbleClick = () => {
+    // Move to the next message in the array, or loop back to the first message
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    
+    // Mark as user interaction
+    setUserInteracted(true);
+    
+    // Reset the timer when user clicks
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    startAutoAdvanceTimer();
+  };
+
+  const title = "Good and Bad Data";
   const description = (
     <View style={styles.container}>
       {/* Main Content */}
@@ -24,18 +91,26 @@ export default function Page6() {
         <View style={styles.sharkBubbleWrapper}>
           <View style={styles.sharkPosition}>
             <SharkWrapper>
-              <DumbShark />
+              <View style={styles.gogglesContainer}>
+                <Goggles />
+              </View>
             </SharkWrapper>
           </View>
-          <View style={styles.speechBubbleContainer}>
+          {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
+          <TouchableOpacity 
+            style={styles.speechBubbleContainer}
+            onPress={handleSpeechBubbleClick}
+            activeOpacity={0.8} // Slight opacity change when pressed
+          >
             <SpeechBubble scale={1.7} width={600} height={125}>
               <TypewriterText
-                text={"Good data is clear, correct, and easy to understand - like a picture that shows the full object.\n Bad data is confusing, missing parts, or has mistakes - like a blurry photo or one that cuts off the object."}
+                key={currentMessageIndex} // Key changes force re-render of component
+                text={messages[currentMessageIndex]}
                 style={styles.speechText}
-                typingSpeed={250}
+                typingSpeed={70}
               />
             </SpeechBubble>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Cards Section */}
@@ -168,6 +243,17 @@ const styles = StyleSheet.create({
     marginLeft: -340,
     marginTop: 250,
   },
+  gogglesContainer: {
+    position: 'absolute',
+    zIndex: 3,
+    // You may need to adjust these values to position the goggles correctly on the shark
+    top: 80,  // Adjust this value to move goggles up/down
+    left: -0, // Adjust this value to move goggles left/right
+    transform: [
+      { scaleX: 1 }, // This flips the goggles horizontally
+      { scale: 0.7 }  // This makes the goggles 70% of their original size
+    ],
+  },
   speechBubbleContainer: {
     position: 'absolute',
     top: 170,
@@ -176,7 +262,7 @@ const styles = StyleSheet.create({
     width: 500,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 28,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,

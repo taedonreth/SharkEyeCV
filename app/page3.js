@@ -9,6 +9,8 @@ import { Link } from 'expo-router';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import SharkWrapper from '../components/SharkWrapper';
+import Goggles from '../components/goggles';
+
 
 const VideoComponent = () => {
   if (Platform.OS === 'web') {
@@ -43,7 +45,7 @@ const VideoComponent = () => {
 };
 
 export default function Page3() {
-  const title = " ";
+  const title = "Video";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}
@@ -55,16 +57,18 @@ export default function Page3() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.8}>
                 <TypewriterText
-                  text="This is how computer vision is used to detect me in real life!"
+                  text="This is how I can be used to detect Frankie's friend's and family in real life!"
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100}
                   />
               </SpeechBubble>
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
               <SharkWrapper>
-                <DumbShark />
+                <View style={styles.gogglesContainer}>
+                  <Goggles />
+                </View>
               </SharkWrapper>
             </View>
           </View>
@@ -80,10 +84,10 @@ export default function Page3() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/overview" asChild>
+        <Link href="/review" asChild>
           <BackButton isNavigation={true} />
         </Link>
-        <Link href="/page4" asChild>
+        <Link href="/page17" asChild>
           <ContinueButton isNavigation={true} />
         </Link>
       </View>
@@ -98,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 28,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
@@ -127,20 +131,24 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    top: 100,
-    left: 320,
+    top: -240,
+    left: 270,
     zIndex: 2,
     width: 250,
   },
   speechBubbleImage: {
     width: '100%',
     height: 400,
-  },
-  sharkContainer: {
-    marginTop: 200,
-    zIndex: 1,
-    marginLeft: -250,
-    transform: [{ scale: 1.2 }],
+  },  
+  gogglesContainer: {
+    position: 'absolute',
+    zIndex: 3,
+    top: -200,  // Adjust this value to move goggles up/down
+    left: -550, // Adjust this value to move goggles left/right
+    transform: [
+      { scaleX: -1 }, // This flips the goggles horizontally
+      { scale: 0.7 }  // This makes the goggles 70% of their original size
+    ],
   },
   videoContainer: {
     width: 600,

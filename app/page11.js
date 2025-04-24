@@ -10,6 +10,7 @@ import ContinueButton from '../components/ContinueButton';
 import { ThemedText } from '../components/ThemedText';
 import SharkWrapper from '../components/SharkWrapper';
 import TypewriterText from '../components/TypewriterText';
+import Goggles from '../components/goggles';
 
 export default function Page11() {
   // State for tracking current image and what shark says
@@ -69,7 +70,7 @@ export default function Page11() {
                 <TypewriterText
                   text={`Hmmm..\nI see a ${sharkSaying}!`}
                   style={styles.bubbleText}
-                  typingSpeed={40}
+                  typingSpeed={150}
                 />
               </SpeechBubble>
             </View>
@@ -77,7 +78,9 @@ export default function Page11() {
             {/* Shark below the speech bubble */}
             <View style={styles.sharkSection}>
               <SharkWrapper>
-                <DumbShark />
+                <View style={styles.gogglesContainer}>
+                  <Goggles />
+                </View>
               </SharkWrapper>
             </View>
           </View>
@@ -122,7 +125,7 @@ export default function Page11() {
     </View>
   );
 
-  return <BasePage pageNumber={11} title=" " description={description} />;
+  return <BasePage pageNumber={11} title="Learning from Mistakes" description={description} />;
 }
 
 // Update styles to include completion styling
@@ -146,8 +149,8 @@ const styles = StyleSheet.create({
   },
   speechBubbleContainer: {
     position: 'absolute',
-    bottom: 350,
-    left: 375,
+    bottom: 80,
+    left: 340,
     zIndex: 2,
     transform: [{ scale: 1.4 }],
   },
@@ -194,6 +197,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     color: '#333',
+  },
+  gogglesContainer: {
+    position: 'absolute',
+    zIndex: 3,
+    top: -200,  // Adjust this value to move goggles up/down
+    left: -350, // Adjust this value to move goggles left/right
+    transform: [
+      { scaleX: -1 }, // This flips the goggles horizontally
+      { scale: 0.7 }  // This makes the goggles 70% of their original size
+    ],
   },
   sharkSection: {
     transform: [{ scale: 1.2 }],

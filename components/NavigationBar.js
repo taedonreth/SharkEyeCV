@@ -3,28 +3,31 @@ import { View, TouchableOpacity, StyleSheet, Linking, Image } from "react-native
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 
-const NavigationBar = ({ onAboutPress }) => {
+const NavigationBar = ({ onAboutPress, pageTitle }) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  
   const handleAboutPress = () => {
     Linking.openURL('https://bosl.ucsb.edu');
   };
-
+  
   return (
     <ThemedView style={styles.container} lightColor="#FFFFFF">
       <View style={styles.content}>
         {/* Logo and Title Section */}
         <View style={styles.logoSection}>
           <View style={styles.logoContainer}>
-            <Image 
+            <Image
               source={require('../assets/images/SharkEyeLogo.png')}
               style={styles.logo}
               resizeMode="contain"
             />
           </View>
-          <ThemedText style={styles.title}>SharkEye Computer Vision Game</ThemedText>
+          <ThemedText style={styles.title}>
+            SharkEye Computer Vision Game
+            {pageTitle && <ThemedText style={styles.titleSeparator}> - {pageTitle}</ThemedText>}
+          </ThemedText>
         </View>
-
+        
         {/* About Benioff Button */}
         <TouchableOpacity
           style={[
@@ -74,6 +77,11 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   title: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#333333",
+  },
+  titleSeparator: {
     fontSize: 26,
     fontWeight: "700",
     color: "#333333",

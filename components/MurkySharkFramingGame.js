@@ -332,7 +332,7 @@ const UnderwaterClassificationGame = () => {
       if (goodCoverage) {
         // Item is at least 90% in the box - differentiate based on precision
         if (labelCorrect) {
-          if (bestSelectionPrecision > 90) {
+          if (bestSelectionPrecision > 80) {
             pointsEarned = 150;
             message = `Perfect match! Your box fits the ${bestMatch.name} perfectly! +150`;
             // Mark this item as found

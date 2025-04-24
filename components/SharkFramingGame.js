@@ -30,8 +30,8 @@ const SeaCreaturesGame = () => {
     {
       id: 2,
       name: 'clownfish',
-      position: { x: 140, y: 180 },
-      size: { width: 50, height: 40 }
+      position: { x: 143, y: 186 },
+      size: { width: 44, height: 35 }
     },
     {
       id: 3,
@@ -48,8 +48,8 @@ const SeaCreaturesGame = () => {
     {
       id: 6,
       name: 'clownfish',
-      position: { x: 190, y: 90 },
-      size: { width: 50, height: 50 }
+      position: { x: 187, y: 93 },
+      size: { width: 50, height: 39 }
     },
     {
       id: 7,
@@ -502,6 +502,10 @@ const SeaCreaturesGame = () => {
     setAttempts(prev => prev + 1);
 
     if (!currentCreature) return;
+    console.log('Checking creature:', currentCreature);
+    console.log('Frame position:', framePosition, 'Frame size:', frameSize);
+    console.log('Creature position:', currentCreature.position, 'Creature size:', currentCreature.size);
+
 
     // Calculate overlap between the creature and the frame
     const creatureLeft = currentCreature.position.x;
@@ -549,11 +553,11 @@ const SeaCreaturesGame = () => {
     let message = '';
 
     // Consider captures with at least 90% coverage for good/great/perfect ratings
-    const goodCoverage = creatureOverlapPercentage >= 90;
+    const goodCoverage = creatureOverlapPercentage >= 85;
 
     if (goodCoverage) {
       // Good coverage - differentiate based on precision
-      if (frameOverlapPercentage > 90) {
+      if (frameOverlapPercentage > 85) {
         pointsEarned = 150;
         message = 'Perfect capture! Your box fits the creature perfectly! +150';
         // Mark this creature as found
@@ -585,6 +589,8 @@ const SeaCreaturesGame = () => {
     } else {
       message = 'Missed the creature completely! +0';
     }
+    console.log('Overlap percentages - Creature:', creatureOverlapPercentage, 'Frame:', frameOverlapPercentage);
+
 
     setScore(prev => prev + pointsEarned);
     setFeedbackState({ message, visible: true });
@@ -614,7 +620,7 @@ const SeaCreaturesGame = () => {
     // Use ID to distinguish between similar creatures
     if (currentCreature.name === "clownfish") {
       if (currentCreature.id === 2) {
-        return "Capture the clownfish at the bottom";
+        return "Capture the clownfish in the middle";
       } else if (currentCreature.id === 6) {
         return "Capture the clownfish on top";
       }

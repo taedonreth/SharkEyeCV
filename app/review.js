@@ -5,13 +5,13 @@ import BasePage from './BasePage';
 import BackButton from '../components/BackButton';
 import ContinueButton from '../components/ContinueButton';
 import DumbShark from '../components/dumbshark';
-import Overview from '../components/Overview';
+import FlipCardOverview from '../components/FlipCardOverview';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
 
 export default function OverviewPage() {
-  const title = " ";
+  const title = "Overview";
   const description = (
     <View style={styles.container}>
       {/* Main content area */}
@@ -23,11 +23,11 @@ export default function OverviewPage() {
             <View style={styles.speechBubbleContainer}>
               <SpeechBubble scale={1.5}>
                 <TypewriterText
-                  text={"So... what is\n computer vision?"}
+                  text={"Lets review how these goggles helped me find my family!"}
                   style={styles.speechText}
-                  typingSpeed={250}
+                  typingSpeed={100} // Slowed down as discussed
                   />
-              </SpeechBubble>
+              </SpeechBubble> 
             </View>
             {/* Shark below the speech bubble */}
             <View style={styles.sharkContainer}>
@@ -40,7 +40,7 @@ export default function OverviewPage() {
           {/* Right side container for Overview */}
           <View style={styles.rightContainer}>
             <View style={styles.overviewContainer}>
-              <Overview />
+              <FlipCardOverview />
             </View>
           </View>
         </View>
@@ -48,7 +48,7 @@ export default function OverviewPage() {
 
       {/* Footer with navigation buttons */}
       <View style={styles.footerContainer}>
-        <Link href="/" asChild>
+        <Link href="/page16" asChild>
           <BackButton isNavigation={true} />
         </Link>
         <Link href="/page3" asChild>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   speechText: {
-    fontSize: 36,
+    fontSize: 25,
     textAlign: 'center',
     color: 'black',
     lineHeight: 44,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     right: 160,
-    transform: [{ scale: 0.9 }],
+    transform: [{ scale: 0.8 }],
   },
   footerContainer: {
     flexDirection: 'row',
