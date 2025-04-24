@@ -4,6 +4,7 @@ import BasePage from './BasePage';
 import { Link } from 'expo-router';
 import ContinueButton from '../components/ContinueButton';
 import DumbShark from '../components/dumbshark';
+import SharkGif from '../components/SharkGif';
 import SpeechBubble from '../components/SpeechBubble';
 import TypewriterText from '../components/TypewriterText';
 import SharkWrapper from '../components/SharkWrapper';
@@ -11,9 +12,9 @@ import SharkWrapper from '../components/SharkWrapper';
 export default function Index() {
   // Define an array of messages to cycle through
   const messages = [
-    "Can you help me!?!",
-    "My name is Frankie the Shark! \n I lost my family while chasing some squid!",
-    "I need your help to\n find my shark family!\n \n Will you join my adventure?"
+    "Ouch!!",
+    "My name is Frankie the Shark! \n I bumped my head and forgot everything :(",
+    "I need your help to\n find my shark family and relearn what wildlife in the ocean looks like.\n \n Will you join my adventure?"
   ];
 
   // State to track the current message index
@@ -98,7 +99,7 @@ export default function Index() {
         <View style={styles.sharkBubbleWrapper}>
           {/* Wrap Shark in SharkWrapper for animation */}
           <SharkWrapper style={styles.sharkPosition}>
-            <DumbShark />
+            <SharkGif />
           </SharkWrapper>
 
           {/* Speech Bubble - now wrapped in TouchableOpacity to make it clickable */}
